@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Portal — DawaTrack</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="min-height:100vh;display:grid;place-items:center;background:var(--bg);">
+
+<!-- Background grid -->
+<div style="position:fixed;inset:0;background-image:linear-gradient(rgba(99,222,210,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(99,222,210,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;"></div>
+<div style="position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(74,158,255,0.07) 0%,transparent 70%);bottom:-150px;left:-100px;pointer-events:none;"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg" style="position:fixed;top:0;left:0;right:0;z-index:100;">
+  <div class="container-fluid" style="max-width:1240px;margin:0 auto;padding:0 24px;">
+<div class="nav-logo">
+        <img src="logo-TY.png" alt="Nav bar logo" href="index.html">
+    </div>
+    <a class="navbar-brand" href="index.html">Dawa<span>Track</span></a>
+    <div>
+      <a class="nav-link" href="index.html" style="display:inline;color:var(--text2);font-size:0.875rem;">← Back to Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PORTAL CARD -->
+<div style="width:100%;max-width:900px;padding:24px;margin-top:70px;position:relative;z-index:1;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.5);" class="portal-grid">
+
+    <!-- Left Panel -->
+    <div style="background:linear-gradient(135deg,rgba(99,222,210,0.08),rgba(74,158,255,0.06));border-right:1px solid var(--border);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-size:2.5rem;margin-bottom:20px;">🏥</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;letter-spacing:-0.025em;color:var(--text);margin-bottom:12px;line-height:1.15;">Your Health,<br><span style="color:var(--teal);">Always in View</span></div>
+      <p style="color:var(--text2);font-size:0.9rem;line-height:1.7;margin-bottom:32px;font-weight:300;">Access your medication logs, doctor notes, and care plan in one secure place.</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">💊</div>
+          <span style="font-size:0.875rem;color:var(--text2);">Log & track medications daily</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(74,158,255,0.12);border:1px solid rgba(74,158,255,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">🩺</div>
+          <span style="font-size:0.875rem;color:var(--text2);">Receive notes from your doctor</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">📊</div>
+          <span style="font-size:0.875rem;color:var(--text2);">View your adherence progress</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel — Login / Role Select -->
+    <div style="padding:48px 40px;">
+      <!-- Tab nav -->
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-login" onclick="switchTab('tab-login',this)">Sign In</button>
+        <button class="tab-btn" data-tab="tab-register" onclick="switchTab('tab-register',this)">Register</button>
+      </div>
+
+      <!-- LOGIN TAB -->
+      <div id="tab-login" class="tab-content active">
+        <div style="margin-bottom:28px;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;color:var(--text);margin-bottom:6px;">Welcome back</div>
+          <div style="font-size:0.83rem;color:var(--text3);">Sign in to access your health dashboard</div>
+        </div>
+
+        <!-- Role selector -->
+        <div style="margin-bottom:20px;">
+          <label class="form-label">I am a…</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);transition:all 0.2s;" id="role-patient-lbl">
+              <input type="radio" name="role" value="patient" id="rolePatient" checked style="accent-color:var(--teal);" onchange="setRole('patient')">
+              <div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--text);">Patient</div>
+                <div style="font-size:0.72rem;color:var(--text3);">Track my meds</div>
+              </div>
+            </label>
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);transition:all 0.2s;" id="role-doctor-lbl">
+              <input type="radio" name="role" value="doctor" id="roleDoctor" style="accent-color:var(--teal);" onchange="setRole('doctor')">
+              <div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--text);">Doctor</div>
+                <div style="font-size:0.72rem;color:var(--text3);">Monitor patients</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Username / Email</label>
+          <input type="text" class="form-control" id="username" placeholder="patient@dawatrack.com" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+        </div>
+
+        <button class="btn-primary" onclick="handleLogin()" style="width:100%;justify-content:center;margin-bottom:16px;">
+          Sign In →
+        </button>
+
+        <div style="text-align:center;">
+          <a href="#" style="font-size:0.8rem;color:var(--text3);text-decoration:none;" onclick="showForgot()">Forgot password?</a>
+        </div>
+
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text3);text-align:center;margin-bottom:12px;">Demo — click to access directly:</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <a href="patient-dashboard.html" class="btn-ghost" style="font-size:0.8rem;padding:9px 14px;justify-content:center;text-decoration:none;">💊 Patient Demo</a>
+            <a href="doctor-dashboard.html" class="btn-ghost" style="font-size:0.8rem;padding:9px 14px;justify-content:center;text-decoration:none;">🩺 Doctor Demo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTER TAB -->
+      <div id="tab-register" class="tab-content">
+        <div style="margin-bottom:28px;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;color:var(--text);margin-bottom:6px;">Create account</div>
+          <div style="font-size:0.83rem;color:var(--text3);">Join DawaTrack — free for patients</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="mb-3">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" placeholder="Alice">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" placeholder="Kamau">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" placeholder="alice@example.com">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Hospital / Clinic Code</label>
+          <input type="text" class="form-control" placeholder="CITY-001">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" placeholder="Min 8 characters">
+        </div>
+
+        <button class="btn-primary" onclick="handleRegister()" style="width:100%;justify-content:center;">
+          Create Account →
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+@media (max-width: 680px) {
+  .portal-grid { grid-template-columns: 1fr !important; }
+  .portal-grid > div:first-child { display: none !important; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+<script>
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function setRole(role) {
+  const patLbl = document.getElementById('role-patient-lbl');
+  const docLbl = document.getElementById('role-doctor-lbl');
+  if (role === 'patient') {
+    patLbl.style.borderColor = 'rgba(99,222,210,0.4)';
+    patLbl.style.background = 'rgba(99,222,210,0.07)';
+    docLbl.style.borderColor = 'var(--border)';
+    docLbl.style.background = 'var(--surface)';
+  } else {
+    docLbl.style.borderColor = 'rgba(99,222,210,0.4)';
+    docLbl.style.background = 'rgba(99,222,210,0.07)';
+    patLbl.style.borderColor = 'var(--border)';
+    patLbl.style.background = 'var(--surface)';
+  }
+}
+
+function handleLogin() {
+  const role = document.querySelector('input[name="role"]:checked')?.value;
+  const user = document.getElementById('username').value;
+  const pass = document.getElementById('password').value;
+  if (!user || !pass) { showToast('Please enter your credentials.', 'error'); return; }
+  showToast('Signing you in…');
+  setTimeout(() => {
+    window.location.href = role === 'doctor' ? 'doctor-dashboard.html' : 'patient-dashboard.html';
+  }, 900);
+}
+
+function handleRegister() {
+  showToast('Account created! Redirecting to your dashboard…');
+  setTimeout(() => window.location.href = 'patient-dashboard.html', 1200);
+}
+
+function showForgot() {
+  showToast('Password reset link sent to your email.', 'info');
+}
+
+// Set patient role highlight on load
+setRole('patient');
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard — DawaTrack</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid" style="max-width:1240px;margin:0 auto;padding:0 24px;">
+<div class="nav-logo">
+        <img src="logo-TY.png" alt="Nav bar logo" href="index.html">
+    </div>
+    <a class="navbar-brand" href="index.html">Dawa<span>Track</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-center" style="gap:4px;">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item ms-2"><a class="nav-link btn-nav-portal" href="portal.html">Portal →</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- DASHBOARD LAYOUT -->
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span style="font-size:1.4rem;">💊</span> Patient
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Overview</div>
+      <a href="#log-section" class="sidebar-link active">
+        <span class="icon">📋</span> Log Medication
+      </a>
+      <a href="#history-section" class="sidebar-link">
+        <span class="icon">📅</span> History
+      </a>
+      <a href="#stats-section" class="sidebar-link">
+        <span class="icon">📊</span> My Progress
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Account</div>
+      <a href="portal.html" class="sidebar-link">
+        <span class="icon">🔒</span> Sign Out
+      </a>
+      <a href="doctor-dashboard.html" class="sidebar-link">
+        <span class="icon">🩺</span> Doctor View
+      </a>
+    </div>
+
+    <!-- Adherence mini widget -->
+    <div style="margin-top:auto;padding-top:32px;">
+      <div style="background:rgba(99,222,210,0.06);border:1px solid rgba(99,222,210,0.15);border-radius:12px;padding:16px;">
+        <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">My Adherence</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;letter-spacing:-0.03em;color:var(--teal);" id="sidebar-rate">—</div>
+        <div class="adherence-bar" style="margin-top:10px;">
+          <div class="adherence-fill" id="sidebar-bar" style="width:0%;"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="dash-main">
+
+    <!-- Header -->
+    <div class="dash-header">
+      <div>
+        <div class="dash-title">Good morning, Patient 👋</div>
+        <div class="dash-subtitle">Track your medications and stay on top of your health</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <div style="font-size:0.8rem;color:var(--text3);background:var(--surface);border:1px solid var(--border);padding:8px 14px;border-radius:8px;">
+          📅 Today: <strong style="color:var(--text);">May 11, 2026</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI Row -->
+    <div class="kpi-grid" id="stats-section">
+      <div class="kpi-card" style="--kpi-color:linear-gradient(90deg,#63ded2,#4a9eff);">
+        <div class="kpi-label">Total Logged</div>
+        <div class="kpi-value" id="kpi-total">0</div>
+        <div class="kpi-change neutral">all time</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color:linear-gradient(90deg,#34d399,#2ec4b6);">
+        <div class="kpi-label">Doses Taken</div>
+        <div class="kpi-value" id="kpi-taken">0</div>
+        <div class="kpi-change up">↑ Keep it up!</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color:linear-gradient(90deg,#f87171,#e11d48);">
+        <div class="kpi-label">Doses Missed</div>
+        <div class="kpi-value" id="kpi-missed">0</div>
+        <div class="kpi-change neutral">review history</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color:linear-gradient(90deg,#a78bfa,#60a5fa);">
+        <div class="kpi-label">Adherence Rate</div>
+        <div class="kpi-value" id="kpi-rate">—</div>
+        <div class="adherence-bar" style="margin-top:10px;">
+          <div class="adherence-fill" id="adherence-bar-fill" style="width:0%;transition:width 1.2s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOG FORM -->
+    <div id="log-section" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:8px;">
+
+      <div class="chart-container" style="grid-column:1;">
+        <div class="chart-title">Log a Medication</div>
+        <div class="chart-sub">Record whether you took your medication today</div>
+
+        <form id="medicationForm">
+          <div class="mb-3">
+            <label for="medicine" class="form-label">Medicine Name *</label>
+            <input type="text" class="form-control" id="medicine" placeholder="e.g. Metformin 500mg" required>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="mb-3">
+              <label for="date" class="form-label">Date *</label>
+              <input type="date" class="form-control" id="date" required>
+            </div>
+            <div class="mb-3">
+              <label for="medTime" class="form-label">Time Taken</label>
+              <input type="time" class="form-control" id="medTime">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status *</label>
+            <div style="display:flex;gap:12px;">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);transition:all 0.2s;flex:1;" id="lbl-taken">
+                <input type="radio" name="takenStatus" id="statusTaken" value="taken" style="accent-color:var(--teal);" onchange="toggleStatus('taken')">
+                <span style="font-size:0.875rem;color:var(--text);">✅ Taken</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);transition:all 0.2s;flex:1;" id="lbl-missed">
+                <input type="radio" name="takenStatus" id="statusMissed" value="missed" style="accent-color:var(--red);" onchange="toggleStatus('missed')">
+                <span style="font-size:0.875rem;color:var(--text);">❌ Missed</span>
+              </label>
+            </div>
+            <!-- hidden checkbox for legacy script -->
+            <input type="checkbox" id="taken" style="display:none;">
+          </div>
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notes</label>
+            <textarea class="form-control" id="notes" rows="3" placeholder="Any side effects, how you're feeling…"></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">
+            💾 Log Medication
+          </button>
+        </form>
+      </div>
+
+      <!-- Tips panel -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="chart-container" style="flex:1;">
+          <div class="chart-title">💡 Adherence Tips</div>
+          <div class="chart-sub">Small habits, big results</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="font-size:1.2rem;flex-shrink:0;">⏰</span>
+              <div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--text);margin-bottom:2px;">Set a daily alarm</div>
+                <div style="font-size:0.8rem;color:var(--text3);">Take at the same time every day to build a habit.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="font-size:1.2rem;flex-shrink:0;">🍽️</span>
+              <div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--text);margin-bottom:2px;">Link to a meal</div>
+                <div style="font-size:0.8rem;color:var(--text3);">Many medications are best taken with food — use meals as reminders.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="font-size:1.2rem;flex-shrink:0;">📝</span>
+              <div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--text);margin-bottom:2px;">Log immediately</div>
+                <div style="font-size:0.8rem;color:var(--text3);">Record right after taking so you never forget or double-dose.</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <span style="font-size:1.2rem;flex-shrink:0;">🩺</span>
+              <div>
+                <div style="font-size:0.875rem;font-weight:600;color:var(--text);margin-bottom:2px;">Talk to your doctor</div>
+                <div style="font-size:0.8rem;color:var(--text3);">If side effects cause you to skip doses, let your doctor know — there may be alternatives.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container" style="background:rgba(99,222,210,0.05);border-color:rgba(99,222,210,0.15);">
+          <div class="chart-title" style="color:var(--teal);">🩺 Doctor's Dashboard</div>
+          <p style="font-size:0.83rem;color:var(--text2);line-height:1.6;margin-bottom:16px;">Your care team can see all your logs and leave personalized notes on each entry.</p>
+          <a href="doctor-dashboard.html" class="btn-ghost" style="font-size:0.83rem;padding:8px 16px;">View Doctor View →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEKLY CHART -->
+    <div style="margin-top:24px;">
+      <div class="chart-container">
+        <div class="chart-title">📈 My Weekly Adherence</div>
+        <div class="chart-sub">Doses taken vs missed over the last 7 days</div>
+        <div style="height:220px;">
+          <canvas id="patientWeeklyChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT LOGS -->
+    <div id="history-section" style="margin-top:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div class="dash-title" style="font-size:1.1rem;">Recent Medication Logs</div>
+          <div class="dash-subtitle" style="font-size:0.8rem;">Your medication history — visible to your care team</div>
+        </div>
+      </div>
+      <div id="patientLogsList"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;margin-top:0;padding-top:0;">
+      <span class="footer-copy">© 2026 DawaTrack Hospital Partnership. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="script.js"></script>
+<script>
+// Set today's date as default
+document.addEventListener('DOMContentLoaded', () => {
+  const dateEl = document.getElementById('date');
+  if (dateEl) dateEl.valueAsDate = new Date();
+});
+
+function toggleStatus(val) {
+  const takenCb = document.getElementById('taken');
+  if (takenCb) takenCb.checked = val === 'taken';
+  const lblTaken  = document.getElementById('lbl-taken');
+  const lblMissed = document.getElementById('lbl-missed');
+  if (!lblTaken || !lblMissed) return;
+  if (val === 'taken') {
+    lblTaken.style.borderColor  = 'rgba(52,211,153,0.5)';
+    lblTaken.style.background   = 'rgba(52,211,153,0.08)';
+    lblMissed.style.borderColor = 'var(--border)';
+    lblMissed.style.background  = 'var(--surface)';
+  } else if (val === 'missed') {
+    lblMissed.style.borderColor = 'rgba(248,113,113,0.5)';
+    lblMissed.style.background  = 'rgba(248,113,113,0.08)';
+    lblTaken.style.borderColor  = 'var(--border)';
+    lblTaken.style.background   = 'var(--surface)';
+  } else {
+    lblTaken.style.borderColor  = 'var(--border)'; lblTaken.style.background  = 'var(--surface)';
+    lblMissed.style.borderColor = 'var(--border)'; lblMissed.style.background = 'var(--surface)';
+  }
+}
+</script>
+</body>
+</html>

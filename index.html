@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DawaTrack — Advanced medication tracking and hospital partnership platform for better patient outcomes.">
+  <title>DawaTrack — Smart Medication Intelligence</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid" style="max-width:1240px;margin:0 auto;padding:0 24px;">
+    <div class="nav-logo">
+<img src="logo-TY.png" alt="Nav bar logo" href="index.html">
+    </div>
+    <a class="navbar-brand" href="index.html">Dawa<span>Track</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-center" style="gap:4px;">
+        <li class="nav-item"><a class="nav-link active-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item ms-2"><a class="nav-link btn-nav-portal" href="portal.html">Patient Portal →</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="hero-pill">Trusted by 200+ Healthcare Facilities</div>
+    <h1>Where Medicine Meets<br><span class="accent">Intelligent Tracking</span></h1>
+    <p>DawaTrack bridges the gap between patients and doctors — with real-time medication monitoring, smart adherence analytics, and seamless care continuity.</p>
+    <div class="hero-actions">
+      <a href="portal.html" class="btn-primary">Get Started Free →</a>
+      <a href="services.html" class="btn-ghost">Explore Platform</a>
+    </div>
+  </div>
+
+  <!-- FLOATING STATS -->
+  <div style="margin-top:72px;position:relative;z-index:1;">
+    <div class="stats-grid" style="max-width:900px;margin:0 auto;">
+      <div class="stat-item">
+        <div class="stat-number" id="s1">0</div>
+        <div class="stat-label">Active Patients</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="s2">0%</div>
+        <div class="stat-label">Avg Adherence Rate</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="s3">0+</div>
+        <div class="stat-label">Hospital Partners</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="s4">0K</div>
+        <div class="stat-label">Medications Tracked</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- BENEFITS -->
+<section class="section" style="background:transparent;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:52px;">
+      <div class="section-label">Why DawaTrack</div>
+      <h2 class="section-title">Built for real-world healthcare</h2>
+      <p class="section-subtitle" style="margin:0 auto;">Every feature designed around one goal — better patient outcomes through smarter medication management.</p>
+    </div>
+    <div class="grid">
+      <div class="benefit fade-in stagger-1">
+        <div class="benefit-icon">💊</div>
+        <h3>Medication Intelligence</h3>
+        <p>Real-time tracking with smart reminders, dose logging, and pattern detection — patients never miss a critical dose again.</p>
+      </div>
+      <div class="benefit fade-in stagger-2">
+        <div class="benefit-icon">📊</div>
+        <h3>Doctor Insights Dashboard</h3>
+        <p>Physicians see adherence trends, flag at-risk patients, and leave actionable comments — all in one unified view.</p>
+      </div>
+      <div class="benefit fade-in stagger-3">
+        <div class="benefit-icon">🔄</div>
+        <h3>Continuity of Care</h3>
+        <p>Structured follow-ups, treatment timeline visibility, and seamless handoffs between care providers.</p>
+      </div>
+      <div class="benefit fade-in stagger-1">
+        <div class="benefit-icon">🛡️</div>
+        <h3>HIPAA-Ready Security</h3>
+        <p>End-to-end encrypted data pipelines, role-based access, and full audit trails for regulatory compliance.</p>
+      </div>
+      <div class="benefit fade-in stagger-2">
+        <div class="benefit-icon">⚡</div>
+        <h3>Instant Alerts</h3>
+        <p>Configurable threshold alerts notify doctors when adherence drops, enabling proactive intervention before crises.</p>
+      </div>
+      <div class="benefit fade-in stagger-3">
+        <div class="benefit-icon">🔗</div>
+        <h3>EHR Integration</h3>
+        <p>Seamlessly plugs into existing hospital systems via HL7/FHIR standards — no workflow disruption.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background:rgba(8,15,31,0.5);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:52px;">
+      <div class="section-label">Process</div>
+      <h2 class="section-title">Up and running in 3 steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Partner Registration</h3>
+        <p>Your hospital joins the DawaTrack network with a simple onboarding process and system integration.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Patient Enrollment</h3>
+        <p>Patients receive personalized care plans, medication schedules, and access to their dashboard.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Continuous Intelligence</h3>
+        <p>Doctors monitor adherence live, get AI-powered insights, and engage patients with real-time feedback.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD PREVIEW -->
+<section class="section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;" class="responsive-split">
+      <div>
+        <div class="section-label">Platform Preview</div>
+        <h2 class="section-title">A dashboard that thinks like a doctor</h2>
+        <p style="color:var(--text2);font-size:0.95rem;line-height:1.75;margin-bottom:28px;font-weight:300;">Monitor every patient's medication journey in one clean, intelligent view. Adherence graphs, risk flags, and comment threads — your clinical workflow, supercharged.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
+          <div style="display:flex;align-items:center;gap:12px;font-size:0.9rem;color:var(--text2);">
+            <span style="color:var(--teal);font-size:1.1rem;">✓</span> Live adherence tracking per patient
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:0.9rem;color:var(--text2);">
+            <span style="color:var(--teal);font-size:1.1rem;">✓</span> Doctor ↔ Patient comment threads
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:0.9rem;color:var(--text2);">
+            <span style="color:var(--teal);font-size:1.1rem;">✓</span> Risk-level badges and instant alerts
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:0.9rem;color:var(--text2);">
+            <span style="color:var(--teal);font-size:1.1rem;">✓</span> Weekly adherence trend charts
+          </div>
+        </div>
+        <a href="doctor-dashboard.html" class="btn-primary">Open Doctor Dashboard →</a>
+      </div>
+      <div>
+        <!-- Mini dashboard mockup -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow2);">
+          <div style="background:rgba(8,15,31,0.8);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:8px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#f87171;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#34d399;"></div>
+            <span style="font-size:0.75rem;color:var(--text3);margin-left:8px;">DawaTrack — Doctor Dashboard</span>
+          </div>
+          <div style="padding:20px;">
+            <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;">
+              <div class="kpi-card" style="padding:14px;--kpi-color:linear-gradient(90deg,#63ded2,#4a9eff);">
+                <div class="kpi-label">Patients</div>
+                <div class="kpi-value" style="font-size:1.5rem;">24</div>
+              </div>
+              <div class="kpi-card" style="padding:14px;--kpi-color:linear-gradient(90deg,#34d399,#2ec4b6);">
+                <div class="kpi-label">Adherent</div>
+                <div class="kpi-value" style="font-size:1.5rem;">87%</div>
+              </div>
+              <div class="kpi-card" style="padding:14px;--kpi-color:linear-gradient(90deg,#f87171,#e11d48);">
+                <div class="kpi-label">At Risk</div>
+                <div class="kpi-value" style="font-size:1.5rem;">3</div>
+              </div>
+            </div>
+            <!-- Fake patient rows -->
+            <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+              <div class="patient-row" style="grid-template-columns:auto 1fr auto;">
+                <div class="patient-avatar">AK</div>
+                <div><div class="patient-name">Alice Kamau</div><div class="patient-meta">Metformin 500mg · Day 14</div></div>
+                <span class="badge badge-green">✓ 95%</span>
+              </div>
+              <div class="patient-row" style="grid-template-columns:auto 1fr auto;">
+                <div class="patient-avatar" style="background:linear-gradient(135deg,#a78bfa,#60a5fa);">JO</div>
+                <div><div class="patient-name">James Otieno</div><div class="patient-meta">Amlodipine 10mg · Day 7</div></div>
+                <span class="badge badge-amber">⚠ 61%</span>
+              </div>
+              <div class="patient-row" style="grid-template-columns:auto 1fr auto;border-bottom:none;">
+                <div class="patient-avatar" style="background:linear-gradient(135deg,#f87171,#fb923c);">FN</div>
+                <div><div class="patient-name">Fatuma Njeri</div><div class="patient-meta">Lisinopril 20mg · Day 3</div></div>
+                <span class="badge badge-red">✗ 33%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 768px) {
+    .responsive-split { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" style="background:rgba(8,15,31,0.5);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="section-label">Testimonials</div>
+      <h2 class="section-title">What our partners say</h2>
+    </div>
+    <div class="grid-3">
+      <blockquote>
+        <p>DawaTrack completely transformed how we follow up with chronic patients. Adherence improved by 40% in just three months.</p>
+        <footer class="blockquote-footer">Dr. Jane Doe, City Hospital</footer>
+      </blockquote>
+      <blockquote>
+        <p>The real-time dashboard means I can catch missed doses before they become emergencies. It's like having a clinical assistant 24/7.</p>
+        <footer class="blockquote-footer">Nurse John Smith, Regional Clinic</footer>
+      </blockquote>
+      <blockquote>
+        <p>Implementation took one day. The data insights have already informed policy decisions across our network of six facilities.</p>
+        <footer class="blockquote-footer">Admin Lisa Brown, Metro Health</footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="section-label">Ready to transform care?</div>
+      <h2>Join 200+ hospitals<br>on DawaTrack</h2>
+      <p>Start your partnership today. Free onboarding, dedicated support, and results within 30 days.</p>
+      <div class="hero-actions">
+        <a href="contact.html" class="btn-primary">Start Partnership →</a>
+        <a href="services.html" class="btn-ghost">View All Features</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="footer-brand">DawaTrack</div>
+        <p class="footer-tagline">Strengthening patient-doctor relationships through intelligent medication tracking.</p>
+      </div>
+      <div class="col-md-2 mb-4">
+        <div class="footer-heading">Platform</div>
+        <ul class="footer-links">
+          <li><a href="services.html">Services</a></li>
+          <li><a href="doctor-dashboard.html">Doctor Dashboard</a></li>
+          <li><a href="patient-dashboard.html">Patient Dashboard</a></li>
+          <li><a href="portal.html">Patient Portal</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2 mb-4">
+        <div class="footer-heading">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="footer-heading">Get in Touch</div>
+        <p style="color:var(--text3);font-size:0.875rem;line-height:1.8;">
+          info@dawatrack.com<br>
+          +254 700 000 000<br>
+          Nairobi, Kenya
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 DawaTrack Hospital Partnership. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">HIPAA Compliance</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Animated counters
+function animateCounter(id, target, suffix, duration) {
+  const el = document.getElementById(id);
+  const start = 0;
+  const step = (target / (duration / 16));
+  let current = start;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = Math.floor(current).toLocaleString() + suffix;
+  }, 16);
+}
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter('s1', 12400, '', 2000);
+      animateCounter('s2', 87, '%', 1800);
+      animateCounter('s3', 214, '+', 1600);
+      animateCounter('s4', 580, 'K', 2200);
+      observer.disconnect();
+    }
+  });
+});
+observer.observe(document.getElementById('s1'));
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.fade-in');
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.style.animationPlayState = 'running';
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => {
+  el.style.animationPlayState = 'paused';
+  revObs.observe(el);
+});
+</script>
+</body>
+</html>
