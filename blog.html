@@ -360,8 +360,9 @@
 
     <!-- Featured -->
     <div class="featured-post" onclick="openArticle('featured')" style="background:#FFFFFF;border:1px solid #D1E4DE;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(27,82,113,0.10);display:grid;margin-bottom:48px;cursor:pointer;transition:box-shadow 0.25s ease,transform 0.2s ease;" onmouseenter="this.style.boxShadow='0 16px 48px rgba(27,82,113,0.18)';this.style.transform='translateY(-3px)'" onmouseleave="this.style.boxShadow='0 8px 32px rgba(27,82,113,0.10)';this.style.transform='translateY(0)'">
-      <div style="background:linear-gradient(135deg,#EDF5F2,#C8E9E1);display:flex;align-items:center;justify-content:center;min-height:260px;font-size:5rem;position:relative;">
-        🏥
+      <div style="position:relative;min-height:260px;overflow:hidden;">
+        <img src="future.jpg" alt="Featured" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;" />
+        <div style="position:absolute;inset:0;background:rgba(244,248,247,0.18);"></div>
         <div style="position:absolute;bottom:16px;left:16px;"><span class="badge badge-teal">Featured</span></div>
       </div>
       <div style="padding:40px 36px;display:flex;flex-direction:column;justify-content:center;">
@@ -384,7 +385,9 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-bottom:60px;">
 
       <div class="blog-card" onclick="openArticle('adherence')">
-        <div class="blog-card-thumb blog-card-thumb-navy">📊</div>
+        <div class="blog-card-thumb" style="background:#FFFFFF;">
+          <img src="medication.jpg" alt="Adherence" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
         <div class="blog-card-body">
           <span class="badge badge-blue">Adherence</span>
           <h3>Improving Medication Adherence: What the Data Shows</h3>
@@ -394,7 +397,9 @@
       </div>
 
       <div class="blog-card" onclick="openArticle('ai')">
-        <div class="blog-card-thumb" style="background:linear-gradient(135deg,#E8E4F8,#C8C0F0);">🤖</div>
+        <div class="blog-card-thumb" style="background:#FFFFFF;">
+          <img src="ai.jpg" alt="AI" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
         <div class="blog-card-body">
           <span class="badge badge-violet">Technology</span>
           <h3>How AI is Transforming Clinical Decision Support in Africa</h3>
@@ -404,7 +409,9 @@
       </div>
 
       <div class="blog-card" onclick="openArticle('alice')">
-        <div class="blog-card-thumb blog-card-thumb-teal">💬</div>
+        <div class="blog-card-thumb" style="background:#FFFFFF;">
+          <img src="alice.jpg" alt="Patient Stories" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
         <div class="blog-card-body">
           <span class="badge badge-green">Patient Stories</span>
           <h3>"Logging my meds changed my life" — Alice's Story</h3>
@@ -414,7 +421,9 @@
       </div>
 
       <div class="blog-card" onclick="openArticle('hypertension')">
-        <div class="blog-card-thumb blog-card-thumb-warm">📋</div>
+        <div class="blog-card-thumb" style="background:#FFFFFF;">
+          <img src="africa.jpg" alt="Hypertension" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
         <div class="blog-card-body">
           <span class="badge badge-amber">Research</span>
           <h3>Hypertension in Sub-Saharan Africa: The Adherence Crisis</h3>
@@ -424,7 +433,9 @@
       </div>
 
       <div class="blog-card" onclick="openArticle('carefeed')">
-        <div class="blog-card-thumb blog-card-thumb-teal">🚀</div>
+        <div class="blog-card-thumb" style="background:#FFFFFF;">
+          <img src="feed.jpg" alt="Care Feed" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
         <div class="blog-card-body">
           <span class="badge badge-teal">Product</span>
           <h3>Introducing the Live Care Feed: Doctor to Patient in Seconds</h3>
@@ -434,7 +445,9 @@
       </div>
 
       <div class="blog-card" onclick="openArticle('partnerships')">
-        <div class="blog-card-thumb blog-card-thumb-navy">🤝</div>
+        <div class="blog-card-thumb" style="background:#FFFFFF;">
+          <img src="integration.jpg" alt="Partnerships" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
         <div class="blog-card-body">
           <span class="badge badge-navy">Partnerships</span>
           <h3>Building Trust Between Hospitals and Digital Health Vendors</h3>
@@ -442,6 +455,7 @@
           <div class="blog-card-meta"><span>Jan 28, 2026 · 7 min</span><span style="color:#5DAC96;font-weight:700;cursor:pointer;">Read →</span></div>
         </div>
       </div>
+
 
     </div>
 
@@ -516,7 +530,9 @@ const ARTICLES = {
     categoryColor: '#5DAC96',
     emoji: '🏥',
     thumbBg: 'linear-gradient(135deg,#EDF5F2,#C8E9E1)',
+    thumbImg: 'dawa.jpg',
     title: 'The Future of Patient-Doctor Relationships in the Digital Age',
+
     date: 'May 11, 2026',
     readTime: '8 min read',
     author: { initials:'AK', name:'Amara Kariuki', role:'CEO & Co-Founder, DawaTrack', avatarBg:'linear-gradient(135deg,#5DAC96,#1B5271)' },
@@ -574,7 +590,9 @@ const ARTICLES = {
     categoryColor: '#3A8DC4',
     emoji: '📊',
     thumbBg: 'linear-gradient(135deg,#D4E4EE,#9BBBD4)',
+    thumbImg: 'medication.jpg',
     title: 'Improving Medication Adherence: What the Data Shows',
+
     date: 'April 20, 2026',
     readTime: '6 min read',
     author: { initials:'DM', name:'Dr. David Mwangi', role:'Chief Medical Officer, DawaTrack', avatarBg:'linear-gradient(135deg,#1B5271,#3A8DC4)' },
@@ -615,7 +633,9 @@ const ARTICLES = {
     categoryColor: '#7B6EC8',
     emoji: '🤖',
     thumbBg: 'linear-gradient(135deg,#E8E4F8,#C8C0F0)',
+    thumbImg: 'analytics.jpg',
     title: 'How AI is Transforming Clinical Decision Support in Africa',
+
     date: 'April 5, 2026',
     readTime: '5 min read',
     author: { initials:'FN', name:'Faith Njeri', role:'CTO & Co-Founder, DawaTrack', avatarBg:'linear-gradient(135deg,#2DAF83,#5DAC96)' },
@@ -651,7 +671,9 @@ const ARTICLES = {
     categoryColor: '#2DAF83',
     emoji: '💬',
     thumbBg: 'linear-gradient(135deg,#EDF5F2,#C8E9E1)',
+    thumbImg: 'amara.jpg',
     title: '"Logging my meds changed my life" — Alice\'s Story',
+
     date: 'March 18, 2026',
     readTime: '4 min read',
     author: { initials:'MO', name:'Mercy Otieno', role:'Head of Partnerships, DawaTrack', avatarBg:'linear-gradient(135deg,#D98A2A,#D94F4F)' },
@@ -689,7 +711,9 @@ const ARTICLES = {
     categoryColor: '#D98A2A',
     emoji: '📋',
     thumbBg: 'linear-gradient(135deg,#FBF0DC,#F8E0B8)',
+    thumbImg: 'alerts.jpg',
     title: 'Hypertension in Sub-Saharan Africa: The Adherence Crisis',
+
     date: 'March 1, 2026',
     readTime: '9 min read',
     author: { initials:'DM', name:'Dr. David Mwangi', role:'Chief Medical Officer, DawaTrack', avatarBg:'linear-gradient(135deg,#1B5271,#3A8DC4)' },
@@ -729,7 +753,9 @@ const ARTICLES = {
     categoryColor: '#5DAC96',
     emoji: '🚀',
     thumbBg: 'linear-gradient(135deg,#EDF5F2,#C8E9E1)',
+    thumbImg: 'feed.jpg',
     title: 'Introducing the Live Care Feed: Doctor to Patient in Seconds',
+
     date: 'February 14, 2026',
     readTime: '3 min read',
     author: { initials:'FN', name:'Faith Njeri', role:'CTO & Co-Founder, DawaTrack', avatarBg:'linear-gradient(135deg,#2DAF83,#5DAC96)' },
@@ -776,7 +802,9 @@ const ARTICLES = {
     categoryColor: '#1B5271',
     emoji: '🤝',
     thumbBg: 'linear-gradient(135deg,#D4E4EE,#9BBBD4)',
+    thumbImg: 'integration.jpg',
     title: 'Building Trust Between Hospitals and Digital Health Vendors',
+
     date: 'January 28, 2026',
     readTime: '7 min read',
     author: { initials:'MO', name:'Mercy Otieno', role:'Head of Partnerships, DawaTrack', avatarBg:'linear-gradient(135deg,#D98A2A,#D94F4F)' },
@@ -842,7 +870,9 @@ function openArticle(id) {
 
   document.getElementById('drawerBody').innerHTML = `
     <!-- Hero thumb -->
-    <div style="background:${art.thumbBg};border-radius:14px;height:180px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:28px;">${art.emoji}</div>
+      <div style="background:${art.thumbBg};border-radius:14px;height:180px;display:flex;align-items:center;justify-content:center;margin-bottom:28px;overflow:hidden;">
+        ${art.thumbImg ? `<img src="${art.thumbImg}" alt="${art.title}" style="width:100%;height:100%;object-fit:cover;display:block;" />` : `<span style="font-size:4rem;">${art.emoji}</span>`}
+      </div>
 
     <!-- Category & title -->
     <span class="article-category" style="color:${art.categoryColor};">${art.category}</span>

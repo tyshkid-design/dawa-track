@@ -460,15 +460,25 @@ body {
 .feat-card:hover::after { transform: scaleX(1); }
 
 .feat-icon {
-  width: 52px; height: 52px;
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
   background: #EDF5F2;
   border: 1px solid #D1E4DE;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
   transition: background 0.2s ease;
 }
+
+/* Put the icon content “at the top” visually by removing extra baseline/misalignment */
+.feat-card h3,
+.feat-card p {
+  position: relative;
+  z-index: 1;
+}
+
 .feat-card:hover .feat-icon {
   background: #C8E9E1;
   border-color: #9DD1C2;
