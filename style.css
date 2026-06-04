@@ -442,7 +442,7 @@ body {
    GRIDS
 ═══════════════════════════════════════════════════════════════════ */
 .grid   { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 24px; }
-.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -535,7 +535,7 @@ body {
 ═══════════════════════════════════════════════════════════════════ */
 .stats-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  grid-template-columns: repeat(3, 1fr);
   background: #FFFFFF;
   border: 1px solid #D1E4DE;
   border-radius: 20px;
@@ -615,6 +615,7 @@ body {
   border: 1px solid #D1E4DE;
   border-radius: 20px;
   padding: 28px;
+  padding-bottom: 76px; /* space for bigger bottom-right avatar */
   transition: all 0.25s ease;
   position: relative;
 }
@@ -651,9 +652,22 @@ body {
   margin-top: 2px;
 }
 
+.testimonial-avatar {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+  z-index: 2;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    CTA BAND
-═══════════════════════════════════════════════════════════════════ */
+ ═══════════════════════════════════════════════════════════════════ */
 .cta-band {
   background: #1B5271;
   padding: 80px 0;

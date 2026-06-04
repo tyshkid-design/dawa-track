@@ -27,7 +27,9 @@
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
         <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="card.html">S/card</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="pharmacy-dashboard.html">Pharmacy</a></li>
         <li class="nav-item ms-2"><a class="btn-nav-portal nav-link" href="portal.html">Sign In →</a></li>
       </ul>
     </div>
@@ -53,15 +55,11 @@
         <div class="stat-lbl">Active Patients</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num"><span id="s2">0</span><span style="color:#5DAC96;">%</span></div>
-        <div class="stat-lbl">Avg Adherence Rate</div>
-      </div>
-      <div class="stat-cell">
         <div class="stat-num"><span id="s3">0</span><span style="color:#5DAC96;">+</span></div>
         <div class="stat-lbl">Hospital Partners</div>
       </div>
       <div class="stat-cell">
-        <div class="stat-num"><span id="s4">0</span><span style="color:#5DAC96;">K</span></div>
+        <div class="stat-num"><span id="s4">0</span></div>
         <div class="stat-lbl">Medications Tracked</div>
       </div>
     </div>
@@ -242,21 +240,46 @@
       <span class="section-label">Testimonials</span>
       <h2 class="section-title">What our partners say</h2>
     </div>
+    <!-- 3×2 grid of testimonials with small circular avatars (bottom-right) -->
+    <!-- Replace the src paths below with your own JPG images (recommended size ~200x200px) -->
     <div class="grid-3">
       <div class="testimonial-card">
         <p class="testimonial-text">DawaTrack completely transformed how we follow up with chronic patients. Adherence improved by 40% within three months — the care feed is a game-changer.</p>
-        <div class="testimonial-author">Dr. Jane Doe</div>
-        <div class="testimonial-role">Head of Internal Medicine, City Hospital Nairobi</div>
+        <div class="testimonial-author">Dr. Tasneem Yamani</div>
+        <div class="testimonial-role">Geriatric GP </div>
+        <img class="testimonial-avatar" src="Yamani.png" alt="">
       </div>
       <div class="testimonial-card">
         <p class="testimonial-text">The real-time dashboard means I can catch missed doses before they become emergencies. Patients actually read the notes I send — they tell me so at appointments.</p>
-        <div class="testimonial-author">Nurse John Smith</div>
-        <div class="testimonial-role">Senior Nurse, Regional Clinic Mombasa</div>
+        <div class="testimonial-author">Dr. Adnaan Mustafa</div>
+        <div class="testimonial-role">Paediatric Intensivist</div>
+        <img class="testimonial-avatar" src="Adnaan.png" alt="">
       </div>
       <div class="testimonial-card">
         <p class="testimonial-text">Implementation took one day. The analytics already inform policy decisions across all six of our facilities. Worth every shilling.</p>
-        <div class="testimonial-author">Lisa Brown</div>
-        <div class="testimonial-role">Hospital Administrator, Metro Health Group</div>
+        <div class="testimonial-author">Dr. Hassan Bharmal</div>
+        <div class="testimonial-role">General surgeon and endoscopist</div>
+        <img class="testimonial-avatar" src="Hassan.png" alt="">
+      </div>
+
+      <!-- Row 2 -->
+      <div class="testimonial-card">
+        <p class="testimonial-text">DawaTrack's follow-up system has reduced our no-show rates dramatically. Parents now get gentle reminders and clear instructions for their children.</p>
+        <div class="testimonial-author">Nurse Karen</div>
+        <div class="testimonial-role">Pediatrician, Coast General Hospital</div>
+        <img class="testimonial-avatar" src="faith.jpg" alt="">
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Seeing adherence data in real time helps me counsel patients more effectively. It's like having a direct line to their daily routine.</p>
+        <div class="testimonial-author">Geoffrey</div>
+        <div class="testimonial-role">Lead Pharmacist, Nakuru Referral</div>
+        <img class="testimonial-avatar" src="david.jpg" alt="">
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">We rolled it out across 4 sites. The insights from the dashboard have directly influenced our chronic care protocols and improved outcomes.</p>
+        <div class="testimonial-author">Clinical Officer</div>
+        <div class="testimonial-role">Medical Director, Rift Valley Health</div>
+        <img class="testimonial-avatar" src="mercy.jpg" alt="">
       </div>
     </div>
   </div>
@@ -266,7 +289,7 @@
 <section class="cta-band">
   <div class="container" style="text-align:center;position:relative;z-index:1;">
     <span class="section-label" style="color:#9DD1C2;">Ready to transform care?</span>
-    <h2>Join 200+ hospitals<br>already on <em>DawaTrack</em></h2>
+    <h2>Join 14+ hospitals<br>already on <em>DawaTrack</em></h2>
     <p>Free onboarding · Dedicated support · Results within 30 days.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
       <a href="contact.html" class="btn-primary">Start Partnership →</a>
@@ -301,7 +324,7 @@
       </div>
       <div class="col-md-4 mb-4">
         <div class="footer-heading">Get in Touch</div>
-        <p style="color:#9DD1C2;font-size:0.875rem;line-height:1.9;font-weight:300;">info@dawatrack.com<br>+254 700 000 000<br>Westlands, Nairobi, Kenya</p>
+        <p style="color:#9DD1C2;font-size:0.875rem;line-height:1.9;font-weight:300;">dawa@memeyai.com<br>+254 794153677<br>Thome square/Ushindi east avenue</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -327,10 +350,9 @@ function animCount(id, target, suffix, dur) {
 }
 const obs = new IntersectionObserver(e => {
   if (e[0].isIntersecting) {
-    animCount('s1', 12400, '', 2000);
-    animCount('s2', 87, '', 1800);
-    animCount('s3', 214, '', 1600);
-    animCount('s4', 580, '', 2000);
+    animCount('s1', 2400, '', 2000);
+    animCount('s3', 14, '+', 1600);
+    animCount('s4', 240, '', 2000);
     obs.disconnect();
   }
 });
