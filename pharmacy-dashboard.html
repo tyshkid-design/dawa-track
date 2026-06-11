@@ -4,1079 +4,610 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pharmacy Dashboard — DawaTrack</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
   <style>
     /*
-    ══════════════════════════════════════════════════════════════
-    DAWATRACK · PHARMACY DASHBOARD
-    Brand palette — every color as a literal value, no :root block
-    ──────────────────────────────────────────────────────────────
+    ══════════════════════════════════════════════════════════
+    DAWATRACK · PHARMACY DASHBOARD  — embedded CSS + JS
+    No :root block — every color is a literal value
+    ──────────────────────────────────────────────────────────
     Page bg        #F4F8F7
-    Surface white  #FFFFFF
-    Surface tinted #EDF5F2
+    Surface        #FFFFFF
+    Tinted surface #EDF5F2
     Deep ink       #0E1C28
     Body copy      #3A5563
     Muted          #7A9CA8
     Border         #D1E4DE
-    Brand teal     #5DAC96   (primary)
-    Teal dark      #3D8F7A   (hover)
-    Teal light     #7ECAB5
+    Brand teal     #5DAC96
+    Teal dark      #3D8F7A
     Teal shimmer   #9DD1C2
     Teal ultra-lt  #C8E9E1
-    Brand navy     #1B5271   (secondary)
+    Brand navy     #1B5271
     Navy dark      #0E2E42
-    Success        #2DAF83
-    Warning        #D98A2A
-    Danger         #D94F4F
-    Info           #3A8DC4
-    ══════════════════════════════════════════════════════════════
+    Success green  #2DAF83
+    Warning amber  #D98A2A
+    Danger coral   #D94F4F
+    Info blue      #3A8DC4
+    ══════════════════════════════════════════════════════════
     */
 
-    /* ─── RESET ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; font-size: 16px; }
-    body {
-      font-family: 'Outfit', sans-serif;
-      background-color: #F4F8F7;
-      color: #0E1C28;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family: 'Outfit', sans-serif; background: #F4F8F7; color: #0E1C28; min-height: 100vh; -webkit-font-smoothing: antialiased; }
     ::selection { background: #C8E9E1; color: #1B5271; }
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: #F4F8F7; }
     ::-webkit-scrollbar-thumb { background: #9DD1C2; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #5DAC96; }
 
-    /* ─── NAVBAR ─── */
+    /* ── NAVBAR ── */
     .ph-nav {
-      background: rgba(244,248,247,0.94);
+      background: rgba(244,248,247,0.95);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid #D1E4DE;
-      height: 64px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      padding: 0 32px;
-      gap: 20px;
+      height: 64px; position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; padding: 0 28px; gap: 16px;
     }
-    .ph-nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      font-size: 1.3rem;
-      color: #1B5271;
-      letter-spacing: -0.025em;
-      text-decoration: none;
-      white-space: nowrap;
+    .ph-brand {
+      font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem;
+      color: #1B5271; letter-spacing: -0.025em; text-decoration: none;
+      display: flex; align-items: center; gap: 8px; white-space: nowrap;
     }
-    .ph-nav-brand .dot { color: #5DAC96; }
-    .ph-nav-badge {
-      background: #EDF5F2;
-      border: 1px solid #D1E4DE;
-      border-radius: 8px;
-      padding: 4px 12px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #5DAC96;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+    .ph-brand .dot { color: #5DAC96; }
+    .ph-pill {
+      background: #EDF5F2; border: 1px solid #D1E4DE; border-radius: 8px;
+      padding: 4px 12px; font-size: 0.7rem; font-weight: 700;
+      color: #5DAC96; letter-spacing: 0.07em; text-transform: uppercase;
     }
-    .ph-nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-    .ph-nav-user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 10px;
-      padding: 7px 14px;
-      cursor: pointer;
-      transition: all 0.18s ease;
+    .ph-nav-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .ph-user-chip {
+      display: flex; align-items: center; gap: 9px;
+      background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 10px;
+      padding: 7px 14px; cursor: default;
     }
-    .ph-nav-user:hover { border-color: #9DD1C2; background: #EDF5F2; }
-    .ph-nav-user-avatar {
-      width: 30px; height: 30px;
-      border-radius: 50%;
+    .ph-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
       background: linear-gradient(135deg, #5DAC96, #1B5271);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 0.72rem; color: #FFFFFF;
-      flex-shrink: 0;
+      font-weight: 800; font-size: 0.70rem; color: #FFFFFF; flex-shrink: 0;
     }
-    .ph-nav-user-name { font-size: 0.82rem; font-weight: 600; color: #1B5271; }
-    .ph-nav-user-role { font-size: 0.68rem; color: #7A9CA8; }
-
+    .ph-user-name { font-size: 0.82rem; font-weight: 700; color: #1B5271; }
+    .ph-user-role { font-size: 0.68rem; color: #7A9CA8; }
     .btn-logout {
-      background: none;
-      border: 1.5px solid #D1E4DE;
-      border-radius: 9px;
-      padding: 7px 16px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: #7A9CA8;
-      cursor: pointer;
-      transition: all 0.18s ease;
+      background: none; border: 1.5px solid #D1E4DE; border-radius: 9px;
+      padding: 7px 16px; font-family: 'Outfit', sans-serif; font-weight: 600;
+      font-size: 0.8rem; color: #7A9CA8; cursor: pointer; transition: all 0.18s;
     }
     .btn-logout:hover { border-color: #D94F4F; color: #D94F4F; background: #FAE8E8; }
 
-    /* ─── LAYOUT ─── */
-    .ph-layout {
-      display: grid;
-      grid-template-columns: 256px 1fr;
-      min-height: calc(100vh - 64px);
-    }
+    /* ── LAYOUT ── */
+    .ph-layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); }
 
-    /* ─── SIDEBAR ─── */
+    /* ── SIDEBAR ── */
     .ph-sidebar {
-      background: #FFFFFF;
-      border-right: 1px solid #D1E4DE;
-      padding: 28px 16px;
-      position: sticky;
-      top: 64px;
-      height: calc(100vh - 64px);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
+      background: #FFFFFF; border-right: 1px solid #D1E4DE;
+      padding: 24px 14px; position: sticky; top: 64px;
+      height: calc(100vh - 64px); overflow-y: auto;
+      display: flex; flex-direction: column;
     }
-    .ph-sidebar-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-weight: 800; font-size: 1.05rem;
-      color: #1B5271; margin-bottom: 32px;
-      padding: 0 8px; letter-spacing: -0.02em;
+    .ph-sb-logo {
+      display: flex; align-items: center; gap: 9px;
+      font-weight: 800; font-size: 1rem; color: #1B5271;
+      margin-bottom: 28px; padding: 0 8px; letter-spacing: -0.02em;
     }
-    .ph-sidebar-logo span { font-size: 1.3rem; }
-    .ph-section-lbl {
-      font-size: 0.63rem; font-weight: 800;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: #7A9CA8; margin-bottom: 6px; padding: 0 10px;
+    .ph-sb-section { margin-bottom: 22px; }
+    .ph-sb-lbl {
+      font-size: 0.62rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #7A9CA8; margin-bottom: 6px; padding: 0 8px;
     }
-    .ph-nav-group { margin-bottom: 24px; }
-    .ph-nav-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: 10px;
-      color: #3A5563; text-decoration: none;
-      font-size: 0.875rem; font-weight: 500;
-      transition: all 0.18s ease; margin-bottom: 2px;
-      cursor: pointer; border: none; background: none;
-      width: 100%; text-align: left; font-family: 'Outfit', sans-serif;
+    .ph-sb-link {
+      display: flex; align-items: center; gap: 9px; padding: 9px 10px;
+      border-radius: 9px; color: #3A5563; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; border: none; background: none; width: 100%;
+      text-align: left; font-family: 'Outfit', sans-serif; transition: all 0.18s;
+      margin-bottom: 2px; text-decoration: none;
     }
-    .ph-nav-link:hover { background: #EDF5F2; color: #1B5271; }
-    .ph-nav-link.active {
-      background: #EDF5F2; color: #5DAC96;
-      font-weight: 600; border: 1px solid #D1E4DE;
-    }
-    .ph-nav-link .ph-icon { width: 18px; text-align: center; font-size: 0.95rem; flex-shrink: 0; }
+    .ph-sb-link:hover { background: #EDF5F2; color: #1B5271; }
+    .ph-sb-link.active { background: #EDF5F2; color: #5DAC96; font-weight: 600; border: 1px solid #D1E4DE; }
+    .ph-sb-link .ico { width: 17px; text-align: center; font-size: 0.9rem; flex-shrink: 0; }
 
-    /* alert widget in sidebar */
-    .ph-sidebar-alert {
-      background: #FAE8E8;
-      border: 1px solid #F0BBBB;
-      border-radius: 14px;
-      padding: 16px;
-      margin-top: auto;
-    }
-    .ph-sidebar-alert-label {
-      font-size: 0.63rem; font-weight: 800;
-      letter-spacing: 0.09em; text-transform: uppercase;
-      color: #D94F4F; margin-bottom: 6px;
-    }
-    .ph-sidebar-alert-val {
-      font-family: 'Instrument Serif', serif;
-      font-size: 2.4rem; color: #D94F4F; line-height: 1; margin-bottom: 4px;
-    }
-    .ph-sidebar-alert-sub { font-size: 0.72rem; color: #B03030; margin-bottom: 12px; }
-    .ph-sidebar-alert-btn {
-      width: 100%; background: #D94F4F; border: none;
-      color: #FFFFFF; border-radius: 8px; padding: 8px;
-      font-size: 0.78rem; font-family: 'Outfit', sans-serif;
-      font-weight: 700; cursor: pointer; transition: background 0.18s ease;
-    }
-    .ph-sidebar-alert-btn:hover { background: #B03030; }
-
-    /* ─── MAIN CONTENT ─── */
-    .ph-main {
-      background: #F4F8F7;
-      padding: 32px;
-      overflow-y: auto;
-    }
-    .ph-header {
-      display: flex; align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
-    }
-    .ph-page-title {
-      font-family: 'Instrument Serif', serif;
-      font-weight: 400; font-size: 1.7rem;
-      letter-spacing: -0.02em; color: #1B5271;
-    }
-    .ph-page-sub { font-size: 0.84rem; color: #7A9CA8; margin-top: 4px; }
-    .ph-date-chip {
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 0.8rem; color: #3A5563;
-      display: inline-flex; align-items: center; gap: 6px;
-      font-weight: 500; white-space: nowrap;
+    /* Requests badge on sidebar */
+    .req-badge {
+      background: #D94F4F; color: #FFFFFF; font-size: 0.60rem;
+      font-weight: 800; border-radius: 100px; padding: 2px 7px; margin-left: auto;
     }
 
-    /* ─── TABS ─── */
-    .ph-tabs {
-      display: flex; gap: 4px;
-      background: #EDF5F2;
-      border: 1px solid #D1E4DE;
-      border-radius: 12px;
-      padding: 4px; margin-bottom: 24px;
+    /* Sidebar alert */
+    .sb-alert {
+      border-radius: 12px; padding: 14px; margin-top: auto;
     }
-    .ph-tab {
-      flex: none; padding: 9px 20px;
-      border: none; border-radius: 9px;
-      background: transparent; color: #7A9CA8;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 600; font-size: 0.84rem;
-      cursor: pointer; transition: all 0.18s ease;
-      white-space: nowrap;
-    }
-    .ph-tab.active {
-      background: #FFFFFF; color: #1B5271;
-      border: 1px solid #D1E4DE;
-      box-shadow: 0 2px 8px rgba(27,82,113,0.08);
-    }
-    .ph-tab-panel { display: none; }
-    .ph-tab-panel.active { display: block; }
+    .sb-alert-red { background: #FAE8E8; border: 1px solid #F0BBBB; }
+    .sb-alert-lbl { font-size: 0.60rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 5px; }
+    .sb-alert-red .sb-alert-lbl { color: #D94F4F; }
+    .sb-alert-val { font-family: 'Instrument Serif', serif; font-size: 2.3rem; line-height: 1; margin-bottom: 3px; }
+    .sb-alert-red .sb-alert-val { color: #D94F4F; }
+    .sb-alert-sub { font-size: 0.70rem; margin-bottom: 10px; }
+    .sb-alert-red .sb-alert-sub { color: #B03030; }
 
-    /* ─── KPI GRID ─── */
-    .ph-kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px; margin-bottom: 24px;
-    }
-    .ph-kpi {
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 16px;
-      padding: 20px 22px;
-      position: relative; overflow: hidden;
-      transition: all 0.22s ease;
-    }
-    .ph-kpi:hover { border-color: #9DD1C2; box-shadow: 0 6px 24px rgba(27,82,113,0.10); transform: translateY(-2px); }
-    .ph-kpi-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-    .ph-kpi-accent.teal   { background: linear-gradient(90deg, #5DAC96, #9DD1C2); }
-    .ph-kpi-accent.green  { background: linear-gradient(90deg, #2DAF83, #5DAC96); }
-    .ph-kpi-accent.amber  { background: linear-gradient(90deg, #D98A2A, #F0C070); }
-    .ph-kpi-accent.red    { background: linear-gradient(90deg, #D94F4F, #F09090); }
-    .ph-kpi-accent.navy   { background: linear-gradient(90deg, #1B5271, #5DAC96); }
-    .ph-kpi-label { font-size: 0.69rem; font-weight: 700; color: #7A9CA8; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
-    .ph-kpi-val { font-family: 'Instrument Serif', serif; font-size: 2.1rem; color: #1B5271; line-height: 1; margin-bottom: 6px; }
-    .ph-kpi-change { font-size: 0.73rem; font-weight: 600; }
-    .ph-kpi-change.up      { color: #2DAF83; }
-    .ph-kpi-change.down    { color: #D94F4F; }
-    .ph-kpi-change.neutral { color: #7A9CA8; }
+    /* ── MAIN ── */
+    .ph-main { background: #F4F8F7; padding: 28px; overflow-y: auto; }
+    .ph-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; gap: 14px; flex-wrap: wrap; }
+    .ph-page-title { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 1.6rem; letter-spacing: -0.02em; color: #1B5271; }
+    .ph-page-sub { font-size: 0.82rem; color: #7A9CA8; margin-top: 4px; }
+    .date-chip { background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 8px; padding: 7px 13px; font-size: 0.78rem; color: #3A5563; display: inline-flex; align-items: center; gap: 6px; font-weight: 500; white-space: nowrap; }
 
-    /* ─── PANEL / CARD ─── */
-    .ph-panel {
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 16px;
-      overflow: hidden;
-      transition: box-shadow 0.22s ease;
-    }
-    .ph-panel:hover { box-shadow: 0 6px 24px rgba(27,82,113,0.09); }
-    .ph-panel-hdr {
-      padding: 18px 22px;
-      border-bottom: 1px solid #D1E4DE;
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 12px; flex-wrap: wrap;
-      background: #F4F8F7;
-    }
-    .ph-panel-title { font-weight: 700; font-size: 0.95rem; color: #1B5271; }
-    .ph-panel-sub   { font-size: 0.75rem; color: #7A9CA8; margin-top: 2px; }
-    .ph-panel-body  { padding: 0; }
+    /* ── KPI GRID ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px; }
+    .kpi-card { background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 14px; padding: 18px 20px; position: relative; overflow: hidden; transition: all 0.22s; }
+    .kpi-card:hover { border-color: #9DD1C2; box-shadow: 0 6px 24px rgba(27,82,113,0.10); transform: translateY(-2px); }
+    .kpi-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi-accent.teal   { background: linear-gradient(90deg, #5DAC96, #9DD1C2); }
+    .kpi-accent.green  { background: linear-gradient(90deg, #2DAF83, #5DAC96); }
+    .kpi-accent.amber  { background: linear-gradient(90deg, #D98A2A, #F0C070); }
+    .kpi-accent.red    { background: linear-gradient(90deg, #D94F4F, #F09090); }
+    .kpi-accent.navy   { background: linear-gradient(90deg, #1B5271, #5DAC96); }
+    .kpi-lbl { font-size: 0.67rem; font-weight: 700; color: #7A9CA8; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 7px; }
+    .kpi-val { font-family: 'Instrument Serif', serif; font-size: 2rem; color: #1B5271; line-height: 1; margin-bottom: 5px; }
+    .kpi-sub { font-size: 0.70rem; color: #7A9CA8; }
 
-    /* ─── TABLE ─── */
+    /* ── PANEL ── */
+    .panel { background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 14px; overflow: hidden; margin-bottom: 18px; }
+    .panel-hdr { padding: 16px 20px; border-bottom: 1px solid #D1E4DE; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: #F4F8F7; }
+    .panel-title { font-weight: 700; font-size: 0.92rem; color: #1B5271; }
+    .panel-sub   { font-size: 0.72rem; color: #7A9CA8; margin-top: 2px; }
+    .panel-body  { padding: 0; }
+
+    /* ── TABS ── */
+    .ph-tabs { display: flex; gap: 4px; background: #EDF5F2; border: 1px solid #D1E4DE; border-radius: 10px; padding: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+    .ph-tab  { flex: none; padding: 8px 18px; border: none; border-radius: 7px; background: transparent; color: #7A9CA8; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+    .ph-tab.active { background: #FFFFFF; color: #1B5271; border: 1px solid #D1E4DE; box-shadow: 0 2px 8px rgba(27,82,113,0.08); }
+    .ph-panel { display: none; }
+    .ph-panel.active { display: block; }
+
+    /* ── TABLE ── */
     .ph-table { width: 100%; border-collapse: collapse; }
-    .ph-table th {
-      font-size: 0.68rem; font-weight: 800;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: #7A9CA8; padding: 12px 16px;
-      border-bottom: 1.5px solid #D1E4DE;
-      background: #F4F8F7; text-align: left;
-      white-space: nowrap;
-    }
-    .ph-table td {
-      padding: 13px 16px;
-      border-bottom: 1px solid #D1E4DE;
-      font-size: 0.875rem; color: #3A5563;
-      vertical-align: middle;
-    }
+    .ph-table th { font-size: 0.67rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #7A9CA8; padding: 11px 14px; border-bottom: 1.5px solid #D1E4DE; background: #F4F8F7; text-align: left; white-space: nowrap; }
+    .ph-table td { padding: 12px 14px; border-bottom: 1px solid #D1E4DE; font-size: 0.85rem; color: #3A5563; vertical-align: middle; }
     .ph-table tr:last-child td { border-bottom: none; }
     .ph-table tr:hover td { background: #EDF5F2; color: #1B5271; }
 
-    /* ─── BADGES ─── */
-    .badge {
-      padding: 4px 11px; border-radius: 100px;
-      font-size: 0.68rem; font-weight: 700;
-      letter-spacing: 0.04em;
+    /* ── BADGES ── */
+    .badge { padding: 3px 10px; border-radius: 100px; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 4px; }
+    .bg    { background: #D5F3EB; color: #1E8A65; border: 1px solid #A8E4D0; }
+    .ba    { background: #FBF0DC; color: #A0620A; border: 1px solid #F0CC88; }
+    .br    { background: #FAE0E0; color: #B03030; border: 1px solid #F0AAAA; }
+    .bb    { background: #DCF0FA; color: #1A6496; border: 1px solid #9DD0F0; }
+    .bt    { background: #C8E9E1; color: #2E7A65; border: 1px solid #9DD1C2; }
+    .bn    { background: #D4E4EE; color: #1B5271; border: 1px solid #9BBBD4; }
+    .bgr   { background: #EDF5F2; color: #7A9CA8; border: 1px solid #D1E4DE; }
+
+    /* ── FORM CONTROLS ── */
+    .f-label { font-size: 0.78rem; font-weight: 700; color: #1B5271; display: block; margin-bottom: 6px; }
+    .f-input, .f-select, .f-textarea {
+      width: 100%; background: #FFFFFF; border: 1.5px solid #D1E4DE; border-radius: 9px;
+      color: #0E1C28; font-family: 'Outfit', sans-serif; font-size: 0.88rem; padding: 9px 13px;
+      transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
+    }
+    .f-input:focus, .f-select:focus, .f-textarea:focus { outline: none; border-color: #5DAC96; box-shadow: 0 0 0 3px rgba(93,172,150,0.13); }
+    .f-input::placeholder, .f-textarea::placeholder { color: #7A9CA8; }
+    .f-select option { background: #FFFFFF; color: #0E1C28; }
+    .mb2 { margin-bottom: 14px; }
+    .mb3 { margin-bottom: 18px; }
+    .g2  { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    @media(max-width:520px){ .g2{grid-template-columns:1fr;} }
+
+    /* ── BUTTONS ── */
+    .btn-t {
+      background: #5DAC96; color: #FFFFFF; border: none; padding: 9px 22px; border-radius: 9px;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 3px 14px rgba(93,172,150,0.30); display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-t:hover { background: #3D8F7A; transform: translateY(-2px); box-shadow: 0 5px 22px rgba(93,172,150,0.42); }
+    .btn-n {
+      background: #1B5271; color: #FFFFFF; border: none; padding: 9px 22px; border-radius: 9px;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer;
+      transition: background 0.2s, transform 0.15s; box-shadow: 0 3px 14px rgba(27,82,113,0.22);
+      display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-n:hover { background: #0E2E42; transform: translateY(-2px); }
+    .btn-g {
+      background: #FFFFFF; color: #1B5271; border: 1.5px solid #D1E4DE; padding: 9px 20px;
+      border-radius: 9px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 7px;
+    }
+    .btn-g:hover { border-color: #5DAC96; background: #EDF5F2; }
+    .btn-sm {
+      padding: 5px 12px; border-radius: 7px; font-family: 'Outfit', sans-serif; font-weight: 700;
+      font-size: 0.75rem; cursor: pointer; transition: all 0.18s; border: none;
       display: inline-flex; align-items: center; gap: 4px;
     }
-    .badge-green  { background: #D5F3EB; color: #1E8A65; border: 1px solid #A8E4D0; }
-    .badge-amber  { background: #FBF0DC; color: #A0620A; border: 1px solid #F0CC88; }
-    .badge-red    { background: #FAE0E0; color: #B03030; border: 1px solid #F0AAAA; }
-    .badge-blue   { background: #DCF0FA; color: #1A6496; border: 1px solid #9DD0F0; }
-    .badge-teal   { background: #C8E9E1; color: #2E7A65; border: 1px solid #9DD1C2; }
-    .badge-navy   { background: #D4E4EE; color: #1B5271; border: 1px solid #9BBBD4; }
-    .badge-gray   { background: #EDF5F2; color: #7A9CA8; border: 1px solid #D1E4DE; }
+    .bsm-t  { background: #EDF5F2; color: #5DAC96; border: 1px solid #D1E4DE; }
+    .bsm-t:hover { background: #C8E9E1; border-color: #9DD1C2; }
+    .bsm-r  { background: #FAE8E8; color: #D94F4F; border: 1px solid #F0AAAA; }
+    .bsm-r:hover { background: #F0AAAA; }
+    .bsm-n  { background: #D4E4EE; color: #1B5271; border: 1px solid #9BBBD4; }
+    .bsm-n:hover { background: #9BBBD4; }
+    .w100 { width: 100%; justify-content: center; }
 
-    /* stock level bar */
-    .stock-bar { height: 6px; border-radius: 100px; background: #EDF5F2; overflow: hidden; margin-top: 6px; min-width: 80px; }
-    .stock-fill { height: 100%; border-radius: 100px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
-    .stock-fill.high   { background: linear-gradient(90deg, #5DAC96, #9DD1C2); }
-    .stock-fill.medium { background: linear-gradient(90deg, #D98A2A, #F0C070); }
-    .stock-fill.low    { background: linear-gradient(90deg, #D94F4F, #F09090); }
+    /* ── SEARCH BAR ── */
+    .srch-wrap { position: relative; flex: 1; min-width: 180px; }
+    .srch-ico { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 0.83rem; color: #7A9CA8; pointer-events: none; }
+    .srch-input { width: 100%; background: #FFFFFF; border: 1.5px solid #D1E4DE; border-radius: 9px; color: #0E1C28; font-family: 'Outfit', sans-serif; font-size: 0.85rem; padding: 8px 12px 8px 34px; transition: border-color 0.2s, box-shadow 0.2s; }
+    .srch-input:focus { outline: none; border-color: #5DAC96; box-shadow: 0 0 0 3px rgba(93,172,150,0.12); }
+    .srch-input::placeholder { color: #7A9CA8; }
+    .toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
 
-    /* ─── FORM ELEMENTS ─── */
-    .ph-form-label {
-      font-size: 0.8rem; font-weight: 700;
-      color: #1B5271; display: block;
-      margin-bottom: 7px; letter-spacing: 0.01em;
+    /* ── MODAL ── */
+    .ph-modal-ov {
+      position: fixed; inset: 0; background: rgba(14,28,40,0.44); backdrop-filter: blur(4px);
+      z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; pointer-events: none; transition: opacity 0.26s;
     }
-    .ph-input, .ph-select, .ph-textarea {
-      width: 100%;
-      background: #FFFFFF;
-      border: 1.5px solid #D1E4DE;
-      border-radius: 10px;
-      color: #0E1C28;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.9rem;
-      padding: 10px 14px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-      appearance: none;
-    }
-    .ph-input:focus, .ph-select:focus, .ph-textarea:focus {
-      outline: none;
-      border-color: #5DAC96;
-      box-shadow: 0 0 0 3px rgba(93,172,150,0.15);
-    }
-    .ph-input::placeholder, .ph-textarea::placeholder { color: #7A9CA8; }
-    .ph-select option { background: #FFFFFF; color: #0E1C28; }
-    .mb-3 { margin-bottom: 16px; }
-    .mb-4 { margin-bottom: 20px; }
-
-    /* ─── BUTTONS ─── */
-    .btn-ph-primary {
-      background: #5DAC96;
-      color: #FFFFFF;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 10px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700; font-size: 0.875rem;
-      cursor: pointer;
-      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
-      box-shadow: 0 4px 16px rgba(93,172,150,0.32);
-      display: inline-flex; align-items: center; gap: 7px;
-    }
-    .btn-ph-primary:hover { background: #3D8F7A; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(93,172,150,0.44); }
-
-    .btn-ph-navy {
-      background: #1B5271;
-      color: #FFFFFF;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 10px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700; font-size: 0.875rem;
-      cursor: pointer;
-      transition: background 0.2s ease, transform 0.15s ease;
-      box-shadow: 0 4px 16px rgba(27,82,113,0.24);
-      display: inline-flex; align-items: center; gap: 7px;
-    }
-    .btn-ph-navy:hover { background: #0E2E42; transform: translateY(-2px); }
-
-    .btn-ph-ghost {
-      background: #FFFFFF;
-      color: #1B5271;
-      border: 1.5px solid #D1E4DE;
-      padding: 10px 22px;
-      border-radius: 10px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 600; font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.18s ease;
-      display: inline-flex; align-items: center; gap: 7px;
-    }
-    .btn-ph-ghost:hover { border-color: #5DAC96; background: #EDF5F2; }
-
-    .btn-ph-sm {
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700; font-size: 0.78rem;
-      cursor: pointer; transition: all 0.18s ease;
-      display: inline-flex; align-items: center; gap: 5px;
-      border: none;
-    }
-    .btn-ph-sm.teal   { background: #EDF5F2; color: #5DAC96; border: 1px solid #D1E4DE; }
-    .btn-ph-sm.teal:hover { background: #C8E9E1; border-color: #9DD1C2; color: #3D8F7A; }
-    .btn-ph-sm.red    { background: #FAE8E8; color: #D94F4F; border: 1px solid #F0AAAA; }
-    .btn-ph-sm.red:hover  { background: #F0AAAA; color: #B03030; }
-    .btn-ph-sm.navy   { background: #D4E4EE; color: #1B5271; border: 1px solid #9BBBD4; }
-    .btn-ph-sm.navy:hover { background: #9BBBD4; }
-
-    /* ─── SEARCH / FILTER BAR ─── */
-    .ph-toolbar {
-      display: flex; align-items: center;
-      gap: 10px; flex-wrap: wrap; margin-bottom: 16px;
-    }
-    .ph-search-wrap {
-      position: relative; flex: 1; min-width: 200px;
-    }
-    .ph-search-icon {
-      position: absolute; left: 12px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.85rem; color: #7A9CA8; pointer-events: none;
-    }
-    .ph-search {
-      width: 100%; background: #FFFFFF;
-      border: 1.5px solid #D1E4DE; border-radius: 10px;
-      color: #0E1C28; font-family: 'Outfit', sans-serif;
-      font-size: 0.875rem; padding: 9px 12px 9px 36px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .ph-search:focus { outline: none; border-color: #5DAC96; box-shadow: 0 0 0 3px rgba(93,172,150,0.12); }
-    .ph-search::placeholder { color: #7A9CA8; }
-    .ph-filter-select {
-      background: #FFFFFF; border: 1.5px solid #D1E4DE;
-      border-radius: 10px; color: #3A5563;
-      font-family: 'Outfit', sans-serif; font-size: 0.84rem;
-      padding: 9px 14px; cursor: pointer;
-      transition: border-color 0.2s ease;
-    }
-    .ph-filter-select:focus { outline: none; border-color: #5DAC96; }
-
-    /* ─── MODAL ─── */
-    .ph-modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(14,28,40,0.45);
-      backdrop-filter: blur(4px);
-      z-index: 2000;
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.28s ease;
-    }
-    .ph-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .ph-modal-ov.open { opacity: 1; pointer-events: all; }
     .ph-modal {
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 20px;
-      width: 100%; max-width: 560px;
-      max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 24px 80px rgba(27,82,113,0.22);
-      transform: translateY(16px);
-      transition: transform 0.28s cubic-bezier(0.4,0.2,0.2,1);
+      background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 18px;
+      width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 72px rgba(27,82,113,0.20); transform: translateY(14px);
+      transition: transform 0.26s cubic-bezier(0.4,0.2,0.2,1);
     }
-    .ph-modal-overlay.open .ph-modal { transform: translateY(0); }
-    .ph-modal-hdr {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid #D1E4DE;
-      background: #F4F8F7;
-    }
-    .ph-modal-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.3rem; color: #1B5271;
-    }
-    .ph-modal-close {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: #FFFFFF; border: 1px solid #D1E4DE;
-      font-size: 0.9rem; color: #7A9CA8;
-      cursor: pointer; display: flex; align-items: center;
-      justify-content: center; transition: all 0.18s ease;
-    }
+    .ph-modal-ov.open .ph-modal { transform: translateY(0); }
+    .ph-modal-hdr { display: flex; align-items: center; justify-content: space-between; padding: 17px 22px; border-bottom: 1px solid #D1E4DE; background: #F4F8F7; border-radius: 18px 18px 0 0; }
+    .ph-modal-title { font-family: 'Instrument Serif', serif; font-size: 1.2rem; color: #1B5271; }
+    .ph-modal-close { width: 30px; height: 30px; border-radius: 50%; background: #FFFFFF; border: 1px solid #D1E4DE; font-size: 0.85rem; color: #7A9CA8; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.18s; }
     .ph-modal-close:hover { background: #FAE8E8; border-color: #F0AAAA; color: #D94F4F; }
-    .ph-modal-body { padding: 24px; }
-    .ph-modal-footer {
-      padding: 16px 24px;
-      border-top: 1px solid #D1E4DE;
-      display: flex; justify-content: flex-end; gap: 10px;
-      background: #F4F8F7;
-    }
-    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 520px) { .form-grid-2 { grid-template-columns: 1fr; } }
+    .ph-modal-body { padding: 20px 22px; }
+    .ph-modal-foot { padding: 13px 22px; border-top: 1px solid #D1E4DE; display: flex; justify-content: flex-end; gap: 10px; background: #F4F8F7; border-radius: 0 0 18px 18px; }
 
-    /* ─── TOAST ─── */
-    .ph-toasts {
-      position: fixed; bottom: 24px; right: 24px;
-      z-index: 9999; display: flex;
-      flex-direction: column; gap: 10px;
-    }
-    .ph-toast {
-      background: #FFFFFF; border: 1px solid #D1E4DE;
-      border-radius: 12px; padding: 13px 18px;
-      min-width: 280px; display: flex;
-      align-items: center; gap: 11px;
-      box-shadow: 0 8px 32px rgba(27,82,113,0.14);
-      animation: phToastIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
-      font-family: 'Outfit', sans-serif;
-    }
-    .ph-toast.success { border-left: 3px solid #2DAF83; }
-    .ph-toast.error   { border-left: 3px solid #D94F4F; }
-    .ph-toast.info    { border-left: 3px solid #3A8DC4; }
-    .ph-toast.warning { border-left: 3px solid #D98A2A; }
-    .ph-toast-icon { font-size: 1.05rem; flex-shrink: 0; }
-    .ph-toast-msg  { font-size: 0.875rem; color: #3A5563; }
-    @keyframes phToastIn { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
+    /* ── TOAST ── */
+    .ph-toasts { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .ph-toast { background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 11px; padding: 12px 17px; min-width: 270px; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 28px rgba(27,82,113,0.13); animation: phIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both; font-family: 'Outfit', sans-serif; }
+    .ph-toast.s { border-left: 3px solid #2DAF83; }
+    .ph-toast.e { border-left: 3px solid #D94F4F; }
+    .ph-toast.i { border-left: 3px solid #3A8DC4; }
+    .ph-toast.w { border-left: 3px solid #D98A2A; }
+    @keyframes phIn { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
 
-    /* ─── PRESCRIPTION CARD ─── */
-    .rx-card {
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 14px;
-      padding: 18px 20px;
-      margin-bottom: 12px;
-      transition: all 0.22s ease;
-      position: relative; overflow: hidden;
-    }
-    .rx-card::before {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-    }
-    .rx-card.pending::before  { background: #D98A2A; }
-    .rx-card.ready::before    { background: #5DAC96; }
-    .rx-card.dispensed::before{ background: #7A9CA8; }
-    .rx-card.flagged::before  { background: #D94F4F; }
-    .rx-card:hover { border-color: #9DD1C2; box-shadow: 0 6px 20px rgba(27,82,113,0.10); }
+    /* ── PROFILE PANEL ── */
+    .prof-header { background: linear-gradient(135deg, #1B5271, #0E2E42); padding: 28px 24px; border-radius: 14px; margin-bottom: 18px; color: #FFFFFF; position: relative; overflow: hidden; }
+    .prof-header::before { content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(93,172,150,0.18) 0%, transparent 70%); top: -100px; right: -80px; pointer-events: none; }
+    .prof-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #5DAC96, #9DD1C2); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.3rem; color: #FFFFFF; margin-bottom: 14px; flex-shrink: 0; }
+    .prof-name { font-family: 'Instrument Serif', serif; font-size: 1.6rem; color: #FFFFFF; margin-bottom: 4px; }
+    .prof-meta { font-size: 0.82rem; color: #9DD1C2; }
 
-    /* ─── ALERT BOX ─── */
-    .ph-alert {
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 0.875rem;
-      display: flex; gap: 10px; align-items: flex-start;
-      margin-bottom: 16px;
-    }
+    /* adherence bar inside profile */
+    .adh-bar { height: 6px; border-radius: 100px; background: rgba(255,255,255,0.15); overflow: hidden; margin-top: 8px; }
+    .adh-fill { height: 100%; border-radius: 100px; transition: width 1.1s cubic-bezier(0.4,0,0.2,1); }
+    .adh-fill.hi { background: linear-gradient(90deg, #5DAC96, #9DD1C2); }
+    .adh-fill.md { background: linear-gradient(90deg, #D98A2A, #F0C070); }
+    .adh-fill.lo { background: linear-gradient(90deg, #D94F4F, #F09090); }
+
+    /* card info tile */
+    .card-tile { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 10px 14px; text-align: center; }
+    .card-tile-lbl { font-size: 0.60rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 4px; }
+    .card-tile-val { font-size: 0.85rem; font-weight: 700; color: #FFFFFF; }
+
+    /* ── ALERT BOX ── */
+    .ph-alert { border-radius: 9px; padding: 11px 14px; font-size: 0.85rem; display: flex; gap: 9px; align-items: flex-start; margin-bottom: 14px; }
     .ph-alert.info    { background: #DCF0FA; border: 1px solid #9DD0F0; color: #1A6496; }
     .ph-alert.warning { background: #FBF5E6; border: 1px solid #F0CC88; color: #A0620A; }
     .ph-alert.danger  { background: #FAE8E8; border: 1px solid #F0AAAA; color: #B03030; }
     .ph-alert.success { background: #D5F3EB; border: 1px solid #A8E4D0; color: #1E8A65; }
 
-    /* ─── SECTION DIVIDER ─── */
-    .ph-divider { height: 1px; background: linear-gradient(90deg, transparent, #D1E4DE, transparent); margin: 24px 0; }
+    /* ── LOGIN SCREEN ── */
+    .login-wrap { min-height: 100vh; background: #F4F8F7; display: grid; place-items: center; padding: 40px 24px; }
+    .login-panel {
+      display: grid; grid-template-columns: 1fr 1fr;
+      background: #FFFFFF; border: 1px solid #D1E4DE; border-radius: 20px;
+      overflow: hidden; box-shadow: 0 8px 40px rgba(27,82,113,0.12);
+      width: 100%; max-width: 860px;
+    }
+    @media(max-width:700px){ .login-panel{grid-template-columns:1fr;} .login-left{display:none!important;} }
+    .login-left {
+      background: #1B5271; padding: 48px 40px;
+      display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;
+    }
+    .login-left::before { content:''; position:absolute; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle,rgba(93,172,150,0.18) 0%,transparent 70%); top:-80px; right:-80px; pointer-events:none; }
+    .login-left h2 { font-family:'Instrument Serif',serif; font-weight:400; font-size:2rem; color:#FFFFFF; line-height:1.2; margin-bottom:14px; letter-spacing:-0.02em; }
+    .login-left h2 em { font-style:italic; color:#9DD1C2; }
+    .login-left p { color:rgba(255,255,255,0.6); font-size:0.88rem; line-height:1.7; margin-bottom:28px; font-weight:300; }
+    .login-feat { display:flex; align-items:center; gap:11px; margin-bottom:13px; }
+    .login-feat-icon { width:32px; height:32px; border-radius:9px; background:rgba(93,172,150,0.15); border:1px solid rgba(93,172,150,0.28); display:flex; align-items:center; justify-content:center; font-size:0.9rem; flex-shrink:0; }
+    .login-feat span { font-size:0.83rem; color:rgba(255,255,255,0.7); }
+    .login-right { padding: 48px 40px; }
+    .login-logo { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.35rem; color:#1B5271; margin-bottom:5px; letter-spacing:-0.025em; }
+    .login-logo span { color:#5DAC96; }
+    .login-badge { display:inline-block; background:#EDF5F2; border:1px solid #D1E4DE; border-radius:7px; padding:3px 11px; font-size:0.68rem; font-weight:700; color:#5DAC96; letter-spacing:0.07em; text-transform:uppercase; margin-bottom:26px; }
+    .login-title { font-family:'Instrument Serif',serif; font-size:1.55rem; color:#1B5271; margin-bottom:4px; }
+    .login-sub   { font-size:0.80rem; color:#7A9CA8; margin-bottom:26px; }
+    .tab-row { display:flex; gap:4px; background:#EDF5F2; border:1px solid #D1E4DE; border-radius:9px; padding:4px; margin-bottom:22px; }
+    .t-btn { flex:1; padding:8px 12px; border:none; border-radius:7px; background:transparent; color:#7A9CA8; font-family:'Outfit',sans-serif; font-weight:600; font-size:0.82rem; cursor:pointer; transition:all 0.18s; }
+    .t-btn.active { background:#FFFFFF; color:#1B5271; border:1px solid #D1E4DE; box-shadow:0 2px 8px rgba(27,82,113,0.08); }
+    .t-panel { display:none; }
+    .t-panel.active { display:block; }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      .ph-layout { grid-template-columns: 1fr; }
-      .ph-sidebar { display: none; }
-      .ph-main { padding: 18px; }
-    }
-    @media (max-width: 600px) {
-      .ph-kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .ph-nav { padding: 0 16px; }
-    }
+    /* ── DISPENSE LOG ENTRY ── */
+    .disp-entry { padding: 14px 18px; border-bottom: 1px solid #D1E4DE; display: flex; align-items: flex-start; gap: 13px; transition: background 0.18s; }
+    .disp-entry:hover { background: #EDF5F2; }
+    .disp-entry:last-child { border-bottom: none; }
+    .disp-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
 
-    /* ─── LOGIN SCREEN ─── */
-    .ph-login-wrap {
-      min-height: 100vh;
-      background: #F4F8F7;
-      display: grid; place-items: center;
-      padding: 40px 24px;
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){ .ph-layout{grid-template-columns:1fr;} .ph-sidebar{display:none;} .ph-main{padding:16px;} }
+    @media(max-width:768px){
+      .ph-main { padding: 12px; }
+      /* Mobile tab bar */
+      .mobile-tab-bar {
+        display: flex; gap: 6px; overflow-x: auto;
+        padding: 6px 2px 10px; margin: 0 0 16px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .mobile-tab-bar::-webkit-scrollbar { display: none; }
+      .mobile-tab-btn {
+        flex: 0 0 auto; padding: 7px 14px; border-radius: 18px;
+        border: 1.5px solid #D1E4DE; background: #FFFFFF;
+        color: #7A9CA8; font-family: 'Outfit', sans-serif;
+        font-weight: 600; font-size: 0.76rem; cursor: pointer;
+        white-space: nowrap; transition: all 0.18s ease;
+      }
+      .mobile-tab-btn.active {
+        background: #EDF5F2; color: #1B5271;
+        border-color: #5DAC96; font-weight: 700;
+      }
+      .kpi-grid { grid-template-columns: repeat(2,1fr); }
     }
-    .ph-login-card {
-      background: #FFFFFF;
-      border: 1px solid #D1E4DE;
-      border-radius: 20px;
-      padding: 48px 40px;
-      width: 100%; max-width: 420px;
-      box-shadow: 0 8px 40px rgba(27,82,113,0.10);
-    }
-    .ph-login-logo {
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800; font-size: 1.4rem;
-      color: #1B5271; margin-bottom: 6px; letter-spacing: -0.025em;
-    }
-    .ph-login-logo span { color: #5DAC96; }
-    .ph-login-badge {
-      display: inline-block;
-      background: #EDF5F2; border: 1px solid #D1E4DE;
-      border-radius: 8px; padding: 4px 12px;
-      font-size: 0.7rem; font-weight: 700;
-      color: #5DAC96; letter-spacing: 0.07em;
-      text-transform: uppercase; margin-bottom: 28px;
-    }
-    .ph-login-title {
-      font-family: 'Instrument Serif', serif;
-      font-size: 1.6rem; color: #1B5271; margin-bottom: 4px;
-    }
-    .ph-login-sub { font-size: 0.82rem; color: #7A9CA8; margin-bottom: 28px; }
-
-    /* ─── MISC UTILS ─── */
-    .text-teal  { color: #5DAC96; }
-    .text-navy  { color: #1B5271; }
-    .text-muted { color: #7A9CA8; }
-    .fw-700     { font-weight: 700; }
-    .d-flex     { display: flex; }
-    .align-center { align-items: center; }
-    .gap-10     { gap: 10px; }
-    .gap-8      { gap: 8px; }
-    .ms-auto    { margin-left: auto; }
-    .mt-16      { margin-top: 16px; }
-    .mt-24      { margin-top: 24px; }
-    .w-100      { width: 100%; }
-    .overflow-x-auto { overflow-x: auto; }
+    @media(max-width:600px){ .kpi-grid{grid-template-columns:repeat(2,1fr);} .ph-nav{padding:0 14px;} }
   </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
+  </a>
     <a href="index.html" style="font-size:0.875rem;color:#7A9CA8;text-decoration:none;font-family:'Outfit',sans-serif;">← Back to Home</a>
-  </div>
-</nav>
+<!-- ══ LOGIN SCREEN ══════════════════════════════════════ -->
+<div id="loginScreen" class="login-wrap">
+  <div class="login-panel">
 
-<!-- ══════════════════════════════════════════════════════════
-     LOGIN SCREEN (shown first, hidden after login)
-══════════════════════════════════════════════════════════ -->
-<div id="loginScreen" class="ph-login-wrap">
-  <div class="ph-login-card">
-    <div class="ph-login-logo">Dawa<span>Track</span></div>
-    <div class="ph-login-badge">💊 Pharmacy Portal</div>
-    <div class="ph-login-title">Sign in to Pharmacy</div>
-    <div class="ph-login-sub">Access the DawaTrack pharmacy dashboard</div>
-
-    <div class="mb-3">
-      <label class="ph-form-label">Email Address</label>
-      <input type="email" id="loginEmail" class="ph-input" placeholder="pharmacy@demo.com">
+    <!-- Left branding -->
+    <div class="login-left">
+      <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.3rem;color:#FFFFFF;margin-bottom:24px;letter-spacing:-0.025em;">Dawa<span style="color:#9DD1C2;">Track</span></div>
+      <h2>Pharmacy,<br><em>powered up</em></h2>
+      <p>View patient prescriptions, track medication dispensing, manage Smart Card discounts — all in one focused workspace.</p>
+      <div class="login-feat"><div class="login-feat-icon">👥</div><span>Search and open any patient profile</span></div>
+      <div class="login-feat"><div class="login-feat-icon">💊</div><span>View prescriptions with dosage details</span></div>
+      <div class="login-feat"><div class="login-feat-icon">📋</div><span>Record taken, missed, or dispensed doses</span></div>
+      <div class="login-feat"><div class="login-feat-icon">🏷️</div><span>HAMAT Smart Card automatic discounts</span></div>
+      <div class="login-feat"><div class="login-feat-icon">📡</div><span>Receive medicine requests from patients live</span></div>
     </div>
-    <div class="mb-4">
-      <label class="ph-form-label">Password</label>
-      <input type="password" id="loginPass" class="ph-input" placeholder="••••••••">
-    </div>
-    <button class="btn-ph-primary w-100" style="justify-content:center;padding:13px;font-size:0.95rem;" onclick="handlePhLogin()">
-      Sign In →
-    </button>
 
-    <div style="margin-top:24px;padding-top:20px;border-top:1px solid #D1E4DE;">
-      <p style="font-size:0.73rem;color:#7A9CA8;text-align:center;margin-bottom:10px;">Demo credentials</p>
-      <div style="background:#EDF5F2;border:1px solid #D1E4DE;border-radius:10px;padding:14px;font-size:0.8rem;color:#3A5563;font-family:'Outfit',sans-serif;">
-        <div style="font-weight:700;color:#1B5271;margin-bottom:6px;">💊 Pharmacy Demo</div>
-        <div>pharmacy@demo.com &nbsp;·&nbsp; demo123</div>
+    <!-- Right form -->
+    <div class="login-right">
+      <div class="login-logo">Dawa<span>Track</span></div>
+      <div class="login-badge">💊 Pharmacy Portal</div>
+
+      <div class="tab-row">
+        <button class="t-btn active" onclick="switchLoginTab('tl-login',this)">Sign In</button>
+        <button class="t-btn" onclick="switchLoginTab('tl-register',this)">Create Account</button>
       </div>
-      <p style="margin-top:16px;text-align:center;font-size:0.78rem;color:#7A9CA8;">
-        Back to <a href="portal.html" style="color:#5DAC96;font-weight:600;text-decoration:none;">Patient/Doctor Portal</a>
-      </p>
+
+      <!-- Sign In -->
+      <div id="tl-login" class="t-panel active">
+        <div class="login-title">Welcome back</div>
+        <div class="login-sub">Sign in to the pharmacy dashboard</div>
+        <div class="mb3">
+          <label class="f-label">Email Address</label>
+          <input type="email" id="loginEmail" class="f-input" placeholder="pharmacy@email.com">
+        </div>
+        <div class="mb3">
+          <label class="f-label">Password</label>
+          <input type="password" id="loginPass" class="f-input" placeholder="••••••••"
+                 onkeydown="if(event.key==='Enter')handlePhLogin()">
+        </div>
+        <button class="btn-t w100" onclick="handlePhLogin()" style="padding:12px;font-size:0.92rem;">Sign In →</button>
+        <p style="margin-top:14px;text-align:center;font-size:0.76rem;color:#7A9CA8;">Back to <a href="portal.html" style="color:#5DAC96;font-weight:600;text-decoration:none;">Patient / Doctor portal</a></p>
+      </div>
+
+      <!-- Create Account -->
+      <div id="tl-register" class="t-panel">
+        <div class="login-title">Create pharmacy account</div>
+        <div class="login-sub">Use access code PH2026 to register as a pharmacist</div>
+        <div class="mb3"><label class="f-label">Full Name *</label><input type="text" id="regName" class="f-input" placeholder="Purity Wanjiru"></div>
+        <div class="mb3"><label class="f-label">Pharmacy / Branch Name *</label><input type="text" id="regBranch" class="f-input" placeholder="HAMAT Pharmacy – Ruiru Branch"></div>
+        <div class="mb3"><label class="f-label">Email Address *</label><input type="email" id="regEmail" class="f-input" placeholder="purity@hamatpharmacy.com"></div>
+        <div class="mb3"><label class="f-label">Phone Number</label><input type="tel" id="regPhone" class="f-input" placeholder="+254 7xx xxx xxx"></div>
+        <div class="g2">
+          <div class="mb3"><label class="f-label">Password *</label><input type="password" id="regPass" class="f-input" placeholder="Min 6 chars"></div>
+          <div class="mb3"><label class="f-label">Access Code *</label><input type="text" id="regCode" class="f-input" placeholder="PH2026"></div>
+        </div>
+        <button class="btn-t w100" onclick="handlePhRegister()" style="padding:12px;font-size:0.92rem;">Create Account →</button>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     MAIN DASHBOARD (hidden until logged in)
-══════════════════════════════════════════════════════════ -->
+<!-- ══ MAIN DASHBOARD (hidden until logged in) ═════════ -->
 <div id="dashScreen" style="display:none;">
 
   <!-- NAVBAR -->
   <nav class="ph-nav">
-    <a href="index.html" class="ph-nav-brand">DawaTrack</a>
-    <div class="ph-nav-badge">💊 Pharmacy</div>
+    <a href="index.html" class="ph-brand">DawaTrack</a>
+    <div class="ph-pill">💊 Pharmacy</div>
     <div class="ph-nav-right">
-      <div class="ph-nav-user">
-        <div class="ph-nav-user-avatar" id="navAvatar">PH</div>
-        <div>
-          <div class="ph-nav-user-name" id="navName">Loading…</div>
-          <div class="ph-nav-user-role">Pharmacist</div>
-        </div>
+      <div class="ph-user-chip">
+        <div class="ph-avatar" id="navAvatar">PH</div>
+        <div><div class="ph-user-name" id="navName">—</div><div class="ph-user-role" id="navBranch">Pharmacist</div></div>
       </div>
       <button class="btn-logout" onclick="handlePhLogout()">Sign Out</button>
     </div>
   </nav>
 
-  <!-- LAYOUT -->
   <div class="ph-layout">
 
     <!-- SIDEBAR -->
     <aside class="ph-sidebar">
-      <div class="ph-sidebar-logo"><span>💊</span> Pharmacy</div>
+      <div class="ph-sb-logo"><span>💊</span> Pharmacy</div>
 
-      <div class="ph-nav-group">
-        <div class="ph-section-lbl">Overview</div>
-        <button class="ph-nav-link active" onclick="showTab('overview', this)">
-          <span class="ph-icon">📊</span> Dashboard
+      <div class="ph-sb-section">
+        <div class="ph-sb-lbl">Core</div>
+        <button class="ph-sb-link active" onclick="showPanel('p-overview',this)"><span class="ico">📊</span> Overview</button>
+        <button class="ph-sb-link" onclick="showPanel('p-search',this)"><span class="ico">🔍</span> Patient Search</button>
+        <button class="ph-sb-link" onclick="showPanel('p-requests',this)">
+          <span class="ico">📬</span> Patient Requests
+          <span class="req-badge" id="reqBadge" style="display:none;">0</span>
         </button>
-        <button class="ph-nav-link" onclick="showTab('prescriptions', this)">
-          <span class="ph-icon">📋</span> Prescriptions
-        </button>
-        <button class="ph-nav-link" onclick="showTab('inventory', this)">
-          <span class="ph-icon">📦</span> Inventory
-        </button>
-        <button class="ph-nav-link" onclick="showTab('patients', this)">
-          <span class="ph-icon">👥</span> Patients
-        </button>
-        <button class="ph-nav-link" onclick="showTab('orders', this)">
-          <span class="ph-icon">🛒</span> Orders
-        </button>
+        <button class="ph-sb-link" onclick="showPanel('p-log',this)"><span class="ico">📋</span> Dispensing Log</button>
       </div>
 
-      <div class="ph-nav-group">
-        <div class="ph-section-lbl">Reports</div>
-        <button class="ph-nav-link" onclick="showTab('dispensing', this)">
-          <span class="ph-icon">📈</span> Dispensing Log
-        </button>
-        <button class="ph-nav-link" onclick="showTab('discounts', this)">
-          <span class="ph-icon">🏷️</span> Smart Card Discounts
-        </button>
+      <div class="ph-sb-section">
+        <div class="ph-sb-lbl">HAMAT Card</div>
+        <button class="ph-sb-link" onclick="showPanel('p-card',this)"><span class="ico">🏷️</span> Smart Card Discounts</button>
       </div>
 
-      <div class="ph-nav-group">
-        <div class="ph-section-lbl">Account</div>
-        <button class="ph-nav-link" onclick="handlePhLogout()">
-          <span class="ph-icon">🚪</span> Sign Out
-        </button>
-        <a href="portal.html" class="ph-nav-link" style="text-decoration:none;">
-          <span class="ph-icon">↩</span> Main Portal
-        </a>
+      <div class="ph-sb-section">
+        <div class="ph-sb-lbl">Account</div>
+        <button class="ph-sb-link" onclick="handlePhLogout()"><span class="ico">🚪</span> Sign Out</button>
+        <a href="portal.html" class="ph-sb-link" style="text-decoration:none;"><span class="ico">↩</span> Main Portal</a>
       </div>
 
-      <!-- Low stock alert -->
-      <div class="ph-sidebar-alert" id="sidebarLowStock">
-        <div class="ph-sidebar-alert-label">⚠ Low Stock Alert</div>
-        <div class="ph-sidebar-alert-val" id="lowStockCount">0</div>
-        <div class="ph-sidebar-alert-sub">items below reorder level</div>
-        <button class="ph-sidebar-alert-btn" onclick="showTab('inventory',null);scrollToLowStock()">View Now →</button>
+      <!-- Pending requests alert -->
+      <div class="sb-alert sb-alert-red" id="sbAlertReq">
+        <div class="sb-alert-lbl">📬 Pending Requests</div>
+        <div class="sb-alert-val" id="sbReqCount">0</div>
+        <div class="sb-alert-sub">medicine refill requests</div>
+        <button onclick="showPanel('p-requests',null)" style="width:100%;background:#D94F4F;border:none;color:#FFFFFF;border-radius:7px;padding:7px;font-size:0.76rem;font-family:'Outfit',sans-serif;font-weight:700;cursor:pointer;">Review →</button>
       </div>
     </aside>
 
     <!-- MAIN -->
     <main class="ph-main">
 
-      <!-- HEADER -->
+    <!-- Mobile tab bar (hidden on desktop) -->
+    <div class="mobile-tab-bar" style="display:none;">
+      <button class="mobile-tab-btn active" onclick="showPanel('p-overview',this)">📊 Overview</button>
+      <button class="mobile-tab-btn" onclick="showPanel('p-search',this)">🔍 Search</button>
+      <button class="mobile-tab-btn" onclick="showPanel('p-requests',this)">💬 Requests</button>
+      <button class="mobile-tab-btn" onclick="showPanel('p-log',this)">📋 Log</button>
+      <button class="mobile-tab-btn" onclick="showPanel('p-card',this)">🏷️ Smart Card</button>
+    </div>
+
+      <!-- Header -->
       <div class="ph-header">
         <div>
-          <div class="ph-page-title" id="pageTitle">Pharmacy Dashboard</div>
-          <div class="ph-page-sub" id="pageSub">Overview of today's pharmacy activity</div>
+          <div class="ph-page-title" id="pageTitle">Overview</div>
+          <div class="ph-page-sub"  id="pageSub">Today's pharmacy activity</div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <div class="ph-date-chip">📅 <strong id="todayDate"></strong></div>
-          <button class="btn-ph-primary" onclick="openDispenseModal()">+ Dispense Medicine</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <div class="date-chip">📅 <strong id="todayDate"></strong></div>
+          <button class="btn-t" onclick="openDispenseModal()">+ Dispense Medicine</button>
         </div>
       </div>
 
-      <!-- ── TAB: OVERVIEW ── -->
-      <div id="tab-overview" class="ph-tab-panel active">
-
-        <!-- KPIs -->
-        <div class="ph-kpi-grid">
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent teal"></div>
-            <div class="ph-kpi-label">Today's Prescriptions</div>
-            <div class="ph-kpi-val" id="kpi-rx">—</div>
-            <div class="ph-kpi-change up">↑ active today</div>
-          </div>
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent green"></div>
-            <div class="ph-kpi-label">Dispensed Today</div>
-            <div class="ph-kpi-val" id="kpi-dispensed">—</div>
-            <div class="ph-kpi-change up">↑ completed</div>
-          </div>
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent amber"></div>
-            <div class="ph-kpi-label">Pending</div>
-            <div class="ph-kpi-val" id="kpi-pending">—</div>
-            <div class="ph-kpi-change neutral">awaiting pickup</div>
-          </div>
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent red"></div>
-            <div class="ph-kpi-label">Low Stock Items</div>
-            <div class="ph-kpi-val" id="kpi-lowstock">—</div>
-            <div class="ph-kpi-change down">↓ need reorder</div>
-          </div>
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent navy"></div>
-            <div class="ph-kpi-label">Smart Card Patients</div>
-            <div class="ph-kpi-val" id="kpi-sc">—</div>
-            <div class="ph-kpi-change neutral">HAMAT card holders</div>
-          </div>
+      <!-- ═══ PANEL: OVERVIEW ═══ -->
+      <div id="p-overview" class="ph-panel active">
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-accent teal"></div><div class="kpi-lbl">Patients Served Today</div><div class="kpi-val" id="k-today">—</div><div class="kpi-sub">dispensing events</div></div>
+          <div class="kpi-card"><div class="kpi-accent green"></div><div class="kpi-lbl">Total Dispensed</div><div class="kpi-val" id="k-total">—</div><div class="kpi-sub">all time</div></div>
+          <div class="kpi-card"><div class="kpi-accent amber"></div><div class="kpi-lbl">Pending Requests</div><div class="kpi-val" id="k-req">—</div><div class="kpi-sub">from patients</div></div>
+          <div class="kpi-card"><div class="kpi-accent navy"></div><div class="kpi-lbl">Smart Card Patients</div><div class="kpi-val" id="k-sc">—</div><div class="kpi-sub">HAMAT card holders</div></div>
         </div>
 
-        <!-- Recent prescriptions + Low stock side by side -->
-        <div style="display:grid;grid-template-columns:1fr 380px;gap:20px;" class="overview-split">
-
-          <!-- Recent Rx -->
-          <div class="ph-panel">
-            <div class="ph-panel-hdr">
-              <div>
-                <div class="ph-panel-title">Recent Prescriptions</div>
-                <div class="ph-panel-sub">Last 10 prescription orders received</div>
-              </div>
-              <button class="btn-ph-sm teal" onclick="showTab('prescriptions',null)">View All →</button>
-            </div>
-            <div class="ph-panel-body overflow-x-auto">
-              <table class="ph-table" id="recentRxTable">
-                <thead>
-                  <tr>
-                    <th>Patient</th><th>Medicine</th><th>Qty</th><th>Status</th><th>Card</th><th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="recentRxBody"></tbody>
-              </table>
-            </div>
+        <!-- Live request feed -->
+        <div class="panel">
+          <div class="panel-hdr">
+            <div><div class="panel-title">📬 Live Patient Requests</div><div class="panel-sub">Medicine refill requests — updates every 5 seconds</div></div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.73rem;color:#2DAF83;font-weight:600;"><div style="width:7px;height:7px;border-radius:50%;background:#2DAF83;animation:phIn 2s ease infinite;"></div>Live</div>
           </div>
-
-          <!-- Low stock -->
-          <div class="ph-panel" id="lowStockPanel">
-            <div class="ph-panel-hdr">
-              <div>
-                <div class="ph-panel-title">⚠ Low Stock</div>
-                <div class="ph-panel-sub">Items below reorder threshold</div>
-              </div>
-            </div>
-            <div class="ph-panel-body" id="lowStockList"></div>
-          </div>
-
+          <div class="panel-body" id="overviewRequests" style="max-height:320px;overflow-y:auto;"></div>
         </div>
-        <style>.overview-split{grid-template-columns:1fr 380px;}@media(max-width:1100px){.overview-split{grid-template-columns:1fr!important;}}</style>
 
-        <!-- Doctor–Pharmacy notes feed -->
-        <div class="ph-panel mt-24">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">📡 Doctor → Pharmacy Notes</div>
-              <div class="ph-panel-sub">Prescription instructions from DawaTrack doctors — updates live every 5s</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:#2DAF83;font-weight:600;">
-              <div style="width:7px;height:7px;border-radius:50%;background:#2DAF83;animation:phPulse 2s ease infinite;"></div>
-              Live
-            </div>
+        <!-- Recent dispensing -->
+        <div class="panel">
+          <div class="panel-hdr">
+            <div><div class="panel-title">Recent Dispensing Activity</div><div class="panel-sub">Last 8 dispensing events</div></div>
+            <button class="btn-sm bsm-t" onclick="showPanel('p-log',null)">Full Log →</button>
           </div>
-          <div class="ph-panel-body" id="doctorNotesFeed" style="padding:16px;display:flex;flex-direction:column;gap:10px;max-height:360px;overflow-y:auto;">
-          </div>
-        </div>
-        <style>@keyframes phPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.6)}}</style>
-
-      </div>
-
-      <!-- ── TAB: PRESCRIPTIONS ── -->
-      <div id="tab-prescriptions" class="ph-tab-panel">
-        <div class="ph-toolbar">
-          <div class="ph-search-wrap">
-            <span class="ph-search-icon">🔍</span>
-            <input type="text" class="ph-search" id="rxSearch" placeholder="Search patient or medicine…" oninput="renderRxTable()">
-          </div>
-          <select class="ph-filter-select" id="rxFilter" onchange="renderRxTable()">
-            <option value="all">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="ready">Ready</option>
-            <option value="dispensed">Dispensed</option>
-            <option value="flagged">Flagged</option>
-          </select>
-          <button class="btn-ph-navy" onclick="openDispenseModal()">+ New Prescription</button>
-        </div>
-        <div class="ph-panel">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">All Prescriptions</div>
-              <div class="ph-panel-sub" id="rxCount">Showing all records</div>
-            </div>
-          </div>
-          <div class="ph-panel-body overflow-x-auto">
-            <table class="ph-table" id="rxFullTable">
-              <thead>
-                <tr>
-                  <th>#</th><th>Patient</th><th>Medicine</th><th>Dosage</th><th>Qty</th><th>Doctor</th><th>Smart Card</th><th>Discount</th><th>Status</th><th>Date</th><th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="rxFullBody"></tbody>
+          <div class="panel-body" style="overflow-x:auto;">
+            <table class="ph-table" id="recentDispTable">
+              <thead><tr><th>Patient</th><th>Medicine</th><th>Dosage</th><th>Qty</th><th>Status</th><th>Smart Card</th><th>Time</th></tr></thead>
+              <tbody id="recentDispBody"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- ── TAB: INVENTORY ── -->
-      <div id="tab-inventory" class="ph-tab-panel">
-        <div class="ph-toolbar">
-          <div class="ph-search-wrap">
-            <span class="ph-search-icon">🔍</span>
-            <input type="text" class="ph-search" id="invSearch" placeholder="Search medicine name or category…" oninput="renderInventory()">
+      <!-- ═══ PANEL: PATIENT SEARCH ═══ -->
+      <div id="p-search" class="ph-panel">
+        <div class="toolbar">
+          <div class="srch-wrap">
+            <span class="srch-ico">🔍</span>
+            <input type="text" class="srch-input" id="patSearchInput" placeholder="Search by name, ID or email…" oninput="searchPatients()">
           </div>
-          <select class="ph-filter-select" id="invFilter" onchange="renderInventory()">
-            <option value="all">All Categories</option>
-            <option value="chronic">Chronic Disease</option>
-            <option value="antibiotic">Antibiotics</option>
-            <option value="painkiller">Painkillers</option>
-            <option value="vitamin">Vitamins & Supplements</option>
-            <option value="cardiac">Cardiac</option>
-          </select>
-          <button class="btn-ph-primary" onclick="openAddStockModal()">+ Add Stock</button>
         </div>
-        <div class="ph-alert warning">
-          <span>⚠</span>
-          <div><strong>Reorder Alert:</strong> Items shown in red are below the minimum reorder level. Place orders immediately to avoid stock-outs.</div>
+
+        <div class="ph-alert info"><span>💡</span><div>Search for a patient to view their full prescription history, medication log, dosage details, and update their dose status.</div></div>
+
+        <!-- Search results -->
+        <div id="searchResults">
+          <div style="text-align:center;padding:48px 20px;background:#FFFFFF;border:1px solid #D1E4DE;border-radius:14px;">
+            <div style="font-size:3rem;margin-bottom:14px;">🔍</div>
+            <div style="font-weight:700;color:#1B5271;margin-bottom:6px;">Search for a patient</div>
+            <p style="font-size:0.85rem;color:#7A9CA8;">Type a name, ID, or email above to find patient records.</p>
+          </div>
         </div>
-        <div class="ph-panel">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">Medicine Inventory</div>
-              <div class="ph-panel-sub" id="invCount">Loading…</div>
+
+        <!-- Patient profile (shown after clicking a result) -->
+        <div id="patientProfile" style="display:none;margin-top:18px;"></div>
+      </div>
+
+      <!-- ═══ PANEL: PATIENT REQUESTS ═══ -->
+      <div id="p-requests" class="ph-panel">
+        <div class="ph-alert warning"><span>⚠</span><div>These are <strong>medicine-out requests</strong> submitted by patients from their dashboard. Reply with availability and pricing to help them get their medication.</div></div>
+        <div class="panel">
+          <div class="panel-hdr">
+            <div><div class="panel-title">📬 All Patient Requests</div><div class="panel-sub" id="reqCount">Loading…</div></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn-sm bsm-t active" id="rf-all"     onclick="filterReqs('all',this)">All</button>
+              <button class="btn-sm bsm-t"        id="rf-pending" onclick="filterReqs('pending',this)" style="color:#D98A2A;border-color:#F0CC88;background:#FBF5E6;">Pending</button>
+              <button class="btn-sm bsm-t"        id="rf-done"    onclick="filterReqs('fulfilled',this)" style="color:#2DAF83;border-color:#A8E4D0;background:#D5F3EB;">Fulfilled</button>
             </div>
           </div>
-          <div class="ph-panel-body overflow-x-auto">
+          <div class="panel-body" id="reqListBody" style="max-height:600px;overflow-y:auto;"></div>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: DISPENSING LOG ═══ -->
+      <div id="p-log" class="ph-panel">
+        <div class="toolbar">
+          <div class="srch-wrap"><span class="srch-ico">🔍</span><input type="text" class="srch-input" id="logSearch" placeholder="Search patient or medicine…" oninput="renderDispLog()"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-hdr"><div><div class="panel-title">Full Dispensing Log</div><div class="panel-sub" id="logCount">All records</div></div></div>
+          <div class="panel-body" style="overflow-x:auto;">
             <table class="ph-table">
-              <thead>
-                <tr>
-                  <th>Medicine</th><th>Category</th><th>Current Stock</th><th>Unit</th><th>Reorder Level</th><th>Unit Price (KSh)</th><th>Expiry</th><th>Status</th><th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="invBody"></tbody>
+              <thead><tr><th>Time</th><th>Patient</th><th>Medicine</th><th>Dosage</th><th>Qty</th><th>Status Logged</th><th>Smart Card</th><th>Discount</th><th>Pharmacist</th></tr></thead>
+              <tbody id="logBody"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- ── TAB: PATIENTS ── -->
-      <div id="tab-patients" class="ph-tab-panel">
-        <div class="ph-toolbar">
-          <div class="ph-search-wrap">
-            <span class="ph-search-icon">🔍</span>
-            <input type="text" class="ph-search" id="patSearch" placeholder="Search patient name or ID…" oninput="renderPatients()">
-          </div>
-          <select class="ph-filter-select" id="patFilter" onchange="renderPatients()">
-            <option value="all">All Patients</option>
-            <option value="smartcard">Smart Card Holders</option>
-            <option value="active">Active Prescriptions</option>
-          </select>
+      <!-- ═══ PANEL: SMART CARD DISCOUNTS ═══ -->
+      <div id="p-card" class="ph-panel">
+        <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="kpi-card"><div class="kpi-accent teal"></div><div class="kpi-lbl">Card Holders Served</div><div class="kpi-val" id="sc-served">—</div><div class="kpi-sub">all time</div></div>
+          <div class="kpi-card"><div class="kpi-accent green"></div><div class="kpi-lbl">Total Discount Given</div><div class="kpi-val" id="sc-disc">—</div><div class="kpi-sub">KSh saved by patients</div></div>
+          <div class="kpi-card"><div class="kpi-accent navy"></div><div class="kpi-lbl">Transactions</div><div class="kpi-val" id="sc-txn">—</div><div class="kpi-sub">card-used visits</div></div>
         </div>
-        <div class="ph-panel">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">Patient Records</div>
-              <div class="ph-panel-sub" id="patCount">Loading…</div>
-            </div>
-          </div>
-          <div class="ph-panel-body overflow-x-auto">
+        <div class="panel">
+          <div class="panel-hdr"><div><div class="panel-title">HAMAT Smart Card Discount Tiers</div><div class="panel-sub">Applied automatically at dispensing</div></div></div>
+          <div class="panel-body" style="overflow-x:auto;">
             <table class="ph-table">
-              <thead>
-                <tr>
-                  <th>Patient</th><th>ID</th><th>Phone</th><th>Smart Card</th><th>Active Meds</th><th>Adherence</th><th>Last Visit</th><th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="patBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── TAB: ORDERS ── -->
-      <div id="tab-orders" class="ph-tab-panel">
-        <div class="ph-toolbar">
-          <button class="btn-ph-navy" onclick="openOrderModal()">+ Place Restock Order</button>
-        </div>
-        <div class="ph-panel">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">Supplier Orders</div>
-              <div class="ph-panel-sub">Restock orders and delivery status</div>
-            </div>
-          </div>
-          <div class="ph-panel-body overflow-x-auto">
-            <table class="ph-table">
-              <thead>
-                <tr>
-                  <th>Order #</th><th>Medicine</th><th>Qty Ordered</th><th>Supplier</th><th>Order Date</th><th>Expected</th><th>Status</th><th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="ordersBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── TAB: DISPENSING LOG ── -->
-      <div id="tab-dispensing" class="ph-tab-panel">
-        <div class="ph-panel">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">Dispensing History</div>
-              <div class="ph-panel-sub">Complete record of all medicines dispensed</div>
-            </div>
-          </div>
-          <div class="ph-panel-body overflow-x-auto">
-            <table class="ph-table">
-              <thead>
-                <tr>
-                  <th>Timestamp</th><th>Patient</th><th>Medicine</th><th>Qty</th><th>Pharmacist</th><th>Smart Card</th><th>Amount (KSh)</th></tr>
-              </thead>
-              <tbody id="dispLog"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── TAB: SMART CARD DISCOUNTS ── -->
-      <div id="tab-discounts" class="ph-tab-panel">
-        <div class="ph-kpi-grid" style="grid-template-columns:repeat(3,1fr);">
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent teal"></div>
-            <div class="ph-kpi-label">Total SC Patients</div>
-            <div class="ph-kpi-val" id="sc-total">—</div>
-            <div class="ph-kpi-change neutral">HAMAT card holders</div>
-          </div>
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent green"></div>
-            <div class="ph-kpi-label">Discount Given (Month)</div>
-            <div class="ph-kpi-val" id="sc-discount">—</div>
-            <div class="ph-kpi-change up">↑ KSh saved by patients</div>
-          </div>
-          <div class="ph-kpi">
-            <div class="ph-kpi-accent navy"></div>
-            <div class="ph-kpi-label">Transactions (Month)</div>
-            <div class="ph-kpi-val" id="sc-txn">—</div>
-            <div class="ph-kpi-change neutral">card-used visits</div>
-          </div>
-        </div>
-
-        <div class="ph-panel mt-24">
-          <div class="ph-panel-hdr">
-            <div>
-              <div class="ph-panel-title">Smart Card Discount Tiers</div>
-              <div class="ph-panel-sub">HAMAT Smart Card benefit levels applied at dispensing</div>
-            </div>
-          </div>
-          <div class="ph-panel-body">
-            <table class="ph-table">
-              <thead>
-                <tr><th>Plan</th><th>Card Type</th><th>Discount</th><th>Free Consultations</th><th>Eligible Since</th></tr>
-              </thead>
+              <thead><tr><th>Plan</th><th>Card Code</th><th>Pharmacy Discount</th><th>Free Consultations</th><th>How to Verify</th></tr></thead>
               <tbody>
-                <tr>
-                  <td><span style="font-weight:700;color:#1B5271;">Basic Rider</span></td>
-                  <td><span class="badge badge-teal">HMT-BAS</span></td>
-                  <td><span style="font-weight:700;color:#5DAC96;">10%</span></td>
-                  <td style="color:#7A9CA8;">None</td>
-                  <td style="color:#7A9CA8;">On registration</td>
-                </tr>
-                <tr>
-                  <td><span style="font-weight:700;color:#1B5271;">Plus Rider</span></td>
-                  <td><span class="badge badge-navy">HMT-PLU</span></td>
-                  <td><span style="font-weight:700;color:#5DAC96;">20%</span></td>
-                  <td>1/month</td>
-                  <td style="color:#7A9CA8;">On registration</td>
-                </tr>
-                <tr>
-                  <td><span style="font-weight:700;color:#1B5271;">Family Plan</span></td>
-                  <td><span class="badge badge-green">HMT-FAM</span></td>
-                  <td><span style="font-weight:700;color:#2DAF83;">30%</span></td>
-                  <td>2/month</td>
-                  <td style="color:#7A9CA8;">On registration</td>
-                </tr>
+                <tr><td><strong style="color:#1B5271;">Basic Rider</strong></td><td><span class="badge bt">HMT-BAS</span></td><td><span style="font-weight:700;color:#5DAC96;font-size:1rem;">10%</span></td><td style="color:#7A9CA8;">None</td><td style="font-size:0.80rem;color:#3A5563;">Scan barcode on card back</td></tr>
+                <tr><td><strong style="color:#1B5271;">Plus Rider</strong></td><td><span class="badge bn">HMT-PLU</span></td><td><span style="font-weight:700;color:#5DAC96;font-size:1rem;">20%</span></td><td>1 / month</td><td style="font-size:0.80rem;color:#3A5563;">Scan barcode on card back</td></tr>
+                <tr><td><strong style="color:#1B5271;">Family Plan</strong></td><td><span class="badge bg">HMT-FAM</span></td><td><span style="font-weight:700;color:#2DAF83;font-size:1rem;">30%</span></td><td>2 / month</td><td style="font-size:0.80rem;color:#3A5563;">Scan barcode on card back</td></tr>
               </tbody>
             </table>
           </div>
@@ -1087,173 +618,71 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     MODALS
-══════════════════════════════════════════════════════════ -->
-
-<!-- Dispense / New Prescription Modal -->
-<div class="ph-modal-overlay" id="dispenseModal">
+<!-- ═══ DISPENSE MODAL ════════════════════════════════ -->
+<div class="ph-modal-ov" id="dispModal">
   <div class="ph-modal">
-    <div class="ph-modal-hdr">
-      <div class="ph-modal-title">New Prescription / Dispense</div>
-      <button class="ph-modal-close" onclick="closeModal('dispenseModal')">✕</button>
-    </div>
+    <div class="ph-modal-hdr"><div class="ph-modal-title">💊 Dispense Medicine</div><button class="ph-modal-close" onclick="closeModal('dispModal')">✕</button></div>
     <div class="ph-modal-body">
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Patient Name *</label>
-          <input type="text" id="d-patient" class="ph-input" placeholder="e.g. Alice Kamau">
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">Patient ID</label>
-          <input type="text" id="d-pid" class="ph-input" placeholder="e.g. 30350553">
-        </div>
+      <div class="g2">
+        <div class="mb2"><label class="f-label">Patient Name *</label><input type="text" id="d-patient" class="f-input" placeholder="e.g. Alice Kamau"></div>
+        <div class="mb2"><label class="f-label">Patient ID</label><input type="text" id="d-pid" class="f-input" placeholder="e.g. p_self"></div>
       </div>
-      <div class="mb-3">
-        <label class="ph-form-label">Medicine *</label>
-        <select id="d-medicine" class="ph-input" style="cursor:pointer;">
-          <option value="">Select medicine…</option>
+      <div class="mb2"><label class="f-label">Medicine Name *</label><input type="text" id="d-medicine" class="f-input" placeholder="e.g. Metformin 500mg"></div>
+      <div class="g2">
+        <div class="mb2"><label class="f-label">Dosage / Strength *</label><input type="text" id="d-dosage" class="f-input" placeholder="e.g. 500mg"></div>
+        <div class="mb2"><label class="f-label">Quantity</label><input type="number" id="d-qty" class="f-input" placeholder="e.g. 30" min="1" value="30"></div>
+      </div>
+      <div class="mb2">
+        <label class="f-label">Dose Status Recorded</label>
+        <select id="d-status" class="f-input" style="cursor:pointer;">
+          <option value="dispensed">✅ Dispensed — given to patient</option>
+          <option value="taken">✓ Taken — patient confirms took</option>
+          <option value="missed">✗ Missed — patient missed dose</option>
+          <option value="pending">⏳ Pending — awaiting pickup</option>
         </select>
       </div>
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Dosage</label>
-          <input type="text" id="d-dosage" class="ph-input" placeholder="e.g. 500mg twice daily">
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">Quantity *</label>
-          <input type="number" id="d-qty" class="ph-input" placeholder="e.g. 30" min="1">
-        </div>
+      <div class="mb2">
+        <label class="f-label">HAMAT Smart Card</label>
+        <select id="d-card" class="f-input" style="cursor:pointer;" onchange="updateDiscPreview()">
+          <option value="none">No card</option>
+          <option value="HMT-BAS">Basic Rider — 10% off</option>
+          <option value="HMT-PLU">Plus Rider — 20% off</option>
+          <option value="HMT-FAM">Family Plan — 30% off</option>
+        </select>
       </div>
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Prescribing Doctor</label>
-          <input type="text" id="d-doctor" class="ph-input" placeholder="Dr. David Mwangi" value="Dr. David Mwangi">
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">HAMAT Smart Card</label>
-          <select id="d-card" class="ph-input" style="cursor:pointer;" onchange="updateDiscountPreview()">
-            <option value="none">No card</option>
-            <option value="HMT-BAS">Basic Rider (10%)</option>
-            <option value="HMT-PLU">Plus Rider (20%)</option>
-            <option value="HMT-FAM">Family Plan (30%)</option>
-          </select>
-        </div>
+      <div id="discPreview" style="display:none;background:#EDF5F2;border:1px solid #9DD1C2;border-radius:9px;padding:11px 14px;margin-bottom:12px;">
+        <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#5DAC96;margin-bottom:4px;">Smart Card Discount Applied</div>
+        <div id="discPreviewText" style="font-size:0.875rem;font-weight:700;color:#1B5271;"></div>
       </div>
-      <div class="mb-3">
-        <label class="ph-form-label">Notes</label>
-        <textarea id="d-notes" class="ph-input" rows="2" placeholder="Special instructions, allergies, etc."></textarea>
-      </div>
-      <!-- Discount preview -->
-      <div id="discountPreview" style="display:none;background:#EDF5F2;border:1px solid #D1E4DE;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
-        <div style="font-size:0.75rem;font-weight:700;color:#5DAC96;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:6px;">Smart Card Discount Applied</div>
-        <div id="discountPreviewText" style="font-size:0.875rem;color:#1B5271;font-weight:600;"></div>
-      </div>
+      <div class="mb2"><label class="f-label">Notes</label><textarea id="d-notes" class="f-input" rows="2" placeholder="Special instructions, allergies, side effects…"></textarea></div>
     </div>
-    <div class="ph-modal-footer">
-      <button class="btn-ph-ghost" onclick="closeModal('dispenseModal')">Cancel</button>
-      <button class="btn-ph-primary" onclick="submitDispense()">💊 Dispense &amp; Log</button>
+    <div class="ph-modal-foot">
+      <button class="btn-g" onclick="closeModal('dispModal')">Cancel</button>
+      <button class="btn-t" onclick="submitDispense()">💊 Record &amp; Log</button>
     </div>
   </div>
 </div>
 
-<!-- Add Stock Modal -->
-<div class="ph-modal-overlay" id="addStockModal">
+<!-- Reply to patient request modal -->
+<div class="ph-modal-ov" id="replyModal">
   <div class="ph-modal">
-    <div class="ph-modal-hdr">
-      <div class="ph-modal-title">Add / Update Stock</div>
-      <button class="ph-modal-close" onclick="closeModal('addStockModal')">✕</button>
-    </div>
+    <div class="ph-modal-hdr"><div class="ph-modal-title">💬 Reply to Patient Request</div><button class="ph-modal-close" onclick="closeModal('replyModal')">✕</button></div>
     <div class="ph-modal-body">
-      <div class="mb-3">
-        <label class="ph-form-label">Medicine Name *</label>
-        <input type="text" id="s-name" class="ph-input" placeholder="e.g. Amoxicillin 500mg">
-      </div>
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Category *</label>
-          <select id="s-cat" class="ph-input" style="cursor:pointer;">
-            <option value="chronic">Chronic Disease</option>
-            <option value="antibiotic">Antibiotics</option>
-            <option value="painkiller">Painkillers</option>
-            <option value="vitamin">Vitamins & Supplements</option>
-            <option value="cardiac">Cardiac</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">Unit</label>
-          <select id="s-unit" class="ph-input" style="cursor:pointer;">
-            <option>Tablets</option><option>Capsules</option>
-            <option>Syrup (ml)</option><option>Injection (vial)</option>
-            <option>Cream (tube)</option><option>Drops</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Quantity to Add *</label>
-          <input type="number" id="s-qty" class="ph-input" placeholder="e.g. 500" min="1">
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">Reorder Level</label>
-          <input type="number" id="s-reorder" class="ph-input" placeholder="e.g. 50" min="0">
-        </div>
-      </div>
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Unit Price (KSh)</label>
-          <input type="number" id="s-price" class="ph-input" placeholder="e.g. 25" min="0">
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">Expiry Date</label>
-          <input type="date" id="s-expiry" class="ph-input">
-        </div>
-      </div>
-    </div>
-    <div class="ph-modal-footer">
-      <button class="btn-ph-ghost" onclick="closeModal('addStockModal')">Cancel</button>
-      <button class="btn-ph-primary" onclick="submitAddStock()">📦 Add to Inventory</button>
-    </div>
-  </div>
-</div>
-
-<!-- Order Modal -->
-<div class="ph-modal-overlay" id="orderModal">
-  <div class="ph-modal">
-    <div class="ph-modal-hdr">
-      <div class="ph-modal-title">Place Restock Order</div>
-      <button class="ph-modal-close" onclick="closeModal('orderModal')">✕</button>
-    </div>
-    <div class="ph-modal-body">
-      <div class="mb-3">
-        <label class="ph-form-label">Medicine *</label>
-        <select id="o-med" class="ph-input" style="cursor:pointer;">
-          <option value="">Select medicine…</option>
+      <div id="replyReqDetails" style="background:#EDF5F2;border:1px solid #D1E4DE;border-radius:10px;padding:14px;margin-bottom:16px;"></div>
+      <div class="mb2"><label class="f-label">Your Reply to Patient *</label><textarea id="replyText" class="f-input" rows="4" placeholder="e.g. We have Metformin 500mg in stock — 30 tablets at KSh 240. Come in today or we can arrange delivery. Call +254 721 600 700."></textarea></div>
+      <div class="mb2">
+        <label class="f-label">Mark Request As</label>
+        <select id="replyStatus" class="f-input" style="cursor:pointer;">
+          <option value="replied">Replied — waiting for patient</option>
+          <option value="fulfilled">Fulfilled — medicine dispensed</option>
+          <option value="unavailable">Unavailable — out of stock</option>
         </select>
       </div>
-      <div class="form-grid-2">
-        <div class="mb-3">
-          <label class="ph-form-label">Quantity to Order *</label>
-          <input type="number" id="o-qty" class="ph-input" placeholder="e.g. 500" min="1">
-        </div>
-        <div class="mb-3">
-          <label class="ph-form-label">Supplier</label>
-          <select id="o-supplier" class="ph-input" style="cursor:pointer;">
-            <option>Nairobi Pharma Supplies</option>
-            <option>KenyaMed Distributors</option>
-            <option>East Africa Medical</option>
-            <option>KEBS Certified Supplier</option>
-          </select>
-        </div>
-      </div>
-      <div class="mb-3">
-        <label class="ph-form-label">Expected Delivery</label>
-        <input type="date" id="o-delivery" class="ph-input">
-      </div>
+      <input type="hidden" id="replyReqId">
     </div>
-    <div class="ph-modal-footer">
-      <button class="btn-ph-ghost" onclick="closeModal('orderModal')">Cancel</button>
-      <button class="btn-ph-navy" onclick="submitOrder()">🛒 Place Order</button>
+    <div class="ph-modal-foot">
+      <button class="btn-g" onclick="closeModal('replyModal')">Cancel</button>
+      <button class="btn-t" onclick="submitReply()">📤 Send Reply</button>
     </div>
   </div>
 </div>
@@ -1261,742 +690,598 @@
 <!-- Toast container -->
 <div class="ph-toasts" id="phToasts"></div>
 
-<!-- ══════════════════════════════════════════════════════════
-     JAVASCRIPT — embedded, self-contained
-══════════════════════════════════════════════════════════ -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ══ JAVASCRIPT ════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ─── Storage ─────────────────────────────────────────── */
+/* ─── DB ─────────────────────────────────────────────── */
 const PhDB = {
-  get : k    => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
-  set : (k,v)=> localStorage.setItem(k, JSON.stringify(v)),
-  del : k    => localStorage.removeItem(k),
+  get : k     => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set : (k,v) => localStorage.setItem(k, JSON.stringify(v)),
+  del : k     => localStorage.removeItem(k),
 };
 
-/* ─── Auth ────────────────────────────────────────────── */
-const PH_SESSION_KEY = 'ph_session';
+/* ─── Session ─────────────────────────────────────────── */
+const PH_SESSION = 'ph_session';
+function getPhSession()   { return PhDB.get(PH_SESSION); }
+function setPhSession(s)  { PhDB.set(PH_SESSION, s); }
+function clearPhSession() { PhDB.del(PH_SESSION); }
 
-function getPhSession() { return PhDB.get(PH_SESSION_KEY); }
-function setPhSession(s){ PhDB.set(PH_SESSION_KEY, s); }
-function clearPhSession(){ PhDB.del(PH_SESSION_KEY); }
+/* ─── Seed pharmacy users ─────────────────────────────── */
+function seedPhUsers() {}
 
-/* ─── Seed pharmacy data ──────────────────────────────── */
-function seedPharmacyData() {
-  if (PhDB.get('ph_seeded')) return;
-
-  PhDB.set('ph_users', [
-    { id:'ph1', name:'Purity Wanjiru',  email:'pharmacy@demo.com',  password:'demo123', branch:'Ruiru' },
-    { id:'ph2', name:'Kevin Mutua',     email:'pharmacy2@demo.com', password:'demo123', branch:'Nairobi Main' },
-  ]);
-
-  PhDB.set('ph_inventory', [
-    { id:'inv1',  name:'Metformin 500mg',       category:'chronic',    qty:340, reorder:80,  price:8,   unit:'Tablets',    expiry:'2027-06-30' },
-    { id:'inv2',  name:'Amlodipine 10mg',        category:'cardiac',    qty:210, reorder:60,  price:12,  unit:'Tablets',    expiry:'2027-09-15' },
-    { id:'inv3',  name:'Lisinopril 20mg',         category:'cardiac',    qty:45,  reorder:80,  price:15,  unit:'Tablets',    expiry:'2027-03-20' },
-    { id:'inv4',  name:'Vitamin D 1000IU',        category:'vitamin',    qty:28,  reorder:50,  price:5,   unit:'Capsules',   expiry:'2026-12-31' },
-    { id:'inv5',  name:'Amoxicillin 500mg',       category:'antibiotic', qty:180, reorder:60,  price:18,  unit:'Capsules',   expiry:'2026-08-10' },
-    { id:'inv6',  name:'Ibuprofen 400mg',         category:'painkiller', qty:95,  reorder:40,  price:6,   unit:'Tablets',    expiry:'2027-01-15' },
-    { id:'inv7',  name:'Paracetamol 500mg',       category:'painkiller', qty:420, reorder:100, price:3,   unit:'Tablets',    expiry:'2027-06-01' },
-    { id:'inv8',  name:'Omeprazole 20mg',         category:'chronic',    qty:18,  reorder:40,  price:14,  unit:'Capsules',   expiry:'2027-02-28' },
-    { id:'inv9',  name:'Atorvastatin 40mg',       category:'cardiac',    qty:130, reorder:50,  price:22,  unit:'Tablets',    expiry:'2027-05-20' },
-    { id:'inv10', name:'Salbutamol Inhaler',      category:'chronic',    qty:8,   reorder:20,  price:450, unit:'Inhaler',    expiry:'2026-10-30' },
-    { id:'inv11', name:'Doxycycline 100mg',       category:'antibiotic', qty:90,  reorder:30,  price:20,  unit:'Capsules',   expiry:'2026-09-15' },
-    { id:'inv12', name:'Zinc Supplement 10mg',    category:'vitamin',    qty:200, reorder:60,  price:4,   unit:'Tablets',    expiry:'2027-08-01' },
-  ]);
-
-  PhDB.set('ph_prescriptions', [
-    { id:'rx1',  patient:'Alice Kamau',  pid:'30350553', medicine:'Metformin 500mg',    dosage:'500mg after meals', qty:60, doctor:'Dr. David Mwangi', card:'HMT-PLU', discount:20, status:'dispensed', date:'2026-05-14', notes:'Check blood sugar weekly' },
-    { id:'rx2',  patient:'James Otieno',pid:'10293847', medicine:'Amlodipine 10mg',     dosage:'10mg morning',     qty:30, doctor:'Dr. David Mwangi', card:'HMT-BAS', discount:10, status:'pending',   date:'2026-05-14', notes:'' },
-    { id:'rx3',  patient:'Fatuma Njeri', pid:'20384756', medicine:'Lisinopril 20mg',     dosage:'20mg morning',     qty:30, doctor:'Dr. David Mwangi', card:'HMT-FAM', discount:30, status:'ready',     date:'2026-05-14', notes:'Monitor BP daily' },
-    { id:'rx4',  patient:'Collins Mwangi',pid:'30450123', medicine:'Vitamin D 1000IU',  dosage:'1000IU daily',     qty:30, doctor:'Dr. Sarah Ouma',   card:'HMT-PLU', discount:20, status:'pending',   date:'2026-05-13', notes:'' },
-    { id:'rx5',  patient:'Grace Njoroge', pid:'40912345', medicine:'Amoxicillin 500mg', dosage:'500mg 3x daily',   qty:21, doctor:'Dr. David Mwangi', card:'none',    discount:0,  status:'dispensed', date:'2026-05-13', notes:'Full course 7 days' },
-    { id:'rx6',  patient:'Brian Kimani',  pid:'50123456', medicine:'Omeprazole 20mg',   dosage:'20mg before meals',qty:30, doctor:'Dr. Peter Njagi',  card:'HMT-BAS', discount:10, status:'flagged',   date:'2026-05-12', notes:'Patient allergic to penicillin — double-check' },
-    { id:'rx7',  patient:'Mary Wambui',   pid:'60234567', medicine:'Ibuprofen 400mg',   dosage:'400mg as needed',  qty:20, doctor:'Dr. Sarah Ouma',   card:'none',    discount:0,  status:'dispensed', date:'2026-05-12', notes:'' },
-    { id:'rx8',  patient:'David Kariuki', pid:'70345678', medicine:'Atorvastatin 40mg', dosage:'40mg at night',    qty:30, doctor:'Dr. David Mwangi', card:'HMT-PLU', discount:20, status:'ready',     date:'2026-05-11', notes:'' },
-    { id:'rx9',  patient:'Alice Kamau',   pid:'30350553', medicine:'Vitamin D 1000IU',  dosage:'1000IU daily',     qty:30, doctor:'Dr. David Mwangi', card:'HMT-PLU', discount:20, status:'pending',   date:'2026-05-11', notes:'Re-supply after stock-out' },
-    { id:'rx10', patient:'Salbutamol User',pid:'80456789',medicine:'Salbutamol Inhaler','dosage':'2 puffs as needed',qty:1, doctor:'Dr. Peter Njagi', card:'HMT-FAM', discount:30, status:'pending', date:'2026-05-10', notes:'Emergency supply - stock running low' },
-  ]);
-
-  PhDB.set('ph_orders', [
-    { id:'ord1', medicine:'Lisinopril 20mg',   qty:500, supplier:'Nairobi Pharma Supplies', ordered:'2026-05-13', expected:'2026-05-17', status:'confirmed' },
-    { id:'ord2', medicine:'Vitamin D 1000IU',  qty:300, supplier:'KenyaMed Distributors',   ordered:'2026-05-12', expected:'2026-05-16', status:'in-transit' },
-    { id:'ord3', medicine:'Salbutamol Inhaler',qty:50,  supplier:'East Africa Medical',      ordered:'2026-05-11', expected:'2026-05-18', status:'pending' },
-    { id:'ord4', medicine:'Omeprazole 20mg',   qty:200, supplier:'Nairobi Pharma Supplies', ordered:'2026-05-14', expected:'2026-05-20', status:'pending' },
-  ]);
-
-  PhDB.set('ph_disp_log', [
-    { ts:'2026-05-14T09:15:00', patient:'Alice Kamau',   medicine:'Metformin 500mg',    qty:60, pharmacist:'Purity Wanjiru', card:'HMT-PLU', amount:384  },
-    { ts:'2026-05-13T14:30:00', patient:'Grace Njoroge', medicine:'Amoxicillin 500mg',  qty:21, pharmacist:'Kevin Mutua',   card:'none',    amount:378  },
-    { ts:'2026-05-12T10:45:00', patient:'Mary Wambui',   medicine:'Ibuprofen 400mg',    qty:20, pharmacist:'Purity Wanjiru', card:'none',   amount:120  },
-    { ts:'2026-05-11T16:00:00', patient:'David Kariuki', medicine:'Atorvastatin 40mg',  qty:30, pharmacist:'Purity Wanjiru', card:'HMT-PLU',amount:528  },
-    { ts:'2026-05-10T08:30:00', patient:'Alice Kamau',   medicine:'Vitamin D 1000IU',   qty:30, pharmacist:'Kevin Mutua',   card:'HMT-PLU', amount:120  },
-  ]);
-
-  PhDB.set('ph_next_rx',  11);
-  PhDB.set('ph_next_ord', 5);
-  PhDB.set('ph_seeded', true);
-}
-
-/* ─── Data helpers ────────────────────────────────────── */
-function getInv()  { return PhDB.get('ph_inventory')    || []; }
-function getRx()   { return PhDB.get('ph_prescriptions') || []; }
-function getOrders(){ return PhDB.get('ph_orders')       || []; }
-function getDispLog(){ return PhDB.get('ph_disp_log')    || []; }
-function getPhUsers(){ return PhDB.get('ph_users')       || []; }
-
-/* ─── Toast ───────────────────────────────────────────── */
-function phToast(msg, type='success') {
-  const c    = document.getElementById('phToasts');
-  const t    = document.createElement('div');
-  t.className= `ph-toast ${type}`;
-  const icon = type==='success'?'✓':type==='error'?'✗':type==='warning'?'⚠':'ℹ';
-  const clr  = type==='success'?'#2DAF83':type==='error'?'#D94F4F':type==='warning'?'#D98A2A':'#3A8DC4';
-  t.innerHTML= `<span class="ph-toast-icon" style="color:${clr};font-weight:800;">${icon}</span><span class="ph-toast-msg">${msg}</span>`;
-  c.appendChild(t);
-  setTimeout(()=>{ t.style.cssText+='opacity:0;transform:translateX(16px);transition:all 0.3s;'; setTimeout(()=>t.remove(),300); }, 3500);
-}
+/* ─── Shared data (from DawaTrack main system) ─────────── */
+function getSharedLogs()     { try { return JSON.parse(localStorage.getItem('dt_logs'))         || []; } catch { return []; } }
+function getSharedUsers()    { try { return JSON.parse(localStorage.getItem('dt_users'))        || []; } catch { return []; } }
+function getMedRequests()    { try { return JSON.parse(localStorage.getItem('dt_med_requests')) || []; } catch { return []; } }
+function saveMedRequests(r)  { localStorage.setItem('dt_med_requests', JSON.stringify(r)); }
+function getPhNotes()        { try { return JSON.parse(localStorage.getItem('dt_ph_notes'))     || []; } catch { return []; } }
+function savePhNotes(n)      { localStorage.setItem('dt_ph_notes', JSON.stringify(n)); }
+function getSharedDispLog()  { try { return JSON.parse(localStorage.getItem('dt_disp_log'))     || []; } catch { return []; } }
+function saveSharedDispLog(l){ localStorage.setItem('dt_disp_log', JSON.stringify(l)); }
+function getLocalDispLog()   { return PhDB.get('ph_disp_log_local') || []; }
+function saveLocalDispLog(l) { PhDB.set('ph_disp_log_local', l); }
+function getAllDispLog()      { return [...getLocalDispLog(), ...getSharedDispLog()].sort((a,b)=>new Date(b.ts)-new Date(a.ts)); }
+function getPhUsers()        { return PhDB.get('ph_users') || []; }
+function nextDlId()          { const n=PhDB.get('ph_next_dl')||1; PhDB.set('ph_next_dl',n+1); return 'dl'+n; }
 
 /* ─── Helpers ─────────────────────────────────────────── */
-function fmtDate(str) {
-  if (!str) return '—';
-  return new Date(str+'T00:00:00').toLocaleDateString('en-KE', {day:'numeric',month:'short',year:'numeric'});
-}
 function fmtTS(iso) {
+  if (!iso) return '—';
   const d = new Date(iso);
   return d.toLocaleDateString('en-KE',{day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'});
 }
+function fmtDate(str) {
+  if (!str) return '—';
+  return new Date(str+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short',year:'numeric'});
+}
+function timeAgo(iso) {
+  const diff=(Date.now()-new Date(iso))/1000;
+  if(diff<60) return 'just now';
+  if(diff<3600) return Math.floor(diff/60)+'m ago';
+  if(diff<86400) return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
 function cardBadge(card) {
-  if (!card || card==='none') return '<span class="badge badge-gray">No card</span>';
-  const labels = {'HMT-BAS':'Basic 10%','HMT-PLU':'Plus 20%','HMT-FAM':'Family 30%'};
-  return `<span class="badge badge-teal">💳 ${labels[card]||card}</span>`;
+  if (!card || card==='none') return '<span class="badge bgr">No card</span>';
+  const m={'HMT-BAS':'bt HMT-BAS 10%','HMT-PLU':'bn HMT-PLU 20%','HMT-FAM':'bg HMT-FAM 30%'};
+  const parts=(m[card]||'bgr '+card).split(' ');
+  return `<span class="badge ${parts[0]}">💳 ${parts.slice(1).join(' ')}</span>`;
 }
 function statusBadge(s) {
-  const map = {
-    pending  : 'badge-amber',
-    ready    : 'badge-teal',
-    dispensed: 'badge-green',
-    flagged  : 'badge-red',
-    'in-transit':'badge-blue',
-    confirmed: 'badge-navy',
-  };
-  return `<span class="badge ${map[s]||'badge-gray'}">${s.charAt(0).toUpperCase()+s.slice(1)}</span>`;
+  const m={dispensed:'bg ✓ Dispensed',taken:'bg ✓ Taken',missed:'br ✗ Missed',pending:'ba ⏳ Pending',fulfilled:'bg ✓ Fulfilled',replied:'bb 💬 Replied',unavailable:'br ✗ Unavailable'};
+  const parts=(m[s]||'bgr '+s).split(' ');
+  return `<span class="badge ${parts[0]}">${parts.slice(1).join(' ')}</span>`;
 }
-function discountPct(card) {
-  if (card==='HMT-BAS') return 10;
-  if (card==='HMT-PLU') return 20;
-  if (card==='HMT-FAM') return 30;
+function discPct(card) {
+  if(card==='HMT-BAS') return 10;
+  if(card==='HMT-PLU') return 20;
+  if(card==='HMT-FAM') return 30;
   return 0;
 }
-function stockStatus(qty, reorder) {
-  if (qty <= 0)            return { cls:'red',    label:'Out of Stock' };
-  if (qty <= reorder)      return { cls:'medium', label:'Low Stock'    };
-  return                          { cls:'high',   label:'In Stock'     };
-}
-function nextId(key, prefix) {
-  const n = PhDB.get(key) || 1;
-  PhDB.set(key, n+1);
-  return prefix + n;
+function adherenceRate(logs) {
+  if(!logs.length) return 0;
+  return Math.round(logs.filter(l=>l.taken).length/logs.length*100);
 }
 
-/* ─── Modal helpers ───────────────────────────────────── */
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
+/* ─── Toast ───────────────────────────────────────────── */
+function phToast(msg, type='s') {
+  const c=document.getElementById('phToasts');
+  const t=document.createElement('div');
+  t.className=`ph-toast ${type}`;
+  const icon=type==='s'?'✓':type==='e'?'✗':type==='w'?'⚠':'ℹ';
+  const clr=type==='s'?'#2DAF83':type==='e'?'#D94F4F':type==='w'?'#D98A2A':'#3A8DC4';
+  t.innerHTML=`<span style="color:${clr};font-weight:800;font-size:1rem;">${icon}</span><span style="font-size:0.85rem;color:#3A5563;">${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{ t.style.cssText+='opacity:0;transform:translateX(16px);transition:all 0.3s;'; setTimeout(()=>t.remove(),300); },3500);
 }
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('click', e => {
-  if (e.target.classList.contains('ph-modal-overlay')) {
-    e.target.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-});
 
-/* ─── Tab navigation ──────────────────────────────────── */
-const TAB_META = {
-  overview     : { title:'Pharmacy Dashboard',    sub:'Overview of today\'s pharmacy activity'          },
-  prescriptions: { title:'Prescriptions',         sub:'All patient prescription orders'                 },
-  inventory    : { title:'Medicine Inventory',    sub:'Stock levels, expiry dates and reorder alerts'   },
-  patients     : { title:'Patient Records',       sub:'Patients linked to DawaTrack pharmacy'           },
-  orders       : { title:'Supplier Orders',       sub:'Restock orders and delivery status'              },
-  dispensing   : { title:'Dispensing Log',        sub:'Complete record of all medicines dispensed'      },
-  discounts    : { title:'Smart Card Discounts',  sub:'HAMAT Smart Card benefit usage and savings'      },
+/* ─── Modal ───────────────────────────────────────────── */
+function openModal(id)  { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('click', e => { if(e.target.classList.contains('ph-modal-ov')){ e.target.classList.remove('open'); document.body.style.overflow=''; } });
+
+/* ─── Tab switching ───────────────────────────────────── */
+function switchLoginTab(id, btn) {
+  document.querySelectorAll('.t-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.t-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+const PANEL_META = {
+  'p-overview':  {title:'Overview',           sub:'Today\'s pharmacy activity'},
+  'p-search':    {title:'Patient Search',      sub:'Find patient · view prescriptions · update dose status'},
+  'p-requests':  {title:'Patient Requests',    sub:'Medicine refill requests from patients'},
+  'p-log':       {title:'Dispensing Log',      sub:'Complete record of all medicines dispensed'},
+  'p-card':      {title:'HAMAT Smart Card',    sub:'Discount tiers and card-holder statistics'},
 };
+function showPanel(id, btn) {
+  document.querySelectorAll('.ph-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ph-sb-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  const m=PANEL_META[id]||{};
+  document.getElementById('pageTitle').textContent=m.title||id;
+  document.getElementById('pageSub').textContent=m.sub||'';
+  if(id==='p-requests')  renderRequests('all');
+  if(id==='p-log')       renderDispLog();
+  if(id==='p-card')      renderCardStats();
+  if(id==='p-overview')  { renderOverviewRequests(); renderRecentDisp(); renderKPIs(); }
 
-function showTab(name, btn) {
-  // panels
-  document.querySelectorAll('.ph-tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-'+name)?.classList.add('active');
-  // sidebar links
-  document.querySelectorAll('.ph-nav-link').forEach(l => l.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  // header
-  const meta = TAB_META[name] || {};
-  document.getElementById('pageTitle').textContent = meta.title || name;
-  document.getElementById('pageSub').textContent   = meta.sub   || '';
-  // render
-  if (name==='prescriptions') renderRxTable();
-  if (name==='inventory')     renderInventory();
-  if (name==='patients')      renderPatients();
-  if (name==='orders')        renderOrders();
-  if (name==='dispensing')    renderDispLog();
-  if (name==='discounts')     renderDiscounts();
+  /* Sync mobile tab bar */
+  document.querySelectorAll('.mobile-tab-btn').forEach(b=>b.classList.remove('active'));
+  const mobileBtn=document.querySelector(`.mobile-tab-btn[onclick*="'${id}'"]`);
+  if(mobileBtn) mobileBtn.classList.add('active');
 }
 
-function scrollToLowStock() {
-  document.getElementById('lowStockPanel')?.scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-/* ─── LOGIN ───────────────────────────────────────────── */
+/* ─── Auth ────────────────────────────────────────────── */
 function handlePhLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass  = document.getElementById('loginPass').value.trim();
-  if (!email || !pass) { phToast('Please enter your credentials.','error'); return; }
-  const users = getPhUsers();
-  const user  = users.find(u => u.email===email && u.password===pass);
-  if (!user) { phToast('Invalid email or password.','error'); return; }
-  setPhSession({ id:user.id, name:user.name, email:user.email, branch:user.branch });
-  initDashboard();
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value.trim();
+  if(!email||!pass){ phToast('Please enter credentials.','e'); return; }
+  const users=getPhUsers();
+  const user=users.find(u=>u.email===email&&u.password===pass);
+  if(!user){ phToast('Invalid email or password.','e'); return; }
+  setPhSession({id:user.id,name:user.name,branch:user.branch,email:user.email});
+  phToast('Welcome, '+user.name.split(' ')[0]+'!');
+  setTimeout(initDash, 600);
+}
+
+function handlePhRegister() {
+  const name=document.getElementById('regName').value.trim();
+  const branch=document.getElementById('regBranch').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const phone=document.getElementById('regPhone').value.trim();
+  const pass=document.getElementById('regPass').value.trim();
+  const code=document.getElementById('regCode').value.trim();
+  if(!name||!branch||!email||!pass){ phToast('Please fill all required fields.','e'); return; }
+  if(code!=='PH2026'){ phToast('Invalid access code. Use PH2026.','e'); return; }
+  const users=getPhUsers();
+  if(users.find(u=>u.email===email)){ phToast('Email already registered.','e'); return; }
+  const id='ph'+Date.now();
+  users.push({id,name,branch,email,phone,password:pass});
+  PhDB.set('ph_users',users);
+  setPhSession({id,name,branch,email});
+  phToast('Account created!');
+  setTimeout(initDash, 700);
 }
 
 function handlePhLogout() {
   clearPhSession();
-  document.getElementById('dashScreen').style.display  = 'none';
-  document.getElementById('loginScreen').style.display = 'grid';
+  document.getElementById('dashScreen').style.display='none';
+  document.getElementById('loginScreen').style.display='grid';
 }
 
-/* ─── INIT DASHBOARD ──────────────────────────────────── */
-function initDashboard() {
-  const s = getPhSession();
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashScreen').style.display  = 'block';
-
-  // Set user info in nav
-  const initials = s.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('navAvatar').textContent = initials;
-  document.getElementById('navName').textContent   = s.name;
-  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-KE',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
-
-  populateMedicineDropdowns();
+/* ─── Init dashboard ──────────────────────────────────── */
+function initDash() {
+  const s=getPhSession();
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('dashScreen').style.display='block';
+  const ini=s.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('navAvatar').textContent=ini;
+  document.getElementById('navName').textContent=s.name;
+  document.getElementById('navBranch').textContent=s.branch||'Pharmacist';
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-KE',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
   renderKPIs();
-  renderRecentRx();
-  renderLowStock();
-  renderDoctorNotes();
-
-  // Live polling for doctor notes every 5s
-  setInterval(() => { renderDoctorNotes(); renderKPIs(); }, 5000);
+  renderOverviewRequests();
+  renderRecentDisp();
+  updateReqBadge();
+  /* Poll every 5s for new patient requests */
+  setInterval(()=>{ updateReqBadge(); renderOverviewRequests(); renderKPIs(); }, 5000);
 }
 
 /* ─── KPIs ────────────────────────────────────────────── */
 function renderKPIs() {
-  const rx      = getRx();
-  const inv     = getInv();
-  const today   = new Date().toISOString().split('T')[0];
-  const todayRx = rx.filter(r => r.date === today);
-  const lowStock= inv.filter(i => i.qty <= i.reorder);
-  const scPats  = [...new Set(rx.filter(r=>r.card&&r.card!=='none').map(r=>r.patient))];
-
-  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-  set('kpi-rx',         rx.filter(r=>r.date===today).length);
-  set('kpi-dispensed',  todayRx.filter(r=>r.status==='dispensed').length);
-  set('kpi-pending',    rx.filter(r=>r.status==='pending'||r.status==='ready').length);
-  set('kpi-lowstock',   lowStock.length);
-  set('kpi-sc',         scPats.length);
-  set('lowStockCount',  lowStock.length);
-
-  // Smart card tab
-  set('sc-total',    scPats.length);
-  set('sc-discount', 'KSh '+getDispLog().filter(l=>l.card&&l.card!=='none').reduce((s,l)=>s+Math.round(l.amount*(discountPct(l.card)/100)),0).toLocaleString());
-  set('sc-txn',      getDispLog().filter(l=>l.card&&l.card!=='none').length);
+  const log=getAllDispLog();
+  const reqs=getMedRequests();
+  const today=new Date().toISOString().split('T')[0];
+  const todayLog=log.filter(l=>l.ts&&l.ts.startsWith(today));
+  const scPats=[...new Set(log.filter(l=>l.card&&l.card!=='none').map(l=>l.patientId||l.patient))];
+  const pending=reqs.filter(r=>r.status==='pending').length;
+  const set=(id,v)=>{ const el=document.getElementById(id); if(el)el.textContent=v; };
+  set('k-today', todayLog.length);
+  set('k-total', log.length);
+  set('k-req',   pending);
+  set('k-sc',    scPats.length);
+  set('sbReqCount', pending);
+  const sbAlert=document.getElementById('sbAlertReq');
+  if(sbAlert) sbAlert.style.display=pending>0?'block':'none';
 }
 
-/* ─── RECENT PRESCRIPTIONS TABLE ─────────────────────── */
-function renderRecentRx() {
-  const body = document.getElementById('recentRxBody');
-  if (!body) return;
-  const rx = getRx().slice().reverse().slice(0, 10);
-  body.innerHTML = rx.map(r => `
-    <tr>
-      <td><span style="font-weight:600;color:#1B5271;">${r.patient}</span></td>
-      <td style="font-weight:500;">${r.medicine}</td>
-      <td>${r.qty}</td>
-      <td>${statusBadge(r.status)}</td>
-      <td>${cardBadge(r.card)}</td>
-      <td>
-        ${r.status!=='dispensed' ? `<button class="btn-ph-sm teal" onclick="quickDispense('${r.id}')">✓ Dispense</button>` : '<span style="font-size:0.75rem;color:#7A9CA8;">Done</span>'}
-        ${r.status==='flagged'   ? `<button class="btn-ph-sm red" style="margin-left:4px;" onclick="viewFlag('${r.id}')">⚠ Flag</button>` : ''}
-      </td>
-    </tr>`).join('');
+function updateReqBadge() {
+  const n=getMedRequests().filter(r=>r.status==='pending').length;
+  const b=document.getElementById('reqBadge');
+  if(!b) return;
+  b.textContent=n; b.style.display=n>0?'inline-flex':'none';
+  document.getElementById('sbReqCount').textContent=n;
 }
 
-/* ─── LOW STOCK LIST ──────────────────────────────────── */
-function renderLowStock() {
-  const list = document.getElementById('lowStockList');
-  if (!list) return;
-  const items = getInv().filter(i => i.qty <= i.reorder);
-  if (!items.length) {
-    list.innerHTML = '<div style="padding:20px;text-align:center;color:#7A9CA8;font-size:0.875rem;">✅ All stock levels healthy</div>';
+/* ─── Overview panel ──────────────────────────────────── */
+function renderOverviewRequests() {
+  const container=document.getElementById('overviewRequests');
+  if(!container) return;
+  const reqs=getMedRequests().slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).slice(0,8);
+  if(!reqs.length){
+    container.innerHTML='<div style="padding:28px;text-align:center;color:#7A9CA8;font-size:0.875rem;">✅ No pending requests right now.</div>';
     return;
   }
-  list.innerHTML = items.map(i => {
-    const st  = stockStatus(i.qty, i.reorder);
-    const pct = Math.round((i.qty / (i.reorder*2)) * 100);
-    return `<div style="padding:14px 20px;border-bottom:1px solid #D1E4DE;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-      <div>
-        <div style="font-weight:700;font-size:0.875rem;color:#1B5271;">${i.name}</div>
-        <div style="font-size:0.75rem;color:#7A9CA8;margin-top:2px;">${i.qty} ${i.unit} remaining</div>
-        <div class="stock-bar" style="width:120px;">
-          <div class="stock-fill ${st.cls}" style="width:${Math.max(pct,5)}%;"></div>
-        </div>
-      </div>
-      <button class="btn-ph-sm navy" onclick="showTab('orders',null);openOrderModal('${i.name}')">Order →</button>
-    </div>`;
-  }).join('');
-}
-
-/* ─── DOCTOR NOTES FEED (reads from shared dt_notes in localStorage) ─── */
-function renderDoctorNotes() {
-  const feed = document.getElementById('doctorNotesFeed');
-  if (!feed) return;
-
-  // Read notes from the main DawaTrack system
-  let notes = [];
-  try { notes = JSON.parse(localStorage.getItem('dt_notes')) || []; } catch {}
-
-  // Filter for notes that mention pharmacy / prescriptions / medicine
-  const phNotes = notes.filter(n =>
-    n.type==='urgent' ||
-    /prescription|medicine|refill|pharmacy|mg|tablet|capsule|inhaler|drug/i.test(n.message)
-  ).slice().sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
-
-  // Also add any direct doctor→pharmacy notes
-  let drPhNotes = [];
-  try { drPhNotes = JSON.parse(localStorage.getItem('ph_dr_notes')) || []; } catch {}
-
-  const allNotes = [...drPhNotes, ...phNotes].slice(0, 10);
-
-  if (!allNotes.length) {
-    feed.innerHTML = `<div style="text-align:center;padding:32px;color:#7A9CA8;font-size:0.875rem;">
-      <div style="font-size:2rem;margin-bottom:10px;">📡</div>
-      No pharmacy instructions from doctors yet. They will appear here automatically.
-    </div>`;
-    return;
-  }
-
-  const typeStyles = {
-    urgent  : { bg:'#FAE8E8', border:'#F0AAAA', accent:'#D94F4F', icon:'⚠️', label:'Urgent' },
-    advice  : { bg:'#DCF0FA', border:'#9DD0F0', accent:'#3A8DC4', icon:'💊', label:'Prescription Note' },
-    reminder: { bg:'#FBF5E6', border:'#F0CC88', accent:'#D98A2A', icon:'🔔', label:'Reminder' },
-    praise  : { bg:'#D5F3EB', border:'#A8E4D0', accent:'#2DAF83', icon:'🌟', label:'Info' },
-  };
-
-  feed.innerHTML = allNotes.map(n => {
-    const st = typeStyles[n.type] || typeStyles.advice;
-    const ts = n.createdAt ? new Date(n.createdAt).toLocaleString('en-KE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '';
-    return `<div style="background:${st.bg};border:1px solid ${st.border};border-left:3px solid ${st.accent};border-radius:10px;padding:14px 16px;display:flex;gap:10px;align-items:flex-start;">
-      <span style="font-size:1.1rem;flex-shrink:0;">${st.icon}</span>
+  container.innerHTML=reqs.map(r=>{
+    const stClr=r.status==='pending'?'#D98A2A':r.status==='fulfilled'?'#2DAF83':'#7A9CA8';
+    const stBg =r.status==='pending'?'#FBF0DC':r.status==='fulfilled'?'#D5F3EB':'#EDF5F2';
+    return `<div class="disp-entry">
+      <div class="disp-icon" style="background:${stBg};">💊</div>
       <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:5px;">
-          <span style="font-size:0.63rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:${st.accent};">${st.label}</span>
-          <span style="font-size:0.68rem;color:#7A9CA8;">${ts} · Patient: <strong style="color:#1B5271;">${n.patientId||'—'}</strong></span>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+          <span style="font-weight:700;color:#1B5271;font-size:0.9rem;">${r.patientName||'Patient'}</span>
+          <span style="font-size:0.7rem;color:#7A9CA8;">${timeAgo(r.createdAt)}</span>
         </div>
-        <p style="font-size:0.84rem;color:#3A5563;margin:0;line-height:1.6;">${n.message}</p>
-        <div style="font-size:0.72rem;color:#7A9CA8;margin-top:6px;font-weight:500;">— ${n.doctorName||'Doctor'}</div>
+        <div style="font-size:0.85rem;font-weight:600;color:#3A5563;margin-top:2px;">${r.medicine}${r.dosage?' · '+r.dosage:''}</div>
+        <div style="font-size:0.78rem;color:#7A9CA8;margin-top:2px;">${r.message||''}</div>
+        ${r.pharmacyReply?`<div style="margin-top:6px;font-size:0.78rem;color:#5DAC96;font-style:italic;">✓ Replied: ${r.pharmacyReply}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;">
+        <span style="font-size:0.67rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;color:${stClr};background:${stBg};padding:3px 9px;border-radius:100px;">${r.status}</span>
+        ${r.status==='pending'?`<button class="btn-sm bsm-t" onclick="openReplyModal('${r.id}')">💬 Reply</button>`:''}
       </div>
     </div>`;
   }).join('');
 }
 
-/* ─── FULL PRESCRIPTIONS TABLE ───────────────────────── */
-function renderRxTable() {
-  const body   = document.getElementById('rxFullBody');
-  const search = (document.getElementById('rxSearch')?.value||'').toLowerCase();
-  const filter = document.getElementById('rxFilter')?.value || 'all';
-  if (!body) return;
-  let rx = getRx();
-  if (filter!=='all') rx = rx.filter(r=>r.status===filter);
-  if (search) rx = rx.filter(r=>
-    r.patient.toLowerCase().includes(search) ||
-    r.medicine.toLowerCase().includes(search) ||
-    (r.pid||'').includes(search)
-  );
-  document.getElementById('rxCount').textContent = `Showing ${rx.length} record${rx.length!==1?'s':''}`;
-  body.innerHTML = rx.slice().reverse().map((r,i) => `
+function renderRecentDisp() {
+  const body=document.getElementById('recentDispBody');
+  if(!body) return;
+  const log=getAllDispLog().slice(0,8);
+  if(!log.length){ body.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:24px;color:#7A9CA8;">No dispensing records yet.</td></tr>`; return; }
+  body.innerHTML=log.map(l=>`
     <tr>
-      <td style="color:#7A9CA8;font-size:0.78rem;">${r.id}</td>
-      <td>
-        <div style="font-weight:700;color:#1B5271;">${r.patient}</div>
-        <div style="font-size:0.72rem;color:#7A9CA8;">ID: ${r.pid||'—'}</div>
-      </td>
-      <td style="font-weight:600;">${r.medicine}</td>
-      <td style="color:#7A9CA8;font-size:0.82rem;">${r.dosage}</td>
-      <td>${r.qty}</td>
-      <td style="color:#3A5563;font-size:0.82rem;">${r.doctor}</td>
-      <td>${cardBadge(r.card)}</td>
-      <td>${r.discount>0 ? `<span style="color:#5DAC96;font-weight:700;">${r.discount}%</span>` : '—'}</td>
-      <td>${statusBadge(r.status)}</td>
-      <td style="color:#7A9CA8;font-size:0.82rem;white-space:nowrap;">${fmtDate(r.date)}</td>
-      <td>
-        <div style="display:flex;gap:6px;flex-wrap:nowrap;">
-          ${r.status!=='dispensed'?`<button class="btn-ph-sm teal" onclick="quickDispense('${r.id}')">✓ Dispense</button>`:''}
-          ${r.notes?`<button class="btn-ph-sm navy" title="${r.notes}" onclick="phToast('${r.notes.replace(/'/g,'')}'  ,'info')">💬</button>`:''}
-          ${r.status==='flagged'?`<button class="btn-ph-sm red" onclick="phToast('⚠ Flag: ${r.notes||'See prescription'}','warning')">⚠</button>`:''}
-        </div>
-      </td>
-    </tr>`).join('');
-}
-
-/* ─── INVENTORY TABLE ─────────────────────────────────── */
-function renderInventory() {
-  const body   = document.getElementById('invBody');
-  const search = (document.getElementById('invSearch')?.value||'').toLowerCase();
-  const filter = document.getElementById('invFilter')?.value||'all';
-  if (!body) return;
-  let inv = getInv();
-  if (filter!=='all') inv = inv.filter(i=>i.category===filter);
-  if (search) inv = inv.filter(i=>i.name.toLowerCase().includes(search)||i.category.includes(search));
-  document.getElementById('invCount').textContent = `${inv.length} item${inv.length!==1?'s':''}`;
-  body.innerHTML = inv.map(i => {
-    const st  = stockStatus(i.qty, i.reorder);
-    const pct = Math.min(Math.round((i.qty/Math.max(i.reorder*2,1))*100), 100);
-    const expDate = new Date(i.expiry);
-    const daysLeft= Math.round((expDate - Date.now()) / 86400000);
-    const expBadge= daysLeft < 90
-      ? `<span class="badge badge-amber">⚠ ${daysLeft}d left</span>`
-      : `<span class="badge badge-green">✓ ${i.expiry}</span>`;
-    return `<tr${i.qty<=i.reorder?' style="background:rgba(217,79,79,0.03);"':''}>
-      <td>
-        <div style="font-weight:700;color:#1B5271;">${i.name}</div>
-        <div class="stock-bar" style="width:100px;margin-top:6px;">
-          <div class="stock-fill ${st.cls}" style="width:${pct}%;"></div>
-        </div>
-      </td>
-      <td><span class="badge badge-teal" style="text-transform:capitalize;">${i.category}</span></td>
-      <td>
-        <span style="font-family:'Instrument Serif',serif;font-size:1.2rem;font-weight:400;color:${i.qty<=i.reorder?'#D94F4F':'#1B5271'};">${i.qty}</span>
-        ${i.qty<=i.reorder?'<span style="color:#D94F4F;font-size:0.75rem;"> ⚠ Low</span>':''}
-      </td>
-      <td style="color:#7A9CA8;">${i.unit}</td>
-      <td style="color:#3A5563;">${i.reorder}</td>
-      <td style="color:#1B5271;font-weight:600;">KSh ${i.price}</td>
-      <td>${expBadge}</td>
-      <td>${i.qty<=0?'<span class="badge badge-red">Out of Stock</span>':i.qty<=i.reorder?'<span class="badge badge-amber">Low Stock</span>':'<span class="badge badge-green">In Stock</span>'}</td>
-      <td>
-        <div style="display:flex;gap:6px;">
-          <button class="btn-ph-sm teal" onclick="openAddStockModal('${i.id}')">+Stock</button>
-          <button class="btn-ph-sm navy" onclick="openOrderModal('${i.name}')">Order</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-/* ─── PATIENTS TABLE ──────────────────────────────────── */
-function renderPatients() {
-  const body   = document.getElementById('patBody');
-  const search = (document.getElementById('patSearch')?.value||'').toLowerCase();
-  const filter = document.getElementById('patFilter')?.value||'all';
-  if (!body) return;
-  const rx   = getRx();
-  const pats = {};
-  rx.forEach(r => {
-    if (!pats[r.pid]) pats[r.pid] = { name:r.patient, pid:r.pid, card:r.card, meds:[], active:0, last:r.date };
-    pats[r.pid].meds.push(r.medicine);
-    if (r.status!=='dispensed') pats[r.pid].active++;
-    if (r.date > pats[r.pid].last) pats[r.pid].last = r.date;
-    if (r.card && r.card!=='none') pats[r.pid].card = r.card;
-  });
-  let list = Object.values(pats);
-  if (filter==='smartcard') list = list.filter(p=>p.card&&p.card!=='none');
-  if (filter==='active')    list = list.filter(p=>p.active>0);
-  if (search) list = list.filter(p=>p.name.toLowerCase().includes(search)||p.pid.includes(search));
-  document.getElementById('patCount').textContent = `${list.length} patient${list!==1?'s':''}`;
-
-  // Try to get adherence from main DawaTrack data
-  let dtLogs = [];
-  try { dtLogs = JSON.parse(localStorage.getItem('dt_logs'))||[]; } catch {}
-  const adh = pid => {
-    const l = dtLogs.filter(l=>l.patientId===pid||l.patientId==='p_self');
-    if (!l.length) return null;
-    return Math.round(l.filter(x=>x.taken).length/l.length*100);
-  };
-
-  body.innerHTML = list.map(p => {
-    const rate = adh(p.pid);
-    const adhBadge = rate!==null
-      ? `<div style="display:flex;align-items:center;gap:8px;">
-           <span style="font-weight:700;color:${rate>=80?'#2DAF83':rate>=50?'#D98A2A':'#D94F4F'};">${rate}%</span>
-           <div style="width:60px;height:5px;border-radius:100px;background:#EDF5F2;overflow:hidden;">
-             <div style="height:100%;width:${rate}%;background:${rate>=80?'#5DAC96':rate>=50?'#D98A2A':'#D94F4F'};border-radius:100px;"></div>
-           </div>
-         </div>`
-      : '<span style="color:#7A9CA8;font-size:0.78rem;">N/A</span>';
-    const uniqMeds = [...new Set(p.meds)];
-    return `<tr>
-      <td>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#5DAC96,#1B5271);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0;">
-            ${p.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
-          </div>
-          <span style="font-weight:700;color:#1B5271;">${p.name}</span>
-        </div>
-      </td>
-      <td style="color:#7A9CA8;font-size:0.82rem;">${p.pid}</td>
-      <td style="color:#7A9CA8;">—</td>
-      <td>${cardBadge(p.card)}</td>
-      <td style="font-size:0.82rem;color:#3A5563;">${uniqMeds.slice(0,2).join(', ')}${uniqMeds.length>2?'…':''}</td>
-      <td>${adhBadge}</td>
-      <td style="color:#7A9CA8;font-size:0.82rem;">${fmtDate(p.last)}</td>
-      <td><button class="btn-ph-sm teal" onclick="openDispenseModal('${p.name}')">+ Rx</button></td>
-    </tr>`;
-  }).join('');
-}
-
-/* ─── ORDERS TABLE ────────────────────────────────────── */
-function renderOrders() {
-  const body = document.getElementById('ordersBody');
-  if (!body) return;
-  const orders = getOrders();
-  body.innerHTML = orders.map(o => `
-    <tr>
-      <td style="color:#7A9CA8;font-size:0.78rem;font-weight:600;">${o.id}</td>
-      <td style="font-weight:700;color:#1B5271;">${o.medicine}</td>
-      <td>${o.qty}</td>
-      <td style="color:#3A5563;">${o.supplier}</td>
-      <td style="color:#7A9CA8;">${fmtDate(o.ordered)}</td>
-      <td style="color:#3A5563;">${fmtDate(o.expected)}</td>
-      <td>${statusBadge(o.status)}</td>
-      <td>
-        ${o.status!=='delivered'?`<button class="btn-ph-sm green" style="background:#D5F3EB;color:#1E8A65;border:1px solid #A8E4D0;" onclick="markOrderDelivered('${o.id}')">✓ Received</button>`:'<span style="color:#7A9CA8;font-size:0.78rem;">Completed</span>'}
-      </td>
-    </tr>`).join('');
-}
-
-/* ─── DISPENSING LOG ──────────────────────────────────── */
-function renderDispLog() {
-  const body = document.getElementById('dispLog');
-  if (!body) return;
-  const log = getDispLog().slice().reverse();
-  body.innerHTML = log.map(l => `
-    <tr>
-      <td style="color:#7A9CA8;font-size:0.78rem;white-space:nowrap;">${fmtTS(l.ts)}</td>
-      <td style="font-weight:600;color:#1B5271;">${l.patient}</td>
+      <td style="font-weight:700;color:#1B5271;">${l.patient||l.patientName||'—'}</td>
       <td>${l.medicine}</td>
-      <td>${l.qty}</td>
-      <td style="color:#3A5563;">${l.pharmacist}</td>
+      <td style="color:#7A9CA8;">${l.dosage||'—'}</td>
+      <td>${l.qty||'—'}</td>
+      <td>${statusBadge(l.status)}</td>
       <td>${cardBadge(l.card)}</td>
-      <td style="font-weight:700;color:#1B5271;">KSh ${l.amount.toLocaleString()}</td>
+      <td style="color:#7A9CA8;font-size:0.78rem;white-space:nowrap;">${fmtTS(l.ts)}</td>
     </tr>`).join('');
 }
 
-/* ─── DISCOUNTS ───────────────────────────────────────── */
-function renderDiscounts() { renderKPIs(); }
+/* ─── Patient Search ──────────────────────────────────── */
+function searchPatients() {
+  const q=(document.getElementById('patSearchInput').value||'').toLowerCase().trim();
+  const results=document.getElementById('searchResults');
+  const profile=document.getElementById('patientProfile');
+  profile.style.display='none';
+  if(!q){ results.innerHTML=`<div style="text-align:center;padding:48px;background:#FFFFFF;border:1px solid #D1E4DE;border-radius:14px;"><div style="font-size:3rem;margin-bottom:14px;">🔍</div><div style="font-weight:700;color:#1B5271;margin-bottom:6px;">Search for a patient</div><p style="font-size:0.85rem;color:#7A9CA8;">Type a name, ID or email.</p></div>`; return; }
 
-/* ─── POPULATE MEDICINE DROPDOWNS ────────────────────── */
-function populateMedicineDropdowns() {
-  const inv    = getInv();
-  const opts   = inv.map(i=>`<option value="${i.name}">${i.name} (${i.qty} ${i.unit})</option>`).join('');
-  const sel    = document.getElementById('d-medicine');
-  const ordSel = document.getElementById('o-med');
-  if (sel)    sel.innerHTML    = '<option value="">Select medicine…</option>' + opts;
-  if (ordSel) ordSel.innerHTML = '<option value="">Select medicine…</option>' + opts;
-}
+  /* Search across DawaTrack users AND dispatch log patients */
+  const dtUsers=getSharedUsers().filter(u=>u.role==='patient');
+  const logPats=[...new Set(getAllDispLog().map(l=>({id:l.patientId||'',name:l.patient||l.patientName||''})))];
 
-/* ─── DISPENSE SUBMIT ─────────────────────────────────── */
-function openDispenseModal(patientName) {
-  populateMedicineDropdowns();
-  if (patientName) document.getElementById('d-patient').value = patientName;
-  openModal('dispenseModal');
-}
+  const matchedUsers=dtUsers.filter(u=>
+    u.name.toLowerCase().includes(q)||
+    u.email.toLowerCase().includes(q)||
+    u.id.toLowerCase().includes(q)
+  );
 
-function updateDiscountPreview() {
-  const card = document.getElementById('d-card').value;
-  const pct  = discountPct(card);
-  const box  = document.getElementById('discountPreview');
-  const txt  = document.getElementById('discountPreviewText');
-  if (pct > 0) {
-    box.style.display = 'block';
-    txt.textContent   = `${pct}% discount will be applied at dispensing for HAMAT Smart Card holder.`;
-  } else {
-    box.style.display = 'none';
-  }
-}
-
-function submitDispense() {
-  const patient  = document.getElementById('d-patient').value.trim();
-  const pid      = document.getElementById('d-pid').value.trim();
-  const medicine = document.getElementById('d-medicine').value;
-  const dosage   = document.getElementById('d-dosage').value.trim();
-  const qty      = parseInt(document.getElementById('d-qty').value) || 0;
-  const doctor   = document.getElementById('d-doctor').value.trim();
-  const card     = document.getElementById('d-card').value;
-  const notes    = document.getElementById('d-notes').value.trim();
-
-  if (!patient || !medicine || qty < 1) { phToast('Please fill required fields.','error'); return; }
-
-  // Check stock
-  const inv = getInv();
-  const item = inv.find(i => i.name === medicine);
-  if (item && item.qty < qty) { phToast(`⚠ Only ${item.qty} ${item.unit} in stock. Reduce quantity or reorder first.`,'warning'); return; }
-
-  // Add prescription
-  const rx = getRx();
-  const id = nextId('ph_next_rx','rx');
-  const pct= discountPct(card);
-  const unitPrice = item?.price || 0;
-  const amount = Math.round(qty * unitPrice * (1 - pct/100));
-
-  rx.push({ id, patient, pid:pid||'—', medicine, dosage, qty, doctor, card, discount:pct, status:'dispensed', date:new Date().toISOString().split('T')[0], notes });
-  PhDB.set('ph_prescriptions', rx);
-
-  // Deduct stock
-  if (item) {
-    item.qty = Math.max(0, item.qty - qty);
-    PhDB.set('ph_inventory', inv);
+  if(!matchedUsers.length){
+    results.innerHTML=`<div style="text-align:center;padding:40px;background:#FFFFFF;border:1px solid #D1E4DE;border-radius:14px;"><div style="font-size:2rem;margin-bottom:10px;">😕</div><div style="font-weight:700;color:#1B5271;margin-bottom:6px;">No patients found</div><p style="font-size:0.85rem;color:#7A9CA8;">Try searching by name or email. Only DawaTrack-registered patients appear here.</p></div>`;
+    return;
   }
 
-  // Log dispensing
-  const s = getPhSession();
-  const log = getDispLog();
-  log.push({ ts:new Date().toISOString(), patient, medicine, qty, pharmacist:s?.name||'Pharmacist', card, amount });
-  PhDB.set('ph_disp_log', log);
-
-  closeModal('dispenseModal');
-  renderKPIs();
-  renderRecentRx();
-  renderLowStock();
-  populateMedicineDropdowns();
-  phToast(`✓ ${medicine} × ${qty} dispensed to ${patient}${pct>0?' ('+pct+'% SC discount applied)':''}`);
-
-  // Reset form
-  ['d-patient','d-pid','d-medicine','d-dosage','d-qty','d-notes'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value='';
-  });
-  document.getElementById('d-card').value='none';
-  document.getElementById('discountPreview').style.display='none';
+  results.innerHTML=`<div style="font-size:0.72rem;font-weight:700;color:#7A9CA8;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;">${matchedUsers.length} result${matchedUsers.length!==1?'s':''} found</div>`+
+    matchedUsers.map(u=>{
+      const logs=getSharedLogs().filter(l=>l.patientId===u.id);
+      const rate=adherenceRate(logs);
+      const rateBg=rate>=80?'#D5F3EB':rate>=50?'#FBF0DC':'#FAE0E0';
+      const rateClr=rate>=80?'#1E8A65':rate>=50?'#A0620A':'#B03030';
+      const initials=u.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+      return `<div style="background:#FFFFFF;border:1px solid #D1E4DE;border-radius:14px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.22s;" onmouseenter="this.style.borderColor='#9DD1C2';this.style.boxShadow='0 4px 18px rgba(27,82,113,0.10)'" onmouseleave="this.style.borderColor='#D1E4DE';this.style.boxShadow='none'" onclick="openPatientProfile('${u.id}')">
+        <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#5DAC96,#1B5271);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;color:#FFFFFF;flex-shrink:0;">${initials}</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;color:#1B5271;font-size:0.95rem;">${u.name}</div>
+          <div style="font-size:0.76rem;color:#7A9CA8;margin-top:2px;">${u.email}${u.phone?' · '+u.phone:''}</div>
+          <div style="font-size:0.75rem;color:#7A9CA8;margin-top:2px;">${logs.length} medication logs · Last: ${logs.length?fmtDate(logs[logs.length-1].date):'—'}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:0.68rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:${rateClr};background:${rateBg};padding:4px 11px;border-radius:100px;margin-bottom:6px;">${logs.length?rate+'% adherence':'No logs'}</div>
+          <div style="font-size:0.72rem;color:#5DAC96;font-weight:600;">View Profile →</div>
+        </div>
+      </div>`;
+    }).join('');
 }
 
-/* ─── QUICK DISPENSE ──────────────────────────────────── */
-function quickDispense(rxId) {
-  const rx   = getRx();
-  const idx  = rx.findIndex(r=>r.id===rxId);
-  if (idx===-1) return;
-  // Stock check
-  const inv  = getInv();
-  const item = inv.find(i=>i.name===rx[idx].medicine);
-  if (item && item.qty < rx[idx].qty) { phToast(`⚠ Insufficient stock for ${rx[idx].medicine}.`,'warning'); return; }
-  rx[idx].status = 'dispensed';
-  PhDB.set('ph_prescriptions', rx);
-  if (item) { item.qty = Math.max(0, item.qty - rx[idx].qty); PhDB.set('ph_inventory', inv); }
-  // log
-  const s   = getPhSession();
-  const log = getDispLog();
-  const pct = discountPct(rx[idx].card);
-  const amt = Math.round(rx[idx].qty*(item?.price||0)*(1-pct/100));
-  log.push({ ts:new Date().toISOString(), patient:rx[idx].patient, medicine:rx[idx].medicine, qty:rx[idx].qty, pharmacist:s?.name||'Pharmacist', card:rx[idx].card, amount:amt });
-  PhDB.set('ph_disp_log', log);
-  renderKPIs(); renderRecentRx(); renderLowStock(); renderRxTable();
-  phToast(`✓ Dispensed ${rx[idx].medicine} to ${rx[idx].patient}`);
+function openPatientProfile(patientId) {
+  const profile=document.getElementById('patientProfile');
+  const results=document.getElementById('searchResults');
+  const u=getSharedUsers().find(u=>u.id===patientId);
+  if(!u){ phToast('Patient not found.','e'); return; }
+  const logs=getSharedLogs().filter(l=>l.patientId===patientId).slice().reverse();
+  const dispLog=getAllDispLog().filter(l=>l.patientId===patientId||l.patient===u.name);
+  const rate=adherenceRate([...logs]);
+  const initials=u.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  const rateCls=rate>=80?'hi':rate>=50?'md':'lo';
+
+  /* Build prescription rows with ability to update status */
+  const logRows=logs.map(log=>`
+    <tr>
+      <td style="white-space:nowrap;">${fmtDate(log.date)}</td>
+      <td style="font-weight:700;color:#1B5271;">${log.medicine}${log.dosage?'<br><span style="font-weight:400;color:#7A9CA8;font-size:0.75rem;">'+log.dosage+'</span>':''}</td>
+      <td>${log.taken?'<span class="badge bg">✓ Taken</span>':'<span class="badge br">✗ Missed</span>'}</td>
+      <td style="color:#7A9CA8;">${log.time||'—'}</td>
+      <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3A5563;">${log.notes||'—'}</td>
+      <td>
+        <select id="upd-${log.id}" style="background:#FFFFFF;border:1px solid #D1E4DE;border-radius:7px;color:#1B5271;font-size:0.75rem;padding:5px 8px;font-family:'Outfit',sans-serif;cursor:pointer;width:130px;">
+          <option value="taken"   ${log.taken?'selected':''}>✓ Mark Taken</option>
+          <option value="missed"  ${!log.taken?'selected':''}>✗ Mark Missed</option>
+          <option value="dispensed">💊 Dispensed</option>
+        </select>
+      </td>
+      <td><button class="btn-sm bsm-t" onclick="updateDoseStatus('${patientId}',${log.id})">Save</button></td>
+    </tr>`).join('');
+
+  profile.style.display='block';
+  results.style.display='none';
+  profile.innerHTML=`
+    <!-- Back button -->
+    <button class="btn-sm bsm-n" style="margin-bottom:14px;" onclick="document.getElementById('patientProfile').style.display='none';document.getElementById('searchResults').style.display='block';">← Back to results</button>
+
+    <!-- Profile header -->
+    <div class="prof-header">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div class="prof-avatar">${initials}</div>
+        <div style="flex:1;">
+          <div class="prof-name">${u.name}</div>
+          <div class="prof-meta">${u.email}${u.phone?' · '+u.phone:''}</div>
+          <div class="prof-meta" style="margin-top:4px;">Patient ID: ${patientId}</div>
+        </div>
+        <button class="btn-t" onclick="openDispensePrefilled('${u.name}','${patientId}')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);">+ Dispense Medicine</button>
+      </div>
+      <div style="margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <div class="card-tile"><div class="card-tile-lbl">Total Logs</div><div class="card-tile-val">${logs.length}</div></div>
+        <div class="card-tile"><div class="card-tile-lbl">Taken</div><div class="card-tile-val">${logs.filter(l=>l.taken).length}</div></div>
+        <div class="card-tile"><div class="card-tile-lbl">Missed</div><div class="card-tile-val">${logs.filter(l=>!l.taken).length}</div></div>
+        <div class="card-tile"><div class="card-tile-lbl">Adherence</div><div class="card-tile-val">${rate}%</div></div>
+      </div>
+      <div class="adh-bar" style="margin-top:14px;max-width:300px;">
+        <div class="adh-fill ${rateCls}" style="width:${rate}%;"></div>
+      </div>
+    </div>
+
+    <!-- Prescriptions / Medication Log -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <div><div class="panel-title">💊 Prescription &amp; Medication Log</div><div class="panel-sub">View dosage details · update taken / missed status · record dispensing</div></div>
+      </div>
+      <div class="panel-body" style="overflow-x:auto;">
+        ${logs.length?`<table class="ph-table" style="min-width:680px;"><thead><tr><th>Date</th><th>Medicine &amp; Dosage</th><th>Status</th><th>Time</th><th>Notes</th><th>Update Status</th><th></th></tr></thead><tbody>${logRows}</tbody></table>`:'<div style="padding:28px;text-align:center;color:#7A9CA8;font-size:0.875rem;">No medication logs for this patient yet.</div>'}
+      </div>
+    </div>
+
+    <!-- Pharmacy dispensing history for this patient -->
+    ${dispLog.length?`
+    <div class="panel">
+      <div class="panel-hdr"><div><div class="panel-title">📋 Pharmacy Dispensing History</div><div class="panel-sub">All medicines dispensed to this patient at this pharmacy</div></div></div>
+      <div class="panel-body" style="overflow-x:auto;">
+        <table class="ph-table"><thead><tr><th>Date</th><th>Medicine</th><th>Dosage</th><th>Qty</th><th>Status</th><th>Smart Card</th></tr></thead>
+        <tbody>${dispLog.map(l=>`<tr><td style="white-space:nowrap;">${fmtTS(l.ts)}</td><td style="font-weight:600;color:#1B5271;">${l.medicine}</td><td style="color:#7A9CA8;">${l.dosage||'—'}</td><td>${l.qty||'—'}</td><td>${statusBadge(l.status)}</td><td>${cardBadge(l.card)}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </div>`:''}
+  `;
 }
 
-/* ─── ADD STOCK ───────────────────────────────────────── */
-function openAddStockModal(invId) {
-  const inv  = getInv();
-  const item = inv.find(i=>i.id===invId);
-  if (item) {
-    document.getElementById('s-name').value   = item.name;
-    document.getElementById('s-cat').value    = item.category;
-    document.getElementById('s-unit').value   = item.unit;
-    document.getElementById('s-reorder').value= item.reorder;
-    document.getElementById('s-price').value  = item.price;
-    document.getElementById('s-expiry').value = item.expiry;
-  } else {
-    ['s-name','s-qty','s-reorder','s-price','s-expiry'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+function updateDoseStatus(patientId, logId) {
+  const sel=document.getElementById('upd-'+logId);
+  if(!sel) return;
+  const newStatus=sel.value; // 'taken', 'missed', 'dispensed'
+  const isTaken=newStatus==='taken'||newStatus==='dispensed';
+
+  /* Update shared DawaTrack logs */
+  const logs=JSON.parse(localStorage.getItem('dt_logs')||'[]');
+  const idx=logs.findIndex(l=>l.id===logId&&l.patientId===patientId);
+  if(idx!==-1){
+    logs[idx].taken=isTaken;
+    localStorage.setItem('dt_logs', JSON.stringify(logs));
   }
-  openModal('addStockModal');
-}
 
-function submitAddStock() {
-  const name    = document.getElementById('s-name').value.trim();
-  const cat     = document.getElementById('s-cat').value;
-  const unit    = document.getElementById('s-unit').value;
-  const qtyAdd  = parseInt(document.getElementById('s-qty').value)||0;
-  const reorder = parseInt(document.getElementById('s-reorder').value)||50;
-  const price   = parseFloat(document.getElementById('s-price').value)||0;
-  const expiry  = document.getElementById('s-expiry').value;
-  if (!name||qtyAdd<1) { phToast('Please fill required fields.','error'); return; }
-  const inv  = getInv();
-  const idx  = inv.findIndex(i=>i.name.toLowerCase()===name.toLowerCase());
-  if (idx!==-1) {
-    inv[idx].qty    += qtyAdd;
-    inv[idx].reorder = reorder;
-    inv[idx].price   = price;
-    if (expiry) inv[idx].expiry = expiry;
-  } else {
-    inv.push({ id:'inv'+Date.now(), name, category:cat, qty:qtyAdd, reorder, price, unit, expiry:expiry||'2027-12-31' });
-  }
-  PhDB.set('ph_inventory', inv);
-  closeModal('addStockModal');
-  renderKPIs(); renderInventory(); renderLowStock(); populateMedicineDropdowns();
-  phToast(`📦 Stock updated: +${qtyAdd} ${unit} of ${name}`);
-}
-
-/* ─── ORDERS ──────────────────────────────────────────── */
-function openOrderModal(medName) {
-  populateMedicineDropdowns();
-  if (medName) {
-    const sel = document.getElementById('o-med');
-    if (sel) {
-      const opt = [...sel.options].find(o=>o.value===medName||o.text.startsWith(medName));
-      if (opt) sel.value = opt.value;
+  /* If dispensed, also add to dispensing log */
+  if(newStatus==='dispensed'){
+    const u=getSharedUsers().find(u=>u.id===patientId);
+    const log=logs[idx];
+    if(log){
+      const s=getPhSession();
+      const dispLog=getLocalDispLog();
+      dispLog.push({ id:nextDlId(), ts:new Date().toISOString(), patient:u?.name||patientId, patientId, medicine:log.medicine, dosage:log.dosage||'', qty:1, status:'dispensed', card:'none', discount:0, pharmacist:s.name, notes:'Status updated from patient profile' });
+      saveLocalDispLog(dispLog);
     }
   }
-  // Default delivery +5 days
-  const d = new Date(); d.setDate(d.getDate()+5);
-  document.getElementById('o-delivery').value = d.toISOString().split('T')[0];
-  openModal('orderModal');
+
+  phToast(`Status updated to "${newStatus}" for log #${logId}`);
+  /* Refresh the profile */
+  openPatientProfile(patientId);
 }
 
-function submitOrder() {
-  const med      = document.getElementById('o-med').value;
-  const qty      = parseInt(document.getElementById('o-qty').value)||0;
-  const supplier = document.getElementById('o-supplier').value;
-  const delivery = document.getElementById('o-delivery').value;
-  if (!med||qty<1) { phToast('Please fill required fields.','error'); return; }
-  const orders = getOrders();
-  orders.push({ id:nextId('ph_next_ord','ord'), medicine:med, qty, supplier, ordered:new Date().toISOString().split('T')[0], expected:delivery||'TBD', status:'pending' });
-  PhDB.set('ph_orders', orders);
-  closeModal('orderModal');
-  renderOrders();
-  phToast(`🛒 Order placed: ${qty} units of ${med} from ${supplier}`);
+function openDispensePrefilled(name, id) {
+  document.getElementById('d-patient').value=name;
+  document.getElementById('d-pid').value=id;
+  openModal('dispModal');
 }
 
-function markOrderDelivered(ordId) {
-  const orders = getOrders();
-  const idx    = orders.findIndex(o=>o.id===ordId);
-  if (idx===-1) return;
-  // Add to inventory
-  const inv  = getInv();
-  const item = inv.find(i=>i.name===orders[idx].medicine);
-  if (item) { item.qty += orders[idx].qty; PhDB.set('ph_inventory', inv); }
-  orders[idx].status = 'delivered';
-  PhDB.set('ph_orders', orders);
-  renderOrders(); renderInventory(); renderLowStock(); renderKPIs();
-  phToast(`✓ ${orders[idx].qty} units of ${orders[idx].medicine} received and added to stock`);
+/* ─── Patient Requests ────────────────────────────────── */
+let currentReqFilter='all';
+function filterReqs(filter, btn) {
+  currentReqFilter=filter;
+  document.querySelectorAll('#rf-all,#rf-pending,#rf-done').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderRequests(filter);
+}
+function renderRequests(filter) {
+  const body=document.getElementById('reqListBody');
+  if(!body) return;
+  let reqs=getMedRequests().slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  if(filter==='pending')   reqs=reqs.filter(r=>r.status==='pending');
+  if(filter==='fulfilled') reqs=reqs.filter(r=>r.status==='fulfilled');
+  document.getElementById('reqCount').textContent=`${reqs.length} request${reqs.length!==1?'s':''}`;
+  if(!reqs.length){ body.innerHTML='<div style="padding:36px;text-align:center;color:#7A9CA8;font-size:0.875rem;">No requests match this filter.</div>'; return; }
+  body.innerHTML=reqs.map(r=>{
+    const stClr=r.status==='pending'?'#D98A2A':r.status==='fulfilled'?'#2DAF83':r.status==='replied'?'#3A8DC4':'#7A9CA8';
+    const stBg =r.status==='pending'?'#FBF0DC':r.status==='fulfilled'?'#D5F3EB':r.status==='replied'?'#DCF0FA':'#EDF5F2';
+    return `<div class="disp-entry">
+      <div class="disp-icon" style="background:${stBg};min-height:38px;">💊</div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <span style="font-weight:700;color:#1B5271;font-size:0.92rem;">${r.patientName||'Patient'}</span>
+          <span style="font-size:0.7rem;color:#7A9CA8;">${timeAgo(r.createdAt)}</span>
+        </div>
+        <div style="font-size:0.88rem;font-weight:700;color:#3A5563;">${r.medicine}${r.dosage?' <span style="font-weight:400;color:#7A9CA8;"> · '+r.dosage+'</span>':''}</div>
+        <div style="font-size:0.78rem;color:#7A9CA8;margin-top:3px;">${r.message||''}</div>
+        ${r.pharmacyReply?`<div style="margin-top:8px;background:#EDF5F2;border:1px solid #9DD1C2;border-left:3px solid #5DAC96;border-radius:8px;padding:9px 12px;font-size:0.82rem;color:#1B5271;"><strong>🏪 Your reply:</strong> ${r.pharmacyReply}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;">
+        <span style="font-size:0.67rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;color:${stClr};background:${stBg};padding:3px 10px;border-radius:100px;">${r.status}</span>
+        ${r.status==='pending'||r.status==='replied'?`<button class="btn-sm bsm-t" onclick="openReplyModal('${r.id}')">💬 Reply</button>`:''}
+        ${r.status!=='fulfilled'?`<button class="btn-sm bsm-n" onclick="markFulfilled('${r.id}')">✓ Fulfilled</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-/* ─── AUTO-INIT ───────────────────────────────────────── */
+function openReplyModal(reqId) {
+  const reqs=getMedRequests();
+  const req=reqs.find(r=>r.id===reqId);
+  if(!req) return;
+  document.getElementById('replyReqId').value=reqId;
+  document.getElementById('replyText').value=req.pharmacyReply||'';
+  document.getElementById('replyReqDetails').innerHTML=`
+    <div style="font-size:0.68rem;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#5DAC96;margin-bottom:8px;">Request from ${req.patientName||'Patient'}</div>
+    <div style="font-weight:700;color:#1B5271;font-size:0.92rem;">${req.medicine}${req.dosage?' · '+req.dosage:''}</div>
+    <div style="font-size:0.82rem;color:#3A5563;margin-top:4px;">${req.message||''}</div>
+    <div style="font-size:0.72rem;color:#7A9CA8;margin-top:4px;">${timeAgo(req.createdAt)}</div>`;
+  openModal('replyModal');
+}
+
+function submitReply() {
+  const reqId=document.getElementById('replyReqId').value;
+  const text=document.getElementById('replyText').value.trim();
+  const status=document.getElementById('replyStatus').value;
+  if(!text){ phToast('Please write a reply.','e'); return; }
+  const reqs=getMedRequests();
+  const idx=reqs.findIndex(r=>r.id===reqId);
+  if(idx===-1) return;
+  const s=getPhSession();
+  reqs[idx].pharmacyReply=text;
+  reqs[idx].status=status;
+  saveMedRequests(reqs);
+  /* Also push a pharmacy note to the patient's care feed */
+  const notes=getPhNotes();
+  notes.push({ id:Date.now(), patientId:reqs[idx].patientId, patientName:reqs[idx].patientName, subject:reqs[idx].medicine+' — Pharmacy Reply', message:text, pharmacistName:s.name, createdAt:new Date().toISOString(), read:false });
+  savePhNotes(notes);
+  closeModal('replyModal');
+  renderRequests(currentReqFilter);
+  renderOverviewRequests();
+  updateReqBadge();
+  phToast('Reply sent to patient!');
+}
+
+function markFulfilled(reqId) {
+  const reqs=getMedRequests();
+  const idx=reqs.findIndex(r=>r.id===reqId);
+  if(idx!==-1){ reqs[idx].status='fulfilled'; saveMedRequests(reqs); }
+  renderRequests(currentReqFilter);
+  updateReqBadge();
+  phToast('Request marked as fulfilled.');
+}
+
+/* ─── Dispense ────────────────────────────────────────── */
+function updateDiscPreview() {
+  const card=document.getElementById('d-card').value;
+  const pct=discPct(card);
+  const box=document.getElementById('discPreview');
+  const txt=document.getElementById('discPreviewText');
+  if(pct>0){ box.style.display='block'; txt.textContent=`${pct}% HAMAT Smart Card discount will be applied.`; }
+  else { box.style.display='none'; }
+}
+
+function openDispenseModal() { openModal('dispModal'); }
+
+function submitDispense() {
+  const patient=document.getElementById('d-patient').value.trim();
+  const pid=document.getElementById('d-pid').value.trim();
+  const medicine=document.getElementById('d-medicine').value.trim();
+  const dosage=document.getElementById('d-dosage').value.trim();
+  const qty=parseInt(document.getElementById('d-qty').value)||1;
+  const status=document.getElementById('d-status').value;
+  const card=document.getElementById('d-card').value;
+  const notes=document.getElementById('d-notes').value.trim();
+  if(!patient||!medicine){ phToast('Please fill required fields.','e'); return; }
+  const s=getPhSession();
+  const pct=discPct(card);
+  const dl=getLocalDispLog();
+  dl.push({ id:nextDlId(), ts:new Date().toISOString(), patient, patientId:pid||'', medicine, dosage, qty, status, card, discount:pct, pharmacist:s.name, notes });
+  saveLocalDispLog(dl);
+  /* Also push to shared log for patient visibility */
+  const shared=getSharedDispLog();
+  shared.push({ id:'sdl'+Date.now(), ts:new Date().toISOString(), patient, patientId:pid||'', medicine, dosage, qty, status, card, discount:pct, pharmacist:s.name, notes });
+  saveSharedDispLog(shared);
+  closeModal('dispModal');
+  renderKPIs(); renderRecentDisp();
+  /* Reset form */
+  ['d-patient','d-pid','d-medicine','d-dosage','d-notes'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value=''; });
+  document.getElementById('d-qty').value='30';
+  document.getElementById('d-card').value='none';
+  document.getElementById('d-status').value='dispensed';
+  document.getElementById('discPreview').style.display='none';
+  phToast(`✓ ${medicine} dispensed to ${patient}${pct>0?' ('+pct+'% discount)':''}`);
+}
+
+/* ─── Dispensing Log ──────────────────────────────────── */
+function renderDispLog() {
+  const body=document.getElementById('logBody');
+  const search=(document.getElementById('logSearch').value||'').toLowerCase();
+  if(!body) return;
+  let log=getAllDispLog();
+  if(search) log=log.filter(l=>(l.patient||l.patientName||'').toLowerCase().includes(search)||(l.medicine||'').toLowerCase().includes(search));
+  document.getElementById('logCount').textContent=`${log.length} record${log.length!==1?'s':''}`;
+  if(!log.length){ body.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:24px;color:#7A9CA8;">No dispensing records found.</td></tr>`; return; }
+  body.innerHTML=log.map(l=>`
+    <tr>
+      <td style="white-space:nowrap;color:#7A9CA8;font-size:0.78rem;">${fmtTS(l.ts)}</td>
+      <td style="font-weight:700;color:#1B5271;">${l.patient||l.patientName||'—'}</td>
+      <td>${l.medicine}</td>
+      <td style="color:#7A9CA8;">${l.dosage||'—'}</td>
+      <td>${l.qty||'—'}</td>
+      <td>${statusBadge(l.status)}</td>
+      <td>${cardBadge(l.card)}</td>
+      <td>${l.discount>0?`<span style="color:#5DAC96;font-weight:700;">${l.discount}%</span>`:'—'}</td>
+      <td style="color:#3A5563;font-size:0.80rem;">${l.pharmacist||'—'}</td>
+    </tr>`).join('');
+}
+
+/* ─── Smart Card Stats ────────────────────────────────── */
+function renderCardStats() {
+  const log=getAllDispLog();
+  const cardLog=log.filter(l=>l.card&&l.card!=='none');
+  const totalDisc=cardLog.reduce((s,l)=>s+Math.round((l.discount||0)/100*(l.qty||1)*10),0);
+  const set=(id,v)=>{ const el=document.getElementById(id); if(el)el.textContent=v; };
+  set('sc-served',[...new Set(cardLog.map(l=>l.patient||l.patientName))].length);
+  set('sc-disc','KSh '+totalDisc.toLocaleString());
+  set('sc-txn',cardLog.length);
+}
+
+/* ─── Auto-init ────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
-  seedPharmacyData();
-  document.getElementById('todayDate').textContent =
-    new Date().toLocaleDateString('en-KE',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+  seedPhUsers();
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-KE',{weekday:'short',day:'numeric',month:'long',year:'numeric'});
+  const s=getPhSession();
+  if(s) initDash();
 
-  const s = getPhSession();
-  if (s) initDashboard();
+  /* Mobile tab bar visibility */
+  function syncMobileTabs() {
+    const bar = document.querySelector('.mobile-tab-bar');
+    if (bar) bar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+  }
+  syncMobileTabs();
+  window.addEventListener('resize', syncMobileTabs);
 });
 </script>
 </body>

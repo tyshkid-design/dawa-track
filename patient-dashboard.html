@@ -7,10 +7,96 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    /* Modal overlay */
+    .dt-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(14,28,40,0.42);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.26s ease;
+    }
+    .dt-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .dt-modal {
+      background: #FFFFFF;
+      border: 1px solid #D1E4DE;
+      border-radius: 20px;
+      width: 100%; max-width: 480px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 72px rgba(27,82,113,0.20);
+      transform: translateY(14px);
+      transition: transform 0.26s cubic-bezier(0.4,0.2,0.2,1);
+    }
+    .dt-modal-overlay.open .dt-modal { transform: translateY(0); }
+    .dt-modal-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid #D1E4DE;
+      background: #F4F8F7;
+      border-radius: 20px 20px 0 0;
+    }
+    .dt-modal-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.2rem; color: #1B5271;
+    }
+    .dt-modal-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #FFFFFF; border: 1px solid #D1E4DE;
+      font-size: 0.875rem; color: #7A9CA8;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; transition: all 0.18s ease;
+    }
+    .dt-modal-close:hover { background: #FAE8E8; border-color: #F0AAAA; color: #D94F4F; }
+    .dt-modal-body   { padding: 22px; }
+    .dt-modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid #D1E4DE;
+      display: flex; justify-content: flex-end; gap: 10px;
+      background: #F4F8F7; border-radius: 0 0 20px 20px;
+    }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:500px){ .form-grid-2{grid-template-columns:1fr;} }
+
+    /* Tabs inside dashboard */
+    .dash-tabs {
+      display: flex; gap: 4px;
+      background: #EDF5F2;
+      border: 1px solid #D1E4DE;
+      border-radius: 10px;
+      padding: 4px; margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .dash-tab {
+      flex: none; padding: 8px 16px;
+      border: none; border-radius: 7px;
+      background: transparent; color: #7A9CA8;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600; font-size: 0.82rem;
+      cursor: pointer; transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .dash-tab.active {
+      background: #FFFFFF; color: #1B5271;
+      border: 1px solid #D1E4DE;
+      box-shadow: 0 2px 8px rgba(27,82,113,0.08);
+    }
+    .dash-tab-panel { display: none; }
+    .dash-tab-panel.active { display: block; }
+
+    .two-col-dash { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+    @media(max-width:900px){ .two-col-dash{ grid-template-columns:1fr!important; } }
+
+    /* Reminder simulation badge */
+    @keyframes smsAnim { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+    .sms-badge { animation: smsAnim 2.5s ease infinite; }
+  </style>
 </head>
 <body>
 
-<!-- NAVBAR — Patient only, no doctor dashboard link -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.html">
@@ -19,47 +105,56 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ms-auto align-items-center" style="gap:2px;">
         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="card.html">S/card</a></li>
         <li class="nav-item ms-2">
-          <button data-logout class="btn-nav-portal nav-link" style="cursor:pointer;border:none;">Sign Out</button>
+          <button data-logout class="btn-nav-portal nav-link" style="cursor:pointer;border:none;background:none;">Sign Out</button>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- DASHBOARD -->
+<!-- LAYOUT -->
 <div class="dashboard-layout">
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <img src="logo.png" alt=""> My Health
+    <div class="sidebar-logo"><img src="logo.png" alt=""> My Health</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Medications</div>
+      <button class="sidebar-link active" onclick="switchDashTab('tab-log',this)">
+        <span class="icon">💊</span> Log Medication
+      </button>
+      <button class="sidebar-link" onclick="switchDashTab('tab-history',this)">
+        <span class="icon">📅</span> My History
+      </button>
+      <button class="sidebar-link" onclick="switchDashTab('tab-chart',this)">
+        <span class="icon">📊</span> Progress Chart
+      </button>
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-section-label">Navigation</div>
-      <a href="#log-section" class="sidebar-link active">
-        <span class="icon">💊</span> Log Medication
-      </a>
-      <a href="#history-section" class="sidebar-link">
-        <span class="icon">📅</span> My History
-      </a>
-      <a href="#chart-section" class="sidebar-link">
-        <span class="icon">📊</span> Progress Chart
-      </a>
-      <a href="#feed-section" class="sidebar-link">
+      <div class="sidebar-section-label">Communication</div>
+      <button class="sidebar-link" onclick="switchDashTab('tab-feed',this)">
         <span class="icon">📡</span> Care Feed
         <span id="unreadBadge" style="display:none;background:#D94F4F;color:#FFFFFF;font-size:0.62rem;font-weight:800;border-radius:100px;padding:2px 7px;margin-left:auto;"></span>
-      </a>
+      </button>
+      <button class="sidebar-link" onclick="switchDashTab('tab-pharmacy',this)">
+        <span class="icon">🏪</span> Pharmacy
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Family &amp; Care</div>
+      <button class="sidebar-link" onclick="switchDashTab('tab-caregivers',this)">
+        <span class="icon">👨‍👩‍👧</span> Caregivers
+      </button>
     </div>
 
     <div class="sidebar-section">
@@ -85,13 +180,26 @@
   <!-- MAIN -->
   <main class="dash-main">
 
+  <!-- Mobile tab bar (hidden on desktop) -->
+  <div class="mobile-tab-bar" style="display:none;">
+    <button class="mobile-tab-btn active" onclick="switchDashTab('tab-log',this)">💊 Log</button>
+    <button class="mobile-tab-btn" onclick="switchDashTab('tab-history',this)">📅 History</button>
+    <button class="mobile-tab-btn" onclick="switchDashTab('tab-chart',this)">📊 Chart</button>
+    <button class="mobile-tab-btn" onclick="switchDashTab('tab-feed',this)">📡 Feed</button>
+    <button class="mobile-tab-btn" onclick="switchDashTab('tab-pharmacy',this)">🏪 Pharmacy</button>
+    <button class="mobile-tab-btn" onclick="switchDashTab('tab-caregivers',this)">👨‍👩‍👧 Care</button>
+  </div>
+
     <!-- Header -->
     <div class="dash-header">
       <div>
         <div class="dash-title">Good day, <span id="patientName">Patient</span> 👋</div>
-        <div class="dash-subtitle">Track your medications and read messages from your doctor</div>
+        <div class="dash-subtitle">Track medications · Read doctor notes · Contact pharmacy</div>
       </div>
-      <div class="date-chip">📅 <strong>May 14, 2026</strong></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <div class="date-chip">📅 <strong id="todayDatePat"></strong></div>
+        <button class="btn-primary" style="padding:8px 18px;font-size:0.82rem;" onclick="openMedOutModal()">💊 Need refill?</button>
+      </div>
     </div>
 
     <!-- KPIs -->
@@ -124,122 +232,367 @@
       </div>
     </div>
 
-    <!-- Two column: Log form + Care Feed -->
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;margin-bottom:24px;" class="main-two-col">
+    <!-- ══ TAB: LOG MEDICATION ══ -->
+    <div id="tab-log" class="dash-tab-panel active">
+      <div class="two-col-dash">
 
-      <!-- LOG FORM -->
-      <div id="log-section" class="chart-panel">
-        <div class="chart-panel-title">💊 Log a Medication</div>
-        <div class="chart-panel-sub">Record whether you took your dose today</div>
-
-        <form id="medForm">
-          <div class="mb-3">
-            <label class="form-label">Medicine Name *</label>
-            <input type="text" id="medName" class="form-control" placeholder="e.g. Metformin 500mg" required>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <!-- Log form -->
+        <div class="chart-panel" id="log-section">
+          <div class="chart-panel-title">💊 Log a Medication</div>
+          <div class="chart-panel-sub">Record whether you took your dose today</div>
+          <form id="medForm">
             <div class="mb-3">
-              <label class="form-label">Date *</label>
-              <input type="date" id="medDate" class="form-control" required>
+              <label class="form-label">Medicine Name *</label>
+              <input type="text" id="medName" class="form-control" placeholder="e.g. Metformin 500mg" required>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="mb-3">
+                <label class="form-label">Dosage</label>
+                <input type="text" id="medDosage" class="form-control" placeholder="e.g. 500mg">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Date *</label>
+                <input type="date" id="medDate" class="form-control" required>
+              </div>
             </div>
             <div class="mb-3">
               <label class="form-label">Time Taken</label>
               <input type="time" id="medTime" class="form-control">
             </div>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Status *</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;">
-              <label id="lbl-taken" class="role-option" style="cursor:pointer;" onclick="setStatusUI('taken')">
-                <input type="radio" name="takenStatus" value="taken" style="display:none;">
-                <div style="width:32px;height:32px;border-radius:8px;background:#D5F3EB;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">✅</div>
-                <div><div class="role-option-title">Taken</div><div class="role-option-sub">I took my dose</div></div>
-              </label>
-              <label id="lbl-missed" class="role-option" style="cursor:pointer;" onclick="setStatusUI('missed')">
-                <input type="radio" name="takenStatus" value="missed" style="display:none;">
-                <div style="width:32px;height:32px;border-radius:8px;background:#FAE0E0;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">❌</div>
-                <div><div class="role-option-title">Missed</div><div class="role-option-sub">I skipped this dose</div></div>
-              </label>
+            <div class="mb-3">
+              <label class="form-label">Status *</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;">
+                <label id="lbl-taken" class="role-option" style="cursor:pointer;" onclick="setStatusUI('taken')">
+                  <input type="radio" name="takenStatus" style="display:none;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#D5F3EB;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">✅</div>
+                  <div><div class="role-option-title">Taken</div><div class="role-option-sub">I took my dose</div></div>
+                </label>
+                <label id="lbl-missed" class="role-option" style="cursor:pointer;" onclick="setStatusUI('missed')">
+                  <input type="radio" name="takenStatus" style="display:none;">
+                  <div style="width:32px;height:32px;border-radius:8px;background:#FAE0E0;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">❌</div>
+                  <div><div class="role-option-title">Missed</div><div class="role-option-sub">I skipped this dose</div></div>
+                </label>
+              </div>
+              <input type="checkbox" id="medTaken" style="display:none;">
             </div>
-            <input type="checkbox" id="medTaken" style="display:none;">
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Notes</label>
-            <textarea class="form-control" id="medNotes" rows="3" placeholder="Side effects, how you're feeling, anything relevant…"></textarea>
-          </div>
-          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Save Medication Log</button>
-        </form>
-      </div>
-
-      <!-- CARE FEED (live) -->
-      <div id="feed-section" style="display:flex;flex-direction:column;height:100%;">
-        <div class="chart-panel" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-            <div class="chart-panel-title">📡 Care Feed</div>
-            <span id="unreadBadge2" style="display:none;background:#D94F4F;color:#FFFFFF;font-size:0.62rem;font-weight:800;border-radius:100px;padding:2px 8px;"></span>
-          </div>
-          <div class="chart-panel-sub" style="margin-bottom:14px;">Messages from your doctor · updates live</div>
-
-          <!-- Live pulse indicator -->
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px;padding:8px 12px;background:#EDF5F2;border:1px solid #D1E4DE;border-radius:8px;">
-            <div style="width:7px;height:7px;border-radius:50%;background:#2DAF83;animation:blink 2s ease infinite;"></div>
-            <span style="font-size:0.72rem;font-weight:600;color:#2E7A65;">Live — refreshes every 5 seconds</span>
-          </div>
-
-          <div id="careFeed" style="flex:1;overflow-y:auto;max-height:460px;padding-right:4px;">
-            <div style="text-align:center;padding:40px 16px;">
-              <div style="font-size:2rem;margin-bottom:10px;">📡</div>
-              <p style="font-size:0.82rem;color:#7A9CA8;">Loading care feed…</p>
+            <div class="mb-3">
+              <label class="form-label">Notes</label>
+              <textarea class="form-control" id="medNotes" rows="3" placeholder="Side effects, how you're feeling… (write 'ran out' to auto-notify pharmacy)"></textarea>
             </div>
-          </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Save Medication Log</button>
+          </form>
         </div>
 
-        <!-- Tips card below feed -->
-        <div class="chart-panel" style="margin-top:16px;">
-          <div class="chart-panel-title" style="margin-bottom:12px;">💡 Adherence Tips</div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;gap:10px;align-items:flex-start;">
-              <span style="font-size:1.1rem;flex-shrink:0;">⏰</span>
-              <div><div style="font-size:0.8rem;font-weight:600;color:#1B5271;margin-bottom:2px;">Set a daily alarm</div><div style="font-size:0.76rem;color:#7A9CA8;line-height:1.5;">Take at the same time every day to build a habit.</div></div>
+        <!-- Care feed right panel -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <!-- Doctor feed -->
+          <div class="chart-panel" id="feed-section" style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+              <div class="chart-panel-title">📡 Doctor Feed</div>
+              <span id="unreadBadge2" style="display:none;background:#D94F4F;color:#FFFFFF;font-size:0.62rem;font-weight:800;border-radius:100px;padding:2px 8px;"></span>
             </div>
-            <div style="display:flex;gap:10px;align-items:flex-start;">
-              <span style="font-size:1.1rem;flex-shrink:0;">🍽️</span>
-              <div><div style="font-size:0.8rem;font-weight:600;color:#1B5271;margin-bottom:2px;">Link to a meal</div><div style="font-size:0.76rem;color:#7A9CA8;line-height:1.5;">Use mealtimes as built-in reminders for your medication.</div></div>
+            <div class="chart-panel-sub" style="margin-bottom:12px;">Messages from your doctor · live</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;padding:7px 12px;background:#EDF5F2;border:1px solid #D1E4DE;border-radius:8px;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#2DAF83;animation:blink 2s ease infinite;"></div>
+              <span style="font-size:0.70rem;font-weight:600;color:#2E7A65;">Live — refreshes every 5s</span>
+            </div>
+            <div id="careFeed" style="overflow-y:auto;max-height:280px;padding-right:2px;">
+              <p style="font-size:0.82rem;color:#7A9CA8;text-align:center;padding:20px;">Loading…</p>
+            </div>
+          </div>
+          <!-- Tips -->
+          <div class="chart-panel">
+            <div class="chart-panel-title" style="margin-bottom:10px;">💡 Adherence Tips</div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;gap:9px;align-items:flex-start;"><span style="font-size:1rem;flex-shrink:0;">⏰</span><div><div style="font-size:0.78rem;font-weight:600;color:#1B5271;margin-bottom:2px;">Same time every day</div><div style="font-size:0.74rem;color:#7A9CA8;line-height:1.5;">Build a habit — same time builds consistency.</div></div></div>
+              <div style="display:flex;gap:9px;align-items:flex-start;"><span style="font-size:1rem;flex-shrink:0;">🍽️</span><div><div style="font-size:0.78rem;font-weight:600;color:#1B5271;margin-bottom:2px;">Link to a meal</div><div style="font-size:0.74rem;color:#7A9CA8;line-height:1.5;">Mealtimes are natural built-in reminders.</div></div></div>
+              <div style="display:flex;gap:9px;align-items:flex-start;"><span style="font-size:1rem;flex-shrink:0;">👨‍👩‍👧</span><div><div style="font-size:0.78rem;font-weight:600;color:#1B5271;margin-bottom:2px;">Add a caregiver</div><div style="font-size:0.74rem;color:#7A9CA8;line-height:1.5;">Family members can receive SMS reminders on your behalf.</div></div></div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <style>.main-two-col{grid-template-columns:1fr 360px;}@media(max-width:900px){.main-two-col{grid-template-columns:1fr!important;}}</style>
-
-    <!-- CHART -->
-    <div id="chart-section" class="chart-panel" style="margin-bottom:24px;">
-      <div class="chart-panel-title">📈 Weekly Adherence</div>
-      <div class="chart-panel-sub">Doses taken vs missed — last 7 days</div>
-      <div style="height:220px;">
-        <canvas id="patientChart"></canvas>
-      </div>
-    </div>
-
-    <!-- HISTORY -->
-    <div id="history-section">
+    <!-- ══ TAB: HISTORY ══ -->
+    <div id="tab-history" class="dash-tab-panel">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
         <div>
-          <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.25rem;color:#1B5271;">My Medication History</div>
-          <div style="font-size:0.8rem;color:#7A9CA8;margin-top:3px;">Doctor notes appear directly on each log entry below</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:1.25rem;color:#1B5271;">My Medication History</div>
+          <div style="font-size:0.8rem;color:#7A9CA8;margin-top:3px;">Doctor notes appear on each entry · click "Need refill?" to notify pharmacy</div>
         </div>
       </div>
       <div id="patientLogs"></div>
     </div>
 
+    <!-- ══ TAB: CHART ══ -->
+    <div id="tab-chart" class="dash-tab-panel">
+      <div class="chart-panel">
+        <div class="chart-panel-title">📈 Weekly Adherence</div>
+        <div class="chart-panel-sub">Doses taken vs missed — last 7 days</div>
+        <div style="height:260px;"><canvas id="patientChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: CARE FEED ══ -->
+    <div id="tab-feed" class="dash-tab-panel">
+      <div class="chart-panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div class="chart-panel-title">📡 Doctor Care Feed</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:0.73rem;color:#2DAF83;font-weight:600;">
+            <div style="width:7px;height:7px;border-radius:50%;background:#2DAF83;animation:blink 2s ease infinite;"></div>Live
+          </div>
+        </div>
+        <div class="chart-panel-sub" style="margin-bottom:16px;">All messages from your doctor — click to mark as read</div>
+        <div id="careFeedFull" style="max-height:600px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- ══ TAB: PHARMACY ══ -->
+    <div id="tab-pharmacy" class="dash-tab-panel">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="ph-two-col">
+
+        <!-- Pharmacy messages -->
+        <div class="chart-panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div class="chart-panel-title">🏪 Pharmacy Messages</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:0.73rem;color:#2DAF83;font-weight:600;">
+              <div style="width:7px;height:7px;border-radius:50%;background:#2DAF83;animation:blink 2s ease infinite;"></div>Live
+            </div>
+          </div>
+          <div class="chart-panel-sub" style="margin-bottom:14px;">Replies and offers from the pharmacy · click to mark read</div>
+          <div id="pharmacyFeed" style="max-height:420px;overflow-y:auto;">
+            <p style="font-size:0.82rem;color:#7A9CA8;text-align:center;padding:24px;">Loading…</p>
+          </div>
+        </div>
+
+        <!-- Medicine requests -->
+        <div class="chart-panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div class="chart-panel-title">💊 My Medicine Requests</div>
+            <button class="btn-primary" style="padding:7px 16px;font-size:0.78rem;" onclick="openMedOutModal()">+ Request</button>
+          </div>
+          <div class="chart-panel-sub" style="margin-bottom:14px;">Refill requests sent to pharmacy</div>
+          <div id="medRequestsList"></div>
+        </div>
+      </div>
+      <style>.ph-two-col{grid-template-columns:1fr 1fr;}@media(max-width:768px){.ph-two-col{grid-template-columns:1fr!important;}}</style>
+    </div>
+
+    <!-- ══ TAB: CAREGIVERS ══ -->
+    <div id="tab-caregivers" class="dash-tab-panel">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="cg-two-col">
+
+        <!-- Caregiver list -->
+        <div class="chart-panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div class="chart-panel-title">👨‍👩‍👧 My Caregivers</div>
+            <button class="btn-primary" style="padding:7px 16px;font-size:0.78rem;" onclick="openCgModal()">+ Add Person</button>
+          </div>
+          <div class="chart-panel-sub" style="margin-bottom:16px;">Family, partners, or caregivers who receive medication reminders</div>
+          <div id="caregiversList"></div>
+        </div>
+
+        <!-- How it works -->
+        <div class="chart-panel" style="background:#EDF5F2;border-color:#D1E4DE;">
+          <div class="chart-panel-title" style="color:#1B5271;margin-bottom:16px;">📲 How Caregiver Reminders Work</div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#1B5271;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;color:#FFFFFF;flex-shrink:0;">1</div>
+              <div><div style="font-size:0.875rem;font-weight:700;color:#1B5271;margin-bottom:3px;">Add a caregiver</div><div style="font-size:0.82rem;color:#3A5563;line-height:1.6;">Enter their name, phone number, and relationship (e.g. spouse, parent, child).</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#5DAC96;display:flex;align-items:center;justify-content:function(0.8rem;font-weight:800;color:#FFFFFF;flex-shrink:0;">2</div>
+              <div><div style="font-size:0.875rem;font-weight:700;color:#1B5271;margin-bottom:3px;">System links them to you</div><div style="font-size:0.82rem;color:#3A5563;line-height:1.6;">Their number is stored on your profile and linked to your medication schedule.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#5DAC96;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;color:#FFFFFF;flex-shrink:0;">2</div>
+              <div><div style="font-size:0.875rem;font-weight:700;color:#1B5271;margin-bottom:3px;">System links them to you</div><div style="font-size:0.82rem;color:#3A5563;line-height:1.6;">Their number is stored on your profile and linked to your medication schedule.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#D98A2A;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;color:#FFFFFF;flex-shrink:0;">3</div>
+              <div><div style="font-size:0.875rem;font-weight:700;color:#1B5271;margin-bottom:3px;">They receive SMS reminders</div><div style="font-size:0.82rem;color:#3A5563;line-height:1.6;">When you miss a dose or have an appointment, they receive an SMS — even if you don't have a smartphone.</div></div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#3A8DC4;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;color:#FFFFFF;flex-shrink:0;">4</div>
+              <div><div style="font-size:0.875rem;font-weight:700;color:#1B5271;margin-bottom:3px;">Doctor alerts go to both</div><div style="font-size:0.82rem;color:#3A5563;line-height:1.6;">Urgent notes from your doctor are sent to you <strong>and</strong> your nominated caregiver simultaneously.</div></div>
+            </div>
+          </div>
+
+          <!-- Simulate reminder button -->
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #D1E4DE;">
+            <div style="font-size:0.75rem;font-weight:700;color:#7A9CA8;margin-bottom:10px;letter-spacing:0.04em;text-transform:uppercase;">Simulate a reminder SMS</div>
+            <button class="btn-primary sms-badge" style="width:100%;justify-content:center;font-size:0.85rem;" onclick="simulateSMS()">📱 Send Test Reminder to Caregivers</button>
+          </div>
+        </div>
+      </div>
+      <style>.cg-two-col{grid-template-columns:1fr 1fr;}@media(max-width:768px){.cg-two-col{grid-template-columns:1fr!important;}}</style>
+    </div>
+
   </main>
 </div>
 
+<!-- ═══ MODALS ═══ -->
+
+<!-- Medicine-Out / Refill Request Modal -->
+<div class="dt-modal-overlay" id="medOutModal">
+  <div class="dt-modal">
+    <div class="dt-modal-hdr">
+      <div class="dt-modal-title">💊 Request Medicine Refill</div>
+      <button class="dt-modal-close" onclick="closeMedOutModal()">✕</button>
+    </div>
+    <div class="dt-modal-body">
+      <div style="background:#FBF0DC;border:1px solid #F0CC88;border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;">
+        <span style="font-size:1rem;flex-shrink:0;">🏪</span>
+        <p style="font-size:0.83rem;color:#A0620A;margin:0;line-height:1.6;">The pharmacy will be notified immediately. They can reply with availability, price, and delivery options directly to your dashboard.</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Medicine Name *</label>
+        <input type="text" id="req-medicine" class="form-control" placeholder="e.g. Metformin 500mg">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Dosage / Strength</label>
+        <input type="text" id="req-dosage" class="form-control" placeholder="e.g. 500mg, 1000IU">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Message to Pharmacy</label>
+        <textarea id="req-message" class="form-control" rows="3" placeholder="e.g. Ran out, need 30 tablets. Can you deliver?"></textarea>
+      </div>
+    </div>
+    <div class="dt-modal-footer">
+      <button class="btn-ghost" onclick="closeMedOutModal()">Cancel</button>
+      <button class="btn-primary" onclick="submitMedRequest()">📤 Send to Pharmacy</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Caregiver Modal -->
+<div class="dt-modal-overlay" id="cgModal">
+  <div class="dt-modal">
+    <div class="dt-modal-hdr">
+      <div class="dt-modal-title">👨‍👩‍👧 Add Caregiver / Family Member</div>
+      <button class="dt-modal-close" onclick="closeCgModal()">✕</button>
+    </div>
+    <div class="dt-modal-body">
+      <div style="background:#EDF5F2;border:1px solid #9DD1C2;border-radius:10px;padding:12px 14px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;">
+        <span style="font-size:1rem;flex-shrink:0;">📱</span>
+        <p style="font-size:0.83rem;color:#1B5271;margin:0;line-height:1.6;">This person will receive SMS medication reminders on your behalf — useful if you don't have a smartphone or need extra support.</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Full Name *</label>
+        <input type="text" id="cg-name" class="form-control" placeholder="e.g. John Kamau">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Phone Number *</label>
+        <input type="tel" id="cg-phone" class="form-control" placeholder="e.g. +254722000000">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Relationship</label>
+        <select id="cg-rel" class="form-control" style="cursor:pointer;">
+          <option value="spouse">Spouse</option>
+          <option value="partner">Partner</option>
+          <option value="parent">Parent</option>
+          <option value="sibling">Sibling</option>
+          <option value="child">Child</option>
+          <option value="relative">Relative</option>
+          <option value="caregiver">Caregiver</option>
+          <option value="friend">Friend</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#F4F8F7;border:1px solid #D1E4DE;border-radius:10px;">
+        <input type="checkbox" id="cg-reminders" checked style="accent-color:#5DAC96;width:16px;height:16px;cursor:pointer;">
+        <label for="cg-reminders" style="font-size:0.875rem;font-weight:600;color:#1B5271;cursor:pointer;margin:0;">
+          Send medication reminders to this person
+        </label>
+      </div>
+    </div>
+    <div class="dt-modal-footer">
+      <button class="btn-ghost" onclick="closeCgModal()">Cancel</button>
+      <button class="btn-primary" onclick="submitCg()">✓ Add Caregiver</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
-<!-- Note badges are updated by script.js; no extra syncing interval needed. -->
+<script>
+/* Tab switching */
+function switchDashTab(tabId, btn) {
+  document.querySelectorAll('.dash-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(tabId)?.classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  /* Sync mobile tab bar */
+  document.querySelectorAll('.mobile-tab-btn').forEach(b => b.classList.remove('active'));
+  const mobileMap = {'tab-log':'💊 Log','tab-history':'📅 History','tab-chart':'📊 Chart','tab-feed':'📡 Feed','tab-pharmacy':'🏪 Pharmacy','tab-caregivers':'👨‍👩‍👧 Care'};
+  const mobileBtn = document.querySelector(`.mobile-tab-btn[onclick*="'${tabId}'"]`);
+  if (mobileBtn) mobileBtn.classList.add('active');
+
+  /* Render tab-specific content */
+  if (tabId === 'tab-history')    renderPatientLogs();
+  if (tabId === 'tab-chart')      { setTimeout(renderPatientChart, 120); }
+  if (tabId === 'tab-feed')       renderFullFeed();
+  if (tabId === 'tab-pharmacy')   { renderMedRequests(); renderPharmacyMessages(); }
+  if (tabId === 'tab-caregivers') renderCaregivers();
+}
+
+/* Render full care feed (doctor tab) */
+function renderFullFeed() {
+  const full = document.getElementById('careFeedFull');
+  if (!full) return;
+  /* reuse the careFeed element for content, just mirror it */
+  renderCareFeed();
+  full.innerHTML = document.getElementById('careFeed')?.innerHTML || '';
+}
+
+/* Simulate SMS to caregivers */
+function simulateSMS() {
+  const s   = getSession();
+  const cgs = getCaregivers().filter(c => c.patientId === s.id && c.reminders);
+  if (!cgs.length) {
+    showToast('No caregivers with reminders enabled. Add one first.', 'info');
+    return;
+  }
+  cgs.forEach(c => {
+    setTimeout(() => {
+      showToast(`📱 SMS sent to ${c.name} (${c.phone}) — "${s.name}: Please remember to take your medication today." `, 'success');
+    }, 300);
+  });
+}
+
+/* Close modals on overlay click */
+document.querySelectorAll('.dt-modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+});
+
+/* Set today date */
+document.addEventListener('DOMContentLoaded', () => {
+  const dateEl = document.getElementById('medDate');
+  if (dateEl) dateEl.valueAsDate = new Date();
+  const todayEl = document.getElementById('todayDatePat');
+  if (todayEl) todayEl.textContent = new Date().toLocaleDateString('en-KE', { weekday:'short', day:'numeric', month:'long', year:'numeric' });
+
+  /* Sync second badge */
+  setInterval(() => {
+    const b1 = document.getElementById('unreadBadge');
+    const b2 = document.getElementById('unreadBadge2');
+    if (b1 && b2) { b2.textContent = b1.textContent; b2.style.display = b1.style.display; }
+  }, 1000);
+
+  /* Mobile tab bar visibility */
+  function syncMobileTabs() {
+    const bar = document.querySelector('.mobile-tab-bar');
+    if (bar) bar.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+  }
+  syncMobileTabs();
+  window.addEventListener('resize', syncMobileTabs);
+});
+</script>
 </body>
 </html>
