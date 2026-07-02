@@ -7,6 +7,7 @@
   <title>DawaTrack — Smart Medication Intelligence</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="feat-icon.css">
+  <link rel="stylesheet" href="back-to-top.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -27,7 +28,7 @@
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
         <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="card.html">S/card</a></li>
+        <li class="nav-item"><a class="nav-link" href="card.html">S/Card</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
         <li class="nav-item"><a class="nav-link" href="pharmacy-dashboard.html">Pharmacy</a></li>
         <li class="nav-item ms-2"><a class="btn-nav-portal nav-link" href="portal.html">Sign In →</a></li>
@@ -294,9 +295,9 @@
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
       <a href="contact.html" class="btn-primary">Start Partnership →</a>
       <a href="portal.html" style="background:rgba(255,255,255,0.12);color:#FFFFFF;border:1.5px solid rgba(255,255,255,0.3);padding:13px 30px;border-radius:12px;font-family:'Outfit',sans-serif;font-weight:600;font-size:0.9rem;text-decoration:none;transition:all 0.2s ease;display:inline-flex;align-items:center;gap:8px;" onmouseenter="this.style.background='rgba(255,255,255,0.2)'" onmouseleave="this.style.background='rgba(255,255,255,0.12)'">Try the Demo</a>
-    </div>
-  </div>
-</section>
+    </div>                                                               
+  </div>         
+</section>  
 
 <!-- FOOTER -->
 <footer class="main-footer">
@@ -363,5 +364,6 @@ const reveals = document.querySelectorAll('.fade-in');
 const ro = new IntersectionObserver(e => e.forEach(en => { if(en.isIntersecting) en.target.style.animationPlayState='running'; }), {threshold:0.1});
 reveals.forEach(el => { el.style.animationPlayState='paused'; ro.observe(el); });
 </script>
+<script src="back-to-top.js"></script>
 </body>
 </html>
