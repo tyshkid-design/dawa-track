@@ -22,8 +22,35 @@ function requireRole(role) {
 }
 
 /* ── Seed ────────────────────────────────────────────────────── */
+/* Date relative to today (n days ago; negative = future) → 'YYYY-MM-DD' */
+function daysAgoISO(n) {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - n);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+/* Ordered list of the last 7 day-strings (oldest → today), anchored to now */
+function last7Days() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) days.push(daysAgoISO(i));
+  return days;
+}
+
 function seedDemoData() {
-  if (DB.get('dt_seeded')) return;
+  if (DB.get('dt_seeded_v5')) return;
+
+  /* Live dates: latest demo day = today, going back 6 days */
+  const D11 = daysAgoISO(0);   // most recent
+  const D10 = daysAgoISO(1);
+  const D9  = daysAgoISO(2);
+  const D8  = daysAgoISO(3);
+  const D7  = daysAgoISO(4);
+  const D6  = daysAgoISO(5);
+  const D5  = daysAgoISO(6);   // oldest in the 7-day window
 
   DB.set('dt_users', [
     { id:'p_self', role:'patient', name:'Alice Kamau',       email:'patient@demo.com',   password:'demo123', phone:'+254711000001', doctorId:'doc1' },
@@ -35,39 +62,39 @@ function seedDemoData() {
   ]);
 
   DB.set('dt_logs', [
-    { id:1,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:'2026-05-05', taken:true,  notes:'After breakfast', time:'08:15', loggedAt:'2026-05-05T08:15:00', scheduleId:null },
-    { id:2,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:'2026-05-06', taken:true,  notes:'',               time:'08:30', loggedAt:'2026-05-06T08:30:00', scheduleId:null },
-    { id:3,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:'2026-05-07', taken:false, notes:'Forgot',         time:null,    loggedAt:'2026-05-07T09:00:00', scheduleId:null },
-    { id:4,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:'2026-05-08', taken:true,  notes:'Slight nausea',  time:'08:45', loggedAt:'2026-05-08T08:45:00', scheduleId:null },
-    { id:5,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:'2026-05-09', taken:true,  notes:'',               time:'08:10', loggedAt:'2026-05-09T08:10:00', scheduleId:null },
-    { id:6,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:'2026-05-10', taken:true,  notes:'',               time:'08:05', loggedAt:'2026-05-10T08:05:00', scheduleId:null },
-    { id:7,  patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:'2026-05-07', taken:true,  notes:'With lunch',     time:'13:00', loggedAt:'2026-05-07T13:00:00', scheduleId:null },
-    { id:8,  patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:'2026-05-08', taken:true,  notes:'',               time:'13:15', loggedAt:'2026-05-08T13:15:00', scheduleId:null },
-    { id:9,  patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:'2026-05-09', taken:false, notes:'Ran out',        time:null,    loggedAt:'2026-05-09T13:00:00', scheduleId:null },
-    { id:10, patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:'2026-05-10', taken:true,  notes:'Refilled',       time:'13:00', loggedAt:'2026-05-10T13:00:00', scheduleId:null },
-    { id:11, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-05', taken:false, notes:'Forgot',       time:null,    loggedAt:'2026-05-05T09:00:00', scheduleId:null },
-    { id:12, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-06', taken:true,  notes:'',             time:'07:45', loggedAt:'2026-05-06T07:45:00', scheduleId:null },
-    { id:13, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-07', taken:false, notes:'Travelling',   time:null,    loggedAt:'2026-05-07T09:00:00', scheduleId:null },
-    { id:14, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-08', taken:true,  notes:'',             time:'07:55', loggedAt:'2026-05-08T07:55:00', scheduleId:null },
-    { id:15, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-09', taken:true,  notes:'',             time:'08:00', loggedAt:'2026-05-09T08:00:00', scheduleId:null },
-    { id:16, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-10', taken:false, notes:'Busy day',     time:null,    loggedAt:'2026-05-10T09:00:00', scheduleId:null },
-    { id:17, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:'2026-05-11', taken:true,  notes:'',             time:'07:50', loggedAt:'2026-05-11T07:50:00', scheduleId:null },
-    { id:18, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-05', taken:false, notes:'',             time:null,    loggedAt:'2026-05-05T09:00:00', scheduleId:null },
-    { id:19, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-06', taken:false, notes:'Unwell',       time:null,    loggedAt:'2026-05-06T09:00:00', scheduleId:null },
-    { id:20, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-07', taken:true,  notes:'Back on track',time:'10:20', loggedAt:'2026-05-07T10:20:00', scheduleId:null },
-    { id:21, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-08', taken:false, notes:'',             time:null,    loggedAt:'2026-05-08T09:00:00', scheduleId:null },
-    { id:22, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-09', taken:false, notes:'Still unwell', time:null,    loggedAt:'2026-05-09T09:00:00', scheduleId:null },
-    { id:23, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-10', taken:true,  notes:'',             time:'09:00', loggedAt:'2026-05-10T09:00:00', scheduleId:null },
-    { id:24, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:'2026-05-11', taken:false, notes:'',             time:null,    loggedAt:'2026-05-11T09:00:00', scheduleId:null },
+    { id:1,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:D5,  taken:true,  notes:'After breakfast', time:'08:15', loggedAt:`${D5}T08:15:00`, scheduleId:null },
+    { id:2,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:D6,  taken:true,  notes:'',               time:'08:30', loggedAt:`${D6}T08:30:00`, scheduleId:null },
+    { id:3,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:D7,  taken:false, notes:'Forgot',         time:null,    loggedAt:`${D7}T09:00:00`, scheduleId:null },
+    { id:4,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:D8,  taken:true,  notes:'Slight nausea',  time:'08:45', loggedAt:`${D8}T08:45:00`, scheduleId:null },
+    { id:5,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:D9,  taken:true,  notes:'',               time:'08:10', loggedAt:`${D9}T08:10:00`, scheduleId:null },
+    { id:6,  patientId:'p_self', medicine:'Metformin 500mg',  dosage:'500mg',  date:D10, taken:true,  notes:'',               time:'08:05', loggedAt:`${D10}T08:05:00`, scheduleId:null },
+    { id:7,  patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:D7,  taken:true,  notes:'With lunch',     time:'13:00', loggedAt:`${D7}T13:00:00`, scheduleId:null },
+    { id:8,  patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:D8,  taken:true,  notes:'',               time:'13:15', loggedAt:`${D8}T13:15:00`, scheduleId:null },
+    { id:9,  patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:D9,  taken:false, notes:'Ran out',        time:null,    loggedAt:`${D9}T13:00:00`, scheduleId:null },
+    { id:10, patientId:'p_self', medicine:'Vitamin D 1000IU', dosage:'1000IU', date:D10, taken:true,  notes:'Refilled',       time:'13:00', loggedAt:`${D10}T13:00:00`, scheduleId:null },
+    { id:11, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D5,  taken:false, notes:'Forgot',       time:null,    loggedAt:`${D5}T09:00:00`,  scheduleId:null },
+    { id:12, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D6,  taken:true,  notes:'',             time:'07:45', loggedAt:`${D6}T07:45:00`,  scheduleId:null },
+    { id:13, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D7,  taken:false, notes:'Travelling',   time:null,    loggedAt:`${D7}T09:00:00`,  scheduleId:null },
+    { id:14, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D8,  taken:true,  notes:'',             time:'07:55', loggedAt:`${D8}T07:55:00`,  scheduleId:null },
+    { id:15, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D9,  taken:true,  notes:'',             time:'08:00', loggedAt:`${D9}T08:00:00`,  scheduleId:null },
+    { id:16, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D10, taken:false, notes:'Busy day',     time:null,    loggedAt:`${D10}T09:00:00`, scheduleId:null },
+    { id:17, patientId:'p2', medicine:'Amlodipine 10mg', dosage:'10mg', date:D11, taken:true,  notes:'',             time:'07:50', loggedAt:`${D11}T07:50:00`, scheduleId:null },
+    { id:18, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D5,  taken:false, notes:'',             time:null,    loggedAt:`${D5}T09:00:00`,  scheduleId:null },
+    { id:19, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D6,  taken:false, notes:'Unwell',       time:null,    loggedAt:`${D6}T09:00:00`,  scheduleId:null },
+    { id:20, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D7,  taken:true,  notes:'Back on track',time:'10:20', loggedAt:`${D7}T10:20:00`,  scheduleId:null },
+    { id:21, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D8,  taken:false, notes:'',             time:null,    loggedAt:`${D8}T09:00:00`,  scheduleId:null },
+    { id:22, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D9,  taken:false, notes:'Still unwell', time:null,    loggedAt:`${D9}T09:00:00`,  scheduleId:null },
+    { id:23, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D10, taken:true,  notes:'',             time:'09:00', loggedAt:`${D10}T09:00:00`, scheduleId:null },
+    { id:24, patientId:'p3', medicine:'Lisinopril 20mg', dosage:'20mg', date:D11, taken:false, notes:'',             time:null,    loggedAt:`${D11}T09:00:00`, scheduleId:null },
   ]);
 
   DB.set('dt_notes', [
-    { id:1, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:3,  message:'You missed your dose on the 7th. Please set a daily alarm at 8am to stay consistent.', type:'reminder', createdAt:'2026-05-07T14:00:00', read:false },
-    { id:2, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:4,  message:'The nausea with Metformin is normal. Try taking it with a full meal and a large glass of water.', type:'advice', createdAt:'2026-05-08T16:30:00', read:false },
-    { id:3, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:6,  message:'Excellent work this week! 5 out of 6 doses taken. Your blood sugar management is improving.', type:'praise', createdAt:'2026-05-10T09:00:00', read:false },
-    { id:4, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:9,  message:'You are running low on Vitamin D. Please refill before the end of the week.', type:'urgent', createdAt:'2026-05-09T17:00:00', read:false },
-    { id:5, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p2',     logId:11, message:'James, missing blood pressure medication can be risky — please prioritise this daily.', type:'reminder', createdAt:'2026-05-05T18:00:00', read:false },
-    { id:6, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p3',     logId:18, message:'Fatuma, 2 missed doses is a concern. Please call the clinic at your earliest convenience.', type:'urgent', createdAt:'2026-05-06T10:00:00', read:false },
+    { id:1, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:3,  message:'You missed your dose on the 7th. Please set a daily alarm at 8am to stay consistent.', type:'reminder', createdAt:`${D7}T14:00:00`, read:false },
+    { id:2, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:4,  message:'The nausea with Metformin is normal. Try taking it with a full meal and a large glass of water.', type:'advice', createdAt:`${D8}T16:30:00`, read:false },
+    { id:3, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:6,  message:'Excellent work this week! 5 out of 6 doses taken. Your blood sugar management is improving.', type:'praise', createdAt:`${D10}T09:00:00`, read:false },
+    { id:4, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p_self', logId:9,  message:'You are running low on Vitamin D. Please refill before the end of the week.', type:'urgent', createdAt:`${D9}T17:00:00`, read:false },
+    { id:5, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p2',     logId:11, message:'James, missing blood pressure medication can be risky — please prioritise this daily.', type:'reminder', createdAt:`${D5}T18:00:00`, read:false },
+    { id:6, doctorId:'doc1', doctorName:'Dr. David Mwangi', patientId:'p3',     logId:18, message:'Fatuma, 2 missed doses is a concern. Please call the clinic at your earliest convenience.', type:'urgent', createdAt:`${D6}T10:00:00`, read:false },
   ]);
 
   DB.set('dt_caregivers', [
@@ -76,11 +103,11 @@ function seedDemoData() {
   ]);
 
   DB.set('dt_schedules', [
-    { id:'sch1', patientId:'p_self', medicine:'Metformin 500mg', dosage:'500mg', startDate:'2026-05-01', endDate:'2026-05-31', intervalHrs:8, firstDoseTime:'08:00', notes:'After meals', active:true, createdAt:'2026-05-01T07:00:00' },
+    { id:'sch1', patientId:'p_self', medicine:'Metformin 500mg', dosage:'500mg', startDate:daysAgoISO(10), endDate:daysAgoISO(-20), intervalHrs:8, firstDoseTime:'08:00', notes:'After meals', active:true, createdAt:`${daysAgoISO(10)}T07:00:00` },
   ]);
 
   DB.set('dt_med_requests', [
-    { id:'req1', patientId:'p_self', patientName:'Alice Kamau', medicine:'Vitamin D 1000IU', dosage:'1000IU', message:'Ran out — please advise how to get a refill.', status:'pending', createdAt:'2026-05-09T13:05:00' },
+    { id:'req1', patientId:'p_self', patientName:'Alice Kamau', medicine:'Vitamin D 1000IU', dosage:'1000IU', message:'Ran out — please advise how to get a refill.', status:'pending', createdAt:`${D9}T13:05:00` },
   ]);
 
   DB.set('dt_disp_log',  []);
@@ -92,7 +119,8 @@ function seedDemoData() {
   DB.set('dt_next_req_id',   2);
   DB.set('dt_next_cg_id',    3);
   DB.set('dt_next_sch_id',   2);
-  DB.set('dt_seeded', true);
+  DB.del('dt_seeded');
+  DB.set('dt_seeded_v5', true);
 }
 
 /* ── Getters ─────────────────────────────────────────────────── */
@@ -377,13 +405,13 @@ window.selectDoctor=function(patientId, doctorId){
    SMS SIMULATION ENGINE
 ════════════════════════════════════════════════════════════════ */
 function buildPatientSMS(patientName, medicine, link) {
-  return `Please take your medicine (${medicine}), track on DawaTrack ${link}. Get well soon — ${patientName}`;
+  return `Please take your medicine (${medicine}), track on Meza Dawa ${link}. Get well soon — ${patientName}`;
 }
 function buildCaregiverSMS(caregiverName, patientName, medicine, link) {
-  return `Dear ${caregiverName}, Remind ${patientName} to take his/her medication (${medicine}). Track on DawaTrack ${link}. — DawaTrack`;
+  return `Dear ${caregiverName}, Remind ${patientName} to take his/her medication (${medicine}). Track on Meza Dawa ${link}. — Meza Dawa`;
 }
 function simulateSMSForSchedule(schedule, patientName, patientPhone) {
-  const s=getSession(); const link='https://dawatrack.com/patient-dashboard';
+  const s=getSession(); const link='https://mezadawa.com/patient-dashboard';
   const cgs=getCaregivers().filter(c=>c.patientId===s.id&&c.reminders);
   const log=getSMSLog(); const now=new Date().toISOString();
   const patMsg=buildPatientSMS(patientName,schedule.medicine,link);
@@ -577,7 +605,7 @@ window.onCgRelChange=function(){
 window.simulateSMSNow=function(){
   const s=getSession(); const cgs=getCaregivers().filter(c=>c.patientId===s.id&&c.reminders);
   if(!cgs.length){showToast('No caregivers with SMS enabled. Add one first.','info');return;}
-  const link='https://dawatrack.com/patient-dashboard';
+  const link='https://mezadawa.com/patient-dashboard';
   if(s.phone){ const msg=buildPatientSMS(s.name,'your medication',link); showToast(`📱 SMS → You (${s.phone}): "${msg.slice(0,65)}…"`,'success'); }
   cgs.forEach((cg,i)=>{ setTimeout(()=>{ const msg=buildCaregiverSMS(cg.name,s.name,'their medication',link); showToast(`📱 SMS → ${cg.name} (${cg.phone}): "${msg.slice(0,65)}…"`,'success'); },(i+1)*1400); });
 };
@@ -682,10 +710,10 @@ function renderPatientChart(){
   const canvas=document.getElementById('patientChart'); if(!canvas||!window.Chart) return;
   const ex=Chart.getChart(canvas); if(ex) ex.destroy();
   const s=getSession(); const logs=getLogs().filter(l=>l.patientId===s.id);
-  const days=[]; for(let i=6;i>=0;i--){const d=new Date('2026-05-11');d.setDate(d.getDate()-i);days.push(d.toISOString().split('T')[0]);}
+  const days=last7Days();
   const taken=days.map(d=>logs.filter(l=>l.date===d&&l.taken).length);
   const missed=days.map(d=>logs.filter(l=>l.date===d&&!l.taken).length);
-  const labels=days.map(d=>parseInt(d.split('-')[2])+' May');
+  const labels=days.map(d=>new Date(d+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short'}));
   new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Taken',data:taken,backgroundColor:'rgba(93,172,150,0.75)',borderColor:'#5DAC96',borderWidth:1,borderRadius:6},{label:'Missed',data:missed,backgroundColor:'rgba(217,79,79,0.45)',borderColor:'#D94F4F',borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#7A9CA8',font:{family:'Outfit',size:11},boxWidth:12}},tooltip:{backgroundColor:'#1B5271',titleColor:'#FFFFFF',bodyColor:'#9DD1C2',padding:12}},scales:{x:{grid:{color:'rgba(209,228,222,0.5)'},ticks:{color:'#7A9CA8',font:{family:'Outfit',size:11}}},y:{beginAtZero:true,grid:{color:'rgba(209,228,222,0.5)'},ticks:{color:'#7A9CA8',stepSize:1,font:{family:'Outfit',size:11}}}}}});
 }
 
@@ -704,8 +732,8 @@ function initDoctorDashboard(){
       btn.classList.add('active'); renderPatientList(btn.dataset.filter||'all');
     });
   });
-  /* Poll for new patients assigned to this doctor every 10s */
-  setInterval(()=>{ renderDoctorOverview(); updateSidebarAtRisk(); },10000);
+  /* Poll for new patients assigned to this doctor every 10s (keeps charts + live dates fresh) */
+  setInterval(()=>{ renderDoctorOverview(); updateSidebarAtRisk(); renderTrendChart(); renderDonutChart(); },10000);
 }
 
 /* Get patients belonging to the logged-in doctor only */
@@ -822,9 +850,9 @@ function renderTrendChart(){
   const canvas=document.getElementById('trendChart'); if(!canvas||!window.Chart) return;
   const ex=Chart.getChart(canvas); if(ex) ex.destroy();
   const allLogs=getMyPatients().flatMap(p=>p.logs);
-  const days=[]; for(let i=6;i>=0;i--){const d=new Date('2026-05-11');d.setDate(d.getDate()-i);days.push(d.toISOString().split('T')[0]);}
+  const days=last7Days();
   const rates=days.map(d=>{const dl=allLogs.filter(l=>l.date===d);return dl.length?adherenceRate(dl):null;});
-  const labels=days.map(d=>parseInt(d.split('-')[2])+' May');
+  const labels=days.map(d=>new Date(d+'T00:00:00').toLocaleDateString('en-KE',{day:'numeric',month:'short'}));
   new Chart(canvas.getContext('2d'),{type:'line',data:{labels,datasets:[{label:'Adherence %',data:rates,borderColor:'#5DAC96',backgroundColor:'rgba(93,172,150,0.10)',borderWidth:2.5,pointBackgroundColor:'#5DAC96',pointBorderColor:'#FFFFFF',pointBorderWidth:2,pointRadius:5,pointHoverRadius:7,tension:0.4,fill:true,spanGaps:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1B5271',titleColor:'#FFFFFF',bodyColor:'#9DD1C2',padding:12}},scales:{x:{grid:{color:'rgba(209,228,222,0.5)'},ticks:{color:'#7A9CA8',font:{family:'Outfit',size:11}}},y:{min:0,max:100,grid:{color:'rgba(209,228,222,0.5)'},ticks:{color:'#7A9CA8',font:{family:'Outfit',size:11},callback:v=>v+'%'}}}}});
 }
 function renderDonutChart(){
